@@ -1,14 +1,14 @@
-package differ_test
+package graphql_test
 
 import (
 	"testing"
 
-	"drift-guard-diff-engine/internal/differ"
+	differgraphql "drift-guard-diff-engine/internal/differ/graphql"
 	parsergraphql "drift-guard-diff-engine/internal/parser/graphql"
 	"drift-guard-diff-engine/pkg/schema"
 )
 
-const testdataDir = "../testdata/"
+const testdataDir = "../../testdata/"
 
 // loadFixtures parses the base/head SDL fixtures used across all differ tests.
 func loadFixtures(t *testing.T) (base, head *schema.GQLSchema) {
@@ -56,7 +56,7 @@ func searchSubstr(s, sub string) bool {
 
 func TestDiffGQL_FieldRemoved(t *testing.T) {
 	base, head := loadFixtures(t)
-	changes := differ.DiffGQL(base, head)
+	changes := differgraphql.Diff(base, head)
 
 	// User.address was removed in head
 	c := findChange(changes, schema.ChangeTypeGQLFieldRemoved, "User.address")
@@ -67,7 +67,7 @@ func TestDiffGQL_FieldRemoved(t *testing.T) {
 
 func TestDiffGQL_FieldAdded(t *testing.T) {
 	base, head := loadFixtures(t)
-	changes := differ.DiffGQL(base, head)
+	changes := differgraphql.Diff(base, head)
 
 	// User.createdAt was added in head
 	c := findChange(changes, schema.ChangeTypeGQLFieldAdded, "User.createdAt")
@@ -82,7 +82,7 @@ func TestDiffGQL_FieldAdded(t *testing.T) {
 
 func TestDiffGQL_MutationFieldRemoved(t *testing.T) {
 	base, head := loadFixtures(t)
-	changes := differ.DiffGQL(base, head)
+	changes := differgraphql.Diff(base, head)
 
 	// Mutation.deleteUser removed
 	c := findChange(changes, schema.ChangeTypeGQLFieldRemoved, "Mutation.deleteUser")
@@ -97,12 +97,12 @@ func TestDiffGQL_MutationFieldRemoved(t *testing.T) {
 
 func TestDiffGQL_ArgAdded_Optional(t *testing.T) {
 	base, head := loadFixtures(t)
-	changes := differ.DiffGQL(base, head)
+	changes := differgraphql.Diff(base, head)
 
 	// Query.user gains optional arg includeDeleted: Boolean (non-breaking)
 	c := findChange(changes, schema.ChangeTypeGQLArgAdded, "Query.user(arg:includeDeleted)")
 	if c == nil {
-		t.Error("expected gql_arg_added for Query.user(arg:includeDeleted)")
+		t.Fatal("expected gql_arg_added for Query.user(arg:includeDeleted)")
 	}
 	if c.After != "Boolean" {
 		t.Errorf("expected arg type 'Boolean', got '%s'", c.After)
@@ -111,7 +111,7 @@ func TestDiffGQL_ArgAdded_Optional(t *testing.T) {
 
 func TestDiffGQL_ArgAdded_OnSearch(t *testing.T) {
 	base, head := loadFixtures(t)
-	changes := differ.DiffGQL(base, head)
+	changes := differgraphql.Diff(base, head)
 
 	// Query.search gains optional arg type: String
 	c := findChange(changes, schema.ChangeTypeGQLArgAdded, "Query.search(arg:type)")
@@ -126,12 +126,12 @@ func TestDiffGQL_ArgAdded_OnSearch(t *testing.T) {
 
 func TestDiffGQL_EnumValueRemoved(t *testing.T) {
 	base, head := loadFixtures(t)
-	changes := differ.DiffGQL(base, head)
+	changes := differgraphql.Diff(base, head)
 
 	// UserRole.EDITOR removed
 	c := findChange(changes, schema.ChangeTypeGQLEnumValueRemoved, "UserRole.EDITOR")
 	if c == nil {
-		t.Error("expected gql_enum_value_removed for UserRole.EDITOR")
+		t.Fatal("expected gql_enum_value_removed for UserRole.EDITOR")
 	}
 	if c.Before != "EDITOR" {
 		t.Errorf("expected Before='EDITOR', got '%s'", c.Before)
@@ -140,7 +140,7 @@ func TestDiffGQL_EnumValueRemoved(t *testing.T) {
 
 func TestDiffGQL_EnumValueNotFalsePositive(t *testing.T) {
 	base, head := loadFixtures(t)
-	changes := differ.DiffGQL(base, head)
+	changes := differgraphql.Diff(base, head)
 
 	// ADMIN and VIEWER still exist — must NOT be reported as removed
 	for _, c := range changes {
@@ -158,12 +158,12 @@ func TestDiffGQL_EnumValueNotFalsePositive(t *testing.T) {
 
 func TestDiffGQL_InputFieldTypeChanged_MadeRequired(t *testing.T) {
 	base, head := loadFixtures(t)
-	changes := differ.DiffGQL(base, head)
+	changes := differgraphql.Diff(base, head)
 
 	// CreateUserInput.role changed from UserRole (nullable) to UserRole! (non-null) — breaking
 	c := findChange(changes, schema.ChangeTypeGQLInputFieldTypeChanged, "CreateUserInput.role")
 	if c == nil {
-		t.Error("expected gql_input_field_type_changed for CreateUserInput.role")
+		t.Fatal("expected gql_input_field_type_changed for CreateUserInput.role")
 	}
 	if c.Before != "UserRole" {
 		t.Errorf("expected Before='UserRole', got '%s'", c.Before)
@@ -175,7 +175,7 @@ func TestDiffGQL_InputFieldTypeChanged_MadeRequired(t *testing.T) {
 
 func TestDiffGQL_InputFieldAdded_Optional(t *testing.T) {
 	base, head := loadFixtures(t)
-	changes := differ.DiffGQL(base, head)
+	changes := differgraphql.Diff(base, head)
 
 	// UpdateUserInput.notes added (nullable String — non-breaking)
 	c := findChange(changes, schema.ChangeTypeGQLInputFieldAdded, "UpdateUserInput.notes")
@@ -190,7 +190,7 @@ func TestDiffGQL_InputFieldAdded_Optional(t *testing.T) {
 
 func TestDiffGQL_UnionMemberAdded(t *testing.T) {
 	base, head := loadFixtures(t)
-	changes := differ.DiffGQL(base, head)
+	changes := differgraphql.Diff(base, head)
 
 	// SearchResult gains Post member
 	c := findChange(changes, schema.ChangeTypeGQLUnionMemberAdded, "Post")
@@ -205,12 +205,12 @@ func TestDiffGQL_UnionMemberAdded(t *testing.T) {
 
 func TestDiffGQL_TypeAdded(t *testing.T) {
 	base, head := loadFixtures(t)
-	changes := differ.DiffGQL(base, head)
+	changes := differgraphql.Diff(base, head)
 
 	// Post type is new in head
 	c := findChange(changes, schema.ChangeTypeGQLTypeAdded, "Post")
 	if c == nil {
-		t.Error("expected gql_type_added for Post")
+		t.Fatal("expected gql_type_added for Post")
 	}
 	if c.After != string(schema.GQLTypeKindObject) {
 		t.Errorf("expected After='OBJECT', got '%s'", c.After)
@@ -219,7 +219,7 @@ func TestDiffGQL_TypeAdded(t *testing.T) {
 
 func TestDiffGQL_NoFalsePositive_UnchangedType(t *testing.T) {
 	base, head := loadFixtures(t)
-	changes := differ.DiffGQL(base, head)
+	changes := differgraphql.Diff(base, head)
 
 	// Node interface is unchanged — should not appear in changes
 	for _, c := range changes {
@@ -235,7 +235,7 @@ func TestDiffGQL_NoFalsePositive_UnchangedType(t *testing.T) {
 
 func TestDiffGQL_TotalChanges(t *testing.T) {
 	base, head := loadFixtures(t)
-	changes := differ.DiffGQL(base, head)
+	changes := differgraphql.Diff(base, head)
 
 	if len(changes) == 0 {
 		t.Error("expected at least one change between base and head fixtures")
@@ -249,13 +249,13 @@ func TestDiffGQL_TotalChanges(t *testing.T) {
 
 	// We know these must be present from the fixture design
 	required := []schema.ChangeType{
-		schema.ChangeTypeGQLFieldRemoved,        // User.address, Mutation.deleteUser
-		schema.ChangeTypeGQLEnumValueRemoved,    // UserRole.EDITOR
+		schema.ChangeTypeGQLFieldRemoved,          // User.address, Mutation.deleteUser
+		schema.ChangeTypeGQLEnumValueRemoved,      // UserRole.EDITOR
 		schema.ChangeTypeGQLInputFieldTypeChanged, // CreateUserInput.role
-		schema.ChangeTypeGQLFieldAdded,          // User.createdAt, Address.postcode
-		schema.ChangeTypeGQLArgAdded,            // Query.user includeDeleted
-		schema.ChangeTypeGQLUnionMemberAdded,    // SearchResult | Post
-		schema.ChangeTypeGQLTypeAdded,           // Post
+		schema.ChangeTypeGQLFieldAdded,            // User.createdAt, Address.postcode
+		schema.ChangeTypeGQLArgAdded,              // Query.user includeDeleted
+		schema.ChangeTypeGQLUnionMemberAdded,      // SearchResult | Post
+		schema.ChangeTypeGQLTypeAdded,             // Post
 	}
 
 	for _, ct := range required {
@@ -270,7 +270,7 @@ func TestDiffGQL_IdenticalSchemas_NoChanges(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parse: %v", err)
 	}
-	changes := differ.DiffGQL(base, base)
+	changes := differgraphql.Diff(base, base)
 	if len(changes) != 0 {
 		t.Errorf("expected 0 changes for identical schemas, got %d: %v", len(changes), changes)
 	}

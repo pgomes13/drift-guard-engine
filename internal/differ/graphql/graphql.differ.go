@@ -1,4 +1,6 @@
-package differ
+// Package graphql computes the structural diff between two GraphQL schemas,
+// producing a flat list of Change values for downstream classification.
+package graphql
 
 import (
 	"fmt"
@@ -7,8 +9,8 @@ import (
 	"drift-guard-diff-engine/pkg/schema"
 )
 
-// DiffGQL computes all changes between two normalized GraphQL schemas.
-func DiffGQL(base, head *schema.GQLSchema) []schema.Change {
+// Diff computes all changes between two normalized GraphQL schemas.
+func Diff(base, head *schema.GQLSchema) []schema.Change {
 	var changes []schema.Change
 
 	baseTypes := indexGQLTypes(base)
@@ -263,21 +265,29 @@ func diffGQLInputFields(typeName string, base, head []schema.GQLField) []schema.
 }
 
 // --------------------------------------------------------------------------
-// Enum values
+// Enum values / Union members / Interfaces  (shared set-diff logic)
 // --------------------------------------------------------------------------
 
-func diffGQLEnumValues(typeName string, base, head []string) []schema.Change {
+// diffStringSet computes added/removed entries between two string slices and
+// emits Change records using the supplied change types and format functions.
+func diffStringSet(
+	typeName string,
+	base, head []string,
+	removedType, addedType schema.ChangeType,
+	locFn func(typeName, val string) string,
+	removedDescFn func(typeName, val string) string,
+	addedDescFn func(typeName, val string) string,
+) []schema.Change {
 	var changes []schema.Change
-
 	baseSet := toSet(base)
 	headSet := toSet(head)
 
 	for v := range baseSet {
 		if !headSet[v] {
 			changes = append(changes, schema.Change{
-				Type:        schema.ChangeTypeGQLEnumValueRemoved,
-				Location:    fmt.Sprintf("%s.%s", typeName, v),
-				Description: fmt.Sprintf("Enum value '%s' was removed from '%s'", v, typeName),
+				Type:        removedType,
+				Location:    locFn(typeName, v),
+				Description: removedDescFn(typeName, v),
 				Before:      v,
 			})
 		}
@@ -285,9 +295,9 @@ func diffGQLEnumValues(typeName string, base, head []string) []schema.Change {
 	for v := range headSet {
 		if !baseSet[v] {
 			changes = append(changes, schema.Change{
-				Type:        schema.ChangeTypeGQLEnumValueAdded,
-				Location:    fmt.Sprintf("%s.%s", typeName, v),
-				Description: fmt.Sprintf("Enum value '%s' was added to '%s'", v, typeName),
+				Type:        addedType,
+				Location:    locFn(typeName, v),
+				Description: addedDescFn(typeName, v),
 				After:       v,
 			})
 		}
@@ -295,70 +305,34 @@ func diffGQLEnumValues(typeName string, base, head []string) []schema.Change {
 	return changes
 }
 
-// --------------------------------------------------------------------------
-// Union members
-// --------------------------------------------------------------------------
-
-func diffGQLUnionMembers(typeName string, base, head []string) []schema.Change {
-	var changes []schema.Change
-
-	baseSet := toSet(base)
-	headSet := toSet(head)
-
-	for m := range baseSet {
-		if !headSet[m] {
-			changes = append(changes, schema.Change{
-				Type:        schema.ChangeTypeGQLUnionMemberRemoved,
-				Location:    fmt.Sprintf("%s | %s", typeName, m),
-				Description: fmt.Sprintf("Union member '%s' was removed from '%s'", m, typeName),
-				Before:      m,
-			})
-		}
-	}
-	for m := range headSet {
-		if !baseSet[m] {
-			changes = append(changes, schema.Change{
-				Type:        schema.ChangeTypeGQLUnionMemberAdded,
-				Location:    fmt.Sprintf("%s | %s", typeName, m),
-				Description: fmt.Sprintf("Union member '%s' was added to '%s'", m, typeName),
-				After:       m,
-			})
-		}
-	}
-	return changes
+func diffGQLEnumValues(typeName string, base, head []string) []schema.Change {
+	return diffStringSet(typeName, base, head,
+		schema.ChangeTypeGQLEnumValueRemoved,
+		schema.ChangeTypeGQLEnumValueAdded,
+		func(t, v string) string { return fmt.Sprintf("%s.%s", t, v) },
+		func(t, v string) string { return fmt.Sprintf("Enum value '%s' was removed from '%s'", v, t) },
+		func(t, v string) string { return fmt.Sprintf("Enum value '%s' was added to '%s'", v, t) },
+	)
 }
 
-// --------------------------------------------------------------------------
-// Interfaces implemented by an Object type
-// --------------------------------------------------------------------------
+func diffGQLUnionMembers(typeName string, base, head []string) []schema.Change {
+	return diffStringSet(typeName, base, head,
+		schema.ChangeTypeGQLUnionMemberRemoved,
+		schema.ChangeTypeGQLUnionMemberAdded,
+		func(t, v string) string { return fmt.Sprintf("%s | %s", t, v) },
+		func(t, v string) string { return fmt.Sprintf("Union member '%s' was removed from '%s'", v, t) },
+		func(t, v string) string { return fmt.Sprintf("Union member '%s' was added to '%s'", v, t) },
+	)
+}
 
 func diffGQLInterfaces(typeName string, base, head []string) []schema.Change {
-	var changes []schema.Change
-
-	baseSet := toSet(base)
-	headSet := toSet(head)
-
-	for iface := range baseSet {
-		if !headSet[iface] {
-			changes = append(changes, schema.Change{
-				Type:        schema.ChangeTypeGQLInterfaceRemoved,
-				Location:    fmt.Sprintf("%s implements %s", typeName, iface),
-				Description: fmt.Sprintf("Type '%s' no longer implements interface '%s'", typeName, iface),
-				Before:      iface,
-			})
-		}
-	}
-	for iface := range headSet {
-		if !baseSet[iface] {
-			changes = append(changes, schema.Change{
-				Type:        schema.ChangeTypeGQLInterfaceAdded,
-				Location:    fmt.Sprintf("%s implements %s", typeName, iface),
-				Description: fmt.Sprintf("Type '%s' now implements interface '%s'", typeName, iface),
-				After:       iface,
-			})
-		}
-	}
-	return changes
+	return diffStringSet(typeName, base, head,
+		schema.ChangeTypeGQLInterfaceRemoved,
+		schema.ChangeTypeGQLInterfaceAdded,
+		func(t, v string) string { return fmt.Sprintf("%s implements %s", t, v) },
+		func(t, v string) string { return fmt.Sprintf("Type '%s' no longer implements interface '%s'", t, v) },
+		func(t, v string) string { return fmt.Sprintf("Type '%s' now implements interface '%s'", t, v) },
+	)
 }
 
 // --------------------------------------------------------------------------

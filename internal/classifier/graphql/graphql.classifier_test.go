@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"drift-guard-diff-engine/internal/classifier"
-	"drift-guard-diff-engine/internal/differ"
+	differgraphql "drift-guard-diff-engine/internal/differ/graphql"
 	parsergraphql "drift-guard-diff-engine/internal/parser/graphql"
 	"drift-guard-diff-engine/pkg/schema"
 )
@@ -236,7 +236,7 @@ func TestClassify_GraphQL_FixtureBreakingChanges(t *testing.T) {
 		t.Fatalf("parse head: %v", err)
 	}
 
-	changes := differ.DiffGQL(base, head)
+	changes := differgraphql.Diff(base, head)
 	result := classifier.Classify("base.graphql", "head.graphql", changes)
 
 	if result.Summary.Breaking == 0 {
@@ -263,7 +263,7 @@ func TestClassify_GraphQL_FixtureNonBreakingChanges(t *testing.T) {
 		t.Fatalf("parse head: %v", err)
 	}
 
-	changes := differ.DiffGQL(base, head)
+	changes := differgraphql.Diff(base, head)
 	result := classifier.Classify("base.graphql", "head.graphql", changes)
 
 	if result.Summary.NonBreaking == 0 {
@@ -277,7 +277,7 @@ func TestClassify_GraphQL_IdenticalSchemas_NoChanges(t *testing.T) {
 		t.Fatalf("parse: %v", err)
 	}
 
-	result := classifier.Classify("base.graphql", "base.graphql", differ.DiffGQL(base, base))
+	result := classifier.Classify("base.graphql", "base.graphql", differgraphql.Diff(base, base))
 
 	if result.Summary.Total != 0 {
 		t.Errorf("expected 0 changes for identical schemas, got %d", result.Summary.Total)

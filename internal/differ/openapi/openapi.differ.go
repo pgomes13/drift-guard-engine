@@ -1,4 +1,6 @@
-package differ
+// Package openapi computes the structural diff between two OpenAPI schemas,
+// producing a flat list of Change values for downstream classification.
+package openapi
 
 import (
 	"fmt"

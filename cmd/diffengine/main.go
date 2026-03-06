@@ -8,7 +8,8 @@ import (
 	"strings"
 
 	"drift-guard-diff-engine/internal/classifier"
-	"drift-guard-diff-engine/internal/differ"
+	differgraphql "drift-guard-diff-engine/internal/differ/graphql"
+	differopenapi "drift-guard-diff-engine/internal/differ/openapi"
 	parsergraphql "drift-guard-diff-engine/internal/parser/graphql"
 	parseropenapi "drift-guard-diff-engine/internal/parser/openapi"
 	"drift-guard-diff-engine/internal/reporter"
@@ -44,7 +45,7 @@ func main() {
 			fmt.Fprintf(os.Stderr, "Error parsing head schema: %v\n", err)
 			os.Exit(2)
 		}
-		res := classifier.Classify(*baseFile, *headFile, differ.DiffGQL(baseSchema, headSchema))
+		res := classifier.Classify(*baseFile, *headFile, differgraphql.Diff(baseSchema, headSchema))
 		if err := reporter.Write(os.Stdout, res, reporter.Format(*format)); err != nil {
 			fmt.Fprintf(os.Stderr, "Error writing report: %v\n", err)
 			os.Exit(2)
@@ -64,7 +65,7 @@ func main() {
 			fmt.Fprintf(os.Stderr, "Error parsing head schema: %v\n", err)
 			os.Exit(2)
 		}
-		res := classifier.Classify(*baseFile, *headFile, differ.Diff(baseSchema, headSchema))
+		res := classifier.Classify(*baseFile, *headFile, differopenapi.Diff(baseSchema, headSchema))
 		if err := reporter.Write(os.Stdout, res, reporter.Format(*format)); err != nil {
 			fmt.Fprintf(os.Stderr, "Error writing report: %v\n", err)
 			os.Exit(2)
