@@ -4,8 +4,26 @@ import (
 	"testing"
 
 	differgrpc "drift-guard-diff-engine/internal/differ/grpc"
+	parsergrpc "drift-guard-diff-engine/internal/parser/grpc"
 	"drift-guard-diff-engine/pkg/schema"
 )
+
+const testdataDir = "../../testdata/"
+
+// loadFixtures parses the base/head proto fixtures used across smoke tests.
+func loadFixtures(t *testing.T) (base, head *schema.GRPCSchema) {
+	t.Helper()
+	var err error
+	base, err = parsergrpc.Parse(testdataDir + "base.proto")
+	if err != nil {
+		t.Fatalf("parse base: %v", err)
+	}
+	head, err = parsergrpc.Parse(testdataDir + "head.proto")
+	if err != nil {
+		t.Fatalf("parse head: %v", err)
+	}
+	return
+}
 
 // ---------- fixtures ----------
 
@@ -226,6 +244,140 @@ func TestDiffGRPC_MessageRemoved(t *testing.T) {
 
 func TestDiffGRPC_IdenticalSchemas_NoChanges(t *testing.T) {
 	base := baseSchema()
+	changes := differgrpc.Diff(base, base)
+	if len(changes) != 0 {
+		t.Errorf("expected 0 changes for identical schemas, got %d: %v", len(changes), changes)
+	}
+}
+
+// --------------------------------------------------------------------------
+// Smoke tests — full parser → differ pipeline through .proto fixtures
+// --------------------------------------------------------------------------
+
+func TestDiffGRPC_Smoke_RPCRemoved(t *testing.T) {
+	base, head := loadFixtures(t)
+	changes := differgrpc.Diff(base, head)
+
+	// DeleteUser removed in head.proto
+	c := findChange(changes, schema.ChangeTypeGRPCRPCRemoved, "DeleteUser")
+	if c == nil {
+		t.Error("expected grpc_rpc_removed for UserService.DeleteUser")
+	}
+}
+
+func TestDiffGRPC_Smoke_RPCAdded(t *testing.T) {
+	base, head := loadFixtures(t)
+	changes := differgrpc.Diff(base, head)
+
+	// CreateUser added in head.proto
+	c := findChange(changes, schema.ChangeTypeGRPCRPCAdded, "CreateUser")
+	if c == nil {
+		t.Error("expected grpc_rpc_added for UserService.CreateUser")
+	}
+}
+
+func TestDiffGRPC_Smoke_RPCRequestTypeChanged(t *testing.T) {
+	base, head := loadFixtures(t)
+	changes := differgrpc.Diff(base, head)
+
+	// GetUser request type: GetUserRequest → GetUserRequestV2
+	c := findChange(changes, schema.ChangeTypeGRPCRPCRequestTypeChanged, "GetUser")
+	if c == nil {
+		t.Fatal("expected grpc_rpc_request_type_changed for UserService.GetUser")
+	}
+	if c.Before != "GetUserRequest" {
+		t.Errorf("expected Before='GetUserRequest', got '%s'", c.Before)
+	}
+	if c.After != "GetUserRequestV2" {
+		t.Errorf("expected After='GetUserRequestV2', got '%s'", c.After)
+	}
+}
+
+func TestDiffGRPC_Smoke_RPCStreamingChanged(t *testing.T) {
+	base, head := loadFixtures(t)
+	changes := differgrpc.Diff(base, head)
+
+	// ListUsers: server streaming → bidirectional streaming
+	c := findChange(changes, schema.ChangeTypeGRPCRPCStreamingChanged, "ListUsers")
+	if c == nil {
+		t.Fatal("expected grpc_rpc_streaming_changed for UserService.ListUsers")
+	}
+	if c.Before != "server streaming" {
+		t.Errorf("expected Before='server streaming', got '%s'", c.Before)
+	}
+	if c.After != "bidirectional streaming" {
+		t.Errorf("expected After='bidirectional streaming', got '%s'", c.After)
+	}
+}
+
+func TestDiffGRPC_Smoke_ServiceAdded(t *testing.T) {
+	base, head := loadFixtures(t)
+	changes := differgrpc.Diff(base, head)
+
+	// AdminService added in head.proto
+	c := findChange(changes, schema.ChangeTypeGRPCServiceAdded, "AdminService")
+	if c == nil {
+		t.Error("expected grpc_service_added for AdminService")
+	}
+}
+
+func TestDiffGRPC_Smoke_FieldRemoved(t *testing.T) {
+	base, head := loadFixtures(t)
+	changes := differgrpc.Diff(base, head)
+
+	// GetUserResponse.email removed in head.proto
+	c := findChange(changes, schema.ChangeTypeGRPCFieldRemoved, "GetUserResponse.email")
+	if c == nil {
+		t.Error("expected grpc_field_removed for GetUserResponse.email")
+	}
+}
+
+func TestDiffGRPC_Smoke_FieldAdded(t *testing.T) {
+	base, head := loadFixtures(t)
+	changes := differgrpc.Diff(base, head)
+
+	// GetUserResponse.role added in head.proto
+	c := findChange(changes, schema.ChangeTypeGRPCFieldAdded, "GetUserResponse.role")
+	if c == nil {
+		t.Error("expected grpc_field_added for GetUserResponse.role")
+	}
+}
+
+func TestDiffGRPC_Smoke_TotalChanges(t *testing.T) {
+	base, head := loadFixtures(t)
+	changes := differgrpc.Diff(base, head)
+
+	if len(changes) == 0 {
+		t.Fatal("expected at least one change between base and head fixtures")
+	}
+
+	byType := map[schema.ChangeType]int{}
+	for _, c := range changes {
+		byType[c.Type]++
+	}
+
+	required := []schema.ChangeType{
+		schema.ChangeTypeGRPCRPCRemoved,            // DeleteUser
+		schema.ChangeTypeGRPCRPCAdded,              // CreateUser
+		schema.ChangeTypeGRPCRPCRequestTypeChanged, // GetUser
+		schema.ChangeTypeGRPCRPCStreamingChanged,   // ListUsers
+		schema.ChangeTypeGRPCServiceAdded,          // AdminService
+		schema.ChangeTypeGRPCFieldRemoved,          // GetUserResponse.email, ListUsersResponse.total
+		schema.ChangeTypeGRPCFieldAdded,            // GetUserResponse.role
+	}
+
+	for _, ct := range required {
+		if byType[ct] == 0 {
+			t.Errorf("expected at least one change of type %s", ct)
+		}
+	}
+}
+
+func TestDiffGRPC_Smoke_IdenticalSchemas_NoChanges(t *testing.T) {
+	base, err := parsergrpc.Parse(testdataDir + "base.proto")
+	if err != nil {
+		t.Fatalf("parse: %v", err)
+	}
 	changes := differgrpc.Diff(base, base)
 	if len(changes) != 0 {
 		t.Errorf("expected 0 changes for identical schemas, got %d: %v", len(changes), changes)
