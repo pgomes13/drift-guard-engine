@@ -7,13 +7,10 @@ drift-guard is designed to run in CI as a schema diff gate on pull requests.
 ### Install and run
 
 ```yaml
-- name: Set up Go
-  uses: actions/setup-go@v5
-  with:
-    go-version: "1.22"
-
 - name: Install drift-guard
-  run: go install github.com/pgomes13/drift-guard-engine/cmd/drift-guard@latest
+  run: |
+    brew tap pgomes13/tap
+    brew install drift-guard
 
 - name: Check for breaking API changes
   run: |
@@ -43,12 +40,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-go@v5
-        with:
-          go-version: "1.22"
-
       - name: Install drift-guard
-        run: go install github.com/pgomes13/drift-guard-engine/cmd/drift-guard@latest
+        run: |
+          brew tap pgomes13/tap
+          brew install drift-guard
 
       - name: OpenAPI drift check
         run: |
@@ -75,13 +70,4 @@ jobs:
 | `--fail-on-breaking` | Exits with code `1` to block merges on breaking changes |
 | `--format json` | Use if you need to parse output in a subsequent step |
 
-## Install via Homebrew (alternative)
-
-```yaml
-- name: Install drift-guard
-  run: |
-    brew tap pgomes13/tap
-    brew install drift-guard
-```
-
-> Homebrew is pre-installed on `macos-*` runners. Works on `ubuntu-latest` but is slower than `go install`.
+> Homebrew is pre-installed on `macos-*` runners and available on `ubuntu-latest`.
