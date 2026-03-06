@@ -178,10 +178,17 @@ func findMainGo(dir string) (string, error) {
 	})
 
 	if len(found) == 0 {
+		// list top-level entries to aid diagnosis
+		entries, _ := os.ReadDir(dir)
+		names := make([]string, 0, len(entries))
+		for _, e := range entries {
+			names = append(names, e.Name())
+		}
 		return "", fmt.Errorf(
-			"cannot find main.go in project\n" +
-				"Use --cmd to provide a custom generation command, e.g.:\n" +
+			"cannot find main.go in %s (top-level: %v)\n"+
+				"Use --cmd to provide a custom generation command, e.g.:\n"+
 				`  --cmd "swag init --generalInfo ./path/to/main.go" --output docs/swagger.yaml`,
+			dir, names,
 		)
 	}
 
