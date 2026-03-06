@@ -2,6 +2,7 @@ package classifier
 
 import (
 	"drift-guard-diff-engine/internal/classifier/graphql"
+	"drift-guard-diff-engine/internal/classifier/grpc"
 	"drift-guard-diff-engine/internal/classifier/openapi"
 	"drift-guard-diff-engine/pkg/schema"
 )
@@ -39,6 +40,9 @@ func severityFor(c schema.Change) schema.Severity {
 		return s
 	}
 	if s, ok := graphql.Severity(c); ok {
+		return s
+	}
+	if s, ok := grpc.Severity(c); ok {
 		return s
 	}
 	return schema.SeverityInfo

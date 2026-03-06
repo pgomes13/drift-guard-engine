@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package users.v1;
+
+// UserService provides user management RPCs.
+service UserService {
+  // GetUser: request type changed (breaking)
+  rpc GetUser (GetUserRequestV2) returns (GetUserResponse);
+  // ListUsers: streaming mode changed to bidirectional (breaking)
+  rpc ListUsers (stream ListUsersRequest) returns (stream ListUsersResponse);
+  // DeleteUser removed (breaking)
+  // CreateUser added (non-breaking)
+  rpc CreateUser (CreateUserRequest) returns (CreateUserResponse);
+}
+
+// AdminService added (non-breaking)
+service AdminService {
+  rpc BanUser (BanUserRequest) returns (BanUserResponse);
+}
+
+// GetUserRequestV2 added (non-breaking)
+message GetUserRequestV2 {
+  string id     = 1;
+  string locale = 2;
+}
+
+message GetUserResponse {
+  string id   = 1;
+  string name = 2;
+  // email removed (breaking)
+  // role added (non-breaking)
+  string role = 4;
+}
+
+message ListUsersRequest {
+  int32 page      = 1;
+  int32 page_size = 2;
+}
+
+message ListUsersResponse {
+  repeated GetUserResponse users = 1;
+  // total removed (breaking)
+}
+
+message CreateUserRequest {
+  string name  = 1;
+  string email = 2;
+}
+
+message CreateUserResponse {
+  string id = 1;
+}
+
+message BanUserRequest {
+  string user_id = 1;
+}
+
+message BanUserResponse {
+  bool success = 1;
+}
