@@ -6,7 +6,7 @@ before:
 
 builds:
   - id: drift-guard
-    main: ./cmd/driftengine
+    main: ./cmd/drift-guard
     binary: drift-guard
     env:
       - CGO_ENABLED=0
