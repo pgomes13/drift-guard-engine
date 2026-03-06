@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/fs"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -151,30 +152,43 @@ func runSwagAuto(projectDir, outputDir string) error {
 	return nil
 }
 
-// findMainGo locates main.go in the project root or cmd/*/ subdirectories.
+// findMainGo walks the project directory (up to 4 levels deep) to locate main.go,
+// preferring cmd/*/ locations over others.
 func findMainGo(dir string) (string, error) {
-	if _, err := os.Stat(filepath.Join(dir, "main.go")); err == nil {
-		return filepath.Join(dir, "main.go"), nil
+	var found []string
+	_ = fs.WalkDir(os.DirFS(dir), ".", func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return nil
+		}
+		if d.IsDir() {
+			skip := d.Name() == "vendor" || d.Name() == "node_modules" || strings.HasPrefix(d.Name(), ".")
+			depth := strings.Count(path, string(filepath.Separator))
+			if skip || depth >= 4 {
+				return fs.SkipDir
+			}
+			return nil
+		}
+		if d.Name() == "main.go" {
+			found = append(found, filepath.Join(dir, path))
+		}
+		return nil
+	})
+
+	if len(found) == 0 {
+		return "", fmt.Errorf(
+			"cannot find main.go in project\n" +
+				"Use --cmd to provide a custom generation command, e.g.:\n" +
+				`  --cmd "swag init --generalInfo ./path/to/main.go" --output docs/swagger.yaml`,
+		)
 	}
 
-	cmdDir := filepath.Join(dir, "cmd")
-	entries, err := os.ReadDir(cmdDir)
-	if err == nil {
-		for _, e := range entries {
-			if e.IsDir() {
-				candidate := filepath.Join(cmdDir, e.Name(), "main.go")
-				if _, err := os.Stat(candidate); err == nil {
-					return candidate, nil
-				}
-			}
+	// prefer cmd/* locations
+	for _, f := range found {
+		if strings.Contains(f, string(filepath.Separator)+"cmd"+string(filepath.Separator)) {
+			return f, nil
 		}
 	}
-
-	return "", fmt.Errorf(
-		"cannot find main.go in project root or cmd/*/\n" +
-			"Use --cmd to provide a custom generation command, e.g.:\n" +
-			`  --cmd "swag init --generalInfo ./path/to/main.go" --output docs/swagger.yaml`,
-	)
+	return found[0], nil
 }
 
 func runCmd(command, dir string) error {
