@@ -13,7 +13,7 @@ A schema diff engine that detects and classifies breaking vs. non-breaking API c
 ## Install
 
 ```sh
-go build -o diffengine ./cmd/diffengine
+go build -o drift-guard ./cmd/drift-guard
 ```
 
 Or via Make:
@@ -25,7 +25,7 @@ make build
 ## Usage
 
 ```sh
-diffengine <command> --base <file> --head <file> [--format <format>] [--fail-on-breaking]
+drift-guard <command> --base <file> --head <file> [--format <format>] [--fail-on-breaking]
 ```
 
 | Command | Description |
@@ -45,16 +45,16 @@ diffengine <command> --base <file> --head <file> [--format <format>] [--fail-on-
 
 ```sh
 # OpenAPI — text output
-diffengine openapi --base api/base.yaml --head api/head.yaml
+drift-guard openapi --base api/base.yaml --head api/head.yaml
 
 # GraphQL — JSON output
-diffengine graphql --base schema/base.graphql --head schema/head.graphql --format json
+drift-guard graphql --base schema/base.graphql --head schema/head.graphql --format json
 
 # gRPC — fail CI on breaking changes
-diffengine grpc --base proto/base.proto --head proto/head.proto --fail-on-breaking
+drift-guard grpc --base proto/base.proto --head proto/head.proto --fail-on-breaking
 
 # GitHub Actions annotations
-diffengine openapi --base base.yaml --head head.yaml --format github
+drift-guard openapi --base base.yaml --head head.yaml --format github
 ```
 
 ## Output formats
@@ -188,7 +188,7 @@ make run-graphql  # build and diff bundled GraphQL fixtures
 ## Architecture
 
 ```
-cmd/diffengine/          # CLI entry point
+cmd/drift-guard/          # CLI entry point
 internal/
   parser/
     openapi/             # OpenAPI YAML/JSON → schema.Schema

@@ -1,4 +1,4 @@
-BIN := diffengine
+BIN := drift-guard
 CMD := ./cmd/diffengine
 
 .PHONY: build test vet lint clean run-openapi run-graphql run-grpc
