@@ -12,11 +12,20 @@ A schema diff engine that detects and classifies breaking vs. non-breaking API c
 
 ## Install
 
+### Homebrew (macOS / Linux)
+
+```sh
+brew tap pgomes13/tap
+brew install drift-guard
+```
+
+### Go install
+
 ```sh
 go install github.com/pgomes13/drift-guard-engine/cmd/driftengine@latest
 ```
 
-Or build from source:
+### Build from source
 
 ```sh
 go build -o drift-guard ./cmd/driftengine
