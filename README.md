@@ -1,4 +1,4 @@
-# drift-guard-diff-engine
+# drift-guard-engine
 
 A schema diff engine that detects and classifies breaking vs. non-breaking API contract changes across **OpenAPI**, **GraphQL**, and **gRPC** schemas.
 
@@ -28,18 +28,18 @@ make build
 drift-guard <command> --base <file> --head <file> [--format <format>] [--fail-on-breaking]
 ```
 
-| Command | Description |
-|---|---|
+| Command   | Description                                 |
+| --------- | ------------------------------------------- |
 | `openapi` | Diff two OpenAPI 3.x schemas (YAML or JSON) |
-| `graphql` | Diff two GraphQL SDL schemas |
-| `grpc` | Diff two Protobuf schemas (`.proto`) |
+| `graphql` | Diff two GraphQL SDL schemas                |
+| `grpc`    | Diff two Protobuf schemas (`.proto`)        |
 
-| Flag | Description | Default |
-|---|---|---|
-| `--base` | Path to the base (before) schema file | required |
-| `--head` | Path to the head (after) schema file | required |
-| `-f, --format` | Output format: `text`, `json`, `github` | `text` |
-| `--fail-on-breaking` | Exit with code `1` if breaking changes are detected | `false` |
+| Flag                 | Description                                         | Default  |
+| -------------------- | --------------------------------------------------- | -------- |
+| `--base`             | Path to the base (before) schema file               | required |
+| `--head`             | Path to the head (after) schema file                | required |
+| `-f, --format`       | Output format: `text`, `json`, `github`             | `text`   |
+| `--fail-on-breaking` | Exit with code `1` if breaking changes are detected | `false`  |
 
 ### Examples
 
@@ -112,65 +112,65 @@ Emits GitHub Actions [workflow commands](https://docs.github.com/en/actions/writ
 
 ### OpenAPI
 
-| Change | Severity |
-|---|---|
-| Endpoint / method removed | breaking |
-| Endpoint / method added | non-breaking |
-| Parameter removed | breaking |
-| Parameter added | non-breaking |
-| Parameter type changed | breaking |
-| Parameter required: optional → required | breaking |
+| Change                                  | Severity     |
+| --------------------------------------- | ------------ |
+| Endpoint / method removed               | breaking     |
+| Endpoint / method added                 | non-breaking |
+| Parameter removed                       | breaking     |
+| Parameter added                         | non-breaking |
+| Parameter type changed                  | breaking     |
+| Parameter required: optional → required | breaking     |
 | Parameter required: required → optional | non-breaking |
-| Request body removed | breaking |
-| Response code removed | breaking |
-| Field removed | breaking |
-| Field added | non-breaking |
-| Field type changed | breaking |
-| Field required: optional → required | breaking |
+| Request body removed                    | breaking     |
+| Response code removed                   | breaking     |
+| Field removed                           | breaking     |
+| Field added                             | non-breaking |
+| Field type changed                      | breaking     |
+| Field required: optional → required     | breaking     |
 
 ### GraphQL
 
-| Change | Severity |
-|---|---|
-| Type removed | breaking |
-| Type added | non-breaking |
-| Type kind changed (e.g. Object → Interface) | breaking |
-| Output field removed | breaking |
-| Output field added | non-breaking |
-| Output field deprecated | info |
-| Output field type: non-null → nullable (`T!` → `T`) | breaking |
+| Change                                              | Severity     |
+| --------------------------------------------------- | ------------ |
+| Type removed                                        | breaking     |
+| Type added                                          | non-breaking |
+| Type kind changed (e.g. Object → Interface)         | breaking     |
+| Output field removed                                | breaking     |
+| Output field added                                  | non-breaking |
+| Output field deprecated                             | info         |
+| Output field type: non-null → nullable (`T!` → `T`) | breaking     |
 | Output field type: nullable → non-null (`T` → `T!`) | non-breaking |
-| Argument removed | breaking |
-| Argument added (required) | breaking |
-| Argument added (optional) | non-breaking |
-| Enum value removed | breaking |
-| Enum value added | non-breaking |
-| Union member removed | breaking |
-| Union member added | non-breaking |
-| Input field removed | breaking |
-| Input field added (required) | breaking |
-| Input field added (optional) | non-breaking |
-| Interface removed from type | breaking |
-| Interface added to type | non-breaking |
+| Argument removed                                    | breaking     |
+| Argument added (required)                           | breaking     |
+| Argument added (optional)                           | non-breaking |
+| Enum value removed                                  | breaking     |
+| Enum value added                                    | non-breaking |
+| Union member removed                                | breaking     |
+| Union member added                                  | non-breaking |
+| Input field removed                                 | breaking     |
+| Input field added (required)                        | breaking     |
+| Input field added (optional)                        | non-breaking |
+| Interface removed from type                         | breaking     |
+| Interface added to type                             | non-breaking |
 
 ### gRPC
 
-| Change | Severity |
-|---|---|
-| Service removed | breaking |
-| Service added | non-breaking |
-| RPC removed | breaking |
-| RPC added | non-breaking |
-| RPC request type changed | breaking |
-| RPC response type changed | breaking |
-| RPC streaming mode changed | breaking |
-| Message removed | breaking |
-| Message added | non-breaking |
-| Field removed | breaking |
-| Field added | non-breaking |
-| Field type changed | breaking |
-| Field number changed | breaking |
-| Field label changed (singular ↔ repeated) | breaking |
+| Change                                    | Severity     |
+| ----------------------------------------- | ------------ |
+| Service removed                           | breaking     |
+| Service added                             | non-breaking |
+| RPC removed                               | breaking     |
+| RPC added                                 | non-breaking |
+| RPC request type changed                  | breaking     |
+| RPC response type changed                 | breaking     |
+| RPC streaming mode changed                | breaking     |
+| Message removed                           | breaking     |
+| Message added                             | non-breaking |
+| Field removed                             | breaking     |
+| Field added                               | non-breaking |
+| Field type changed                        | breaking     |
+| Field number changed                      | breaking     |
+| Field label changed (singular ↔ repeated) | breaking     |
 
 ## Development
 
