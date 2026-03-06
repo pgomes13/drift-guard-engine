@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/fs"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -14,6 +13,7 @@ import (
 	differgraphql "github.com/pgomes13/drift-guard-engine/internal/differ/graphql"
 	differgrpc "github.com/pgomes13/drift-guard-engine/internal/differ/grpc"
 	differopenapi "github.com/pgomes13/drift-guard-engine/internal/differ/openapi"
+	"github.com/pgomes13/drift-guard-engine/internal/languages"
 	parsergraphql "github.com/pgomes13/drift-guard-engine/internal/parser/graphql"
 	parsergrpc "github.com/pgomes13/drift-guard-engine/internal/parser/grpc"
 	parseropenapi "github.com/pgomes13/drift-guard-engine/internal/parser/openapi"
@@ -96,8 +96,8 @@ func runCompare(baseRef, genCmd, outputPath string) (basePath, headPath string, 
 	return filepath.Join(worktreeDir, outputPath), filepath.Join(cwd, outputPath), cleanup, nil
 }
 
-// runCompareAutoOpenAPI uses swag to generate OpenAPI schemas without
-// requiring the user to know swag's flags.
+// runCompareAutoOpenAPI detects the project type and generates OpenAPI schemas
+// for both base and head revisions.
 func runCompareAutoOpenAPI(baseRef string) (basePath, headPath string, cleanup func(), err error) {
 	worktreeDir, cwd, worktreeCleanup, err := setupWorktree(baseRef)
 	if err != nil {
@@ -120,85 +120,19 @@ func runCompareAutoOpenAPI(baseRef string) (basePath, headPath string, cleanup f
 		os.RemoveAll(headOut)
 	}
 
-	if err := runSwagAuto(worktreeDir, baseOut); err != nil {
+	gen, err := languages.DetectGenerator(cwd)
+	if err != nil {
+		return "", "", cleanup, err
+	}
+
+	if err := gen(worktreeDir, baseOut); err != nil {
 		return "", "", cleanup, fmt.Errorf("generate base schema: %w", err)
 	}
-	if err := runSwagAuto(cwd, headOut); err != nil {
+	if err := gen(cwd, headOut); err != nil {
 		return "", "", cleanup, fmt.Errorf("generate head schema: %w", err)
 	}
 
 	return filepath.Join(baseOut, "swagger.yaml"), filepath.Join(headOut, "swagger.yaml"), cleanup, nil
-}
-
-// runSwagAuto finds main.go in projectDir and runs swag init with the right flags.
-func runSwagAuto(projectDir, outputDir string) error {
-	mainFile, err := findMainGo(projectDir)
-	if err != nil {
-		return err
-	}
-
-	rel, err := filepath.Rel(projectDir, mainFile)
-	if err != nil {
-		return fmt.Errorf("resolve main.go path: %w", err)
-	}
-
-	cmd := exec.Command("swag", "init", "--generalInfo", rel, "--output", outputDir, "--outputTypes", "yaml")
-	cmd.Dir = projectDir
-	cmd.Stdout = os.Stderr
-	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("%w\n\nHint: install swag with: go install github.com/swaggo/swag/cmd/swag@latest", err)
-	}
-	return nil
-}
-
-// findMainGo walks the project directory (up to 4 levels deep) to locate main.go,
-// preferring cmd/*/ locations over others.
-func findMainGo(dir string) (string, error) {
-	var found []string
-	_ = filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return nil
-		}
-		if d.IsDir() {
-			name := d.Name()
-			if name == "vendor" || name == "node_modules" || strings.HasPrefix(name, ".") {
-				return filepath.SkipDir
-			}
-			rel, _ := filepath.Rel(dir, path)
-			if strings.Count(rel, string(filepath.Separator)) >= 4 {
-				return filepath.SkipDir
-			}
-			return nil
-		}
-		if d.Name() == "main.go" {
-			found = append(found, path)
-		}
-		return nil
-	})
-
-	if len(found) == 0 {
-		// list top-level entries to aid diagnosis
-		entries, _ := os.ReadDir(dir)
-		names := make([]string, 0, len(entries))
-		for _, e := range entries {
-			names = append(names, e.Name())
-		}
-		return "", fmt.Errorf(
-			"cannot find main.go in %s (top-level: %v)\n"+
-				"Use --cmd to provide a custom generation command, e.g.:\n"+
-				`  --cmd "swag init --generalInfo ./path/to/main.go" --output docs/swagger.yaml`,
-			dir, names,
-		)
-	}
-
-	// prefer cmd/* locations
-	for _, f := range found {
-		if strings.Contains(f, string(filepath.Separator)+"cmd"+string(filepath.Separator)) {
-			return f, nil
-		}
-	}
-	return found[0], nil
 }
 
 func runCmd(command, dir string) error {
