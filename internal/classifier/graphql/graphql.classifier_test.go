@@ -1,15 +1,15 @@
-package classifier_test
+package graphql_test
 
 import (
 	"testing"
 
 	"drift-guard-diff-engine/internal/classifier"
 	"drift-guard-diff-engine/internal/differ"
-	"drift-guard-diff-engine/internal/parser"
+	parsergraphql "drift-guard-diff-engine/internal/parser/graphql"
 	"drift-guard-diff-engine/pkg/schema"
 )
 
-const testdataDir = "../../internal/testdata/"
+const testdataDir = "../../testdata/"
 
 // --------------------------------------------------------------------------
 // Severity rules — table-driven
@@ -199,11 +199,11 @@ func TestClassify_GraphQL_SeverityRules(t *testing.T) {
 
 func TestClassify_GraphQL_SummaryCounts(t *testing.T) {
 	changes := []schema.Change{
-		{Type: schema.ChangeTypeGQLFieldRemoved},           // breaking
-		{Type: schema.ChangeTypeGQLEnumValueRemoved},       // breaking
-		{Type: schema.ChangeTypeGQLFieldAdded},             // non-breaking
-		{Type: schema.ChangeTypeGQLTypeAdded, After: "OBJECT"}, // non-breaking
-		{Type: schema.ChangeTypeGQLFieldDeprecated},        // info
+		{Type: schema.ChangeTypeGQLFieldRemoved},                  // breaking
+		{Type: schema.ChangeTypeGQLEnumValueRemoved},              // breaking
+		{Type: schema.ChangeTypeGQLFieldAdded},                    // non-breaking
+		{Type: schema.ChangeTypeGQLTypeAdded, After: "OBJECT"},    // non-breaking
+		{Type: schema.ChangeTypeGQLFieldDeprecated},               // info
 	}
 
 	result := classifier.Classify("base", "head", changes)
@@ -227,11 +227,11 @@ func TestClassify_GraphQL_SummaryCounts(t *testing.T) {
 // --------------------------------------------------------------------------
 
 func TestClassify_GraphQL_FixtureBreakingChanges(t *testing.T) {
-	base, err := parser.ParseGraphQLFile(testdataDir + "base.graphql")
+	base, err := parsergraphql.Parse(testdataDir + "base.graphql")
 	if err != nil {
 		t.Fatalf("parse base: %v", err)
 	}
-	head, err := parser.ParseGraphQLFile(testdataDir + "head.graphql")
+	head, err := parsergraphql.Parse(testdataDir + "head.graphql")
 	if err != nil {
 		t.Fatalf("parse head: %v", err)
 	}
@@ -254,11 +254,11 @@ func TestClassify_GraphQL_FixtureBreakingChanges(t *testing.T) {
 }
 
 func TestClassify_GraphQL_FixtureNonBreakingChanges(t *testing.T) {
-	base, err := parser.ParseGraphQLFile(testdataDir + "base.graphql")
+	base, err := parsergraphql.Parse(testdataDir + "base.graphql")
 	if err != nil {
 		t.Fatalf("parse base: %v", err)
 	}
-	head, err := parser.ParseGraphQLFile(testdataDir + "head.graphql")
+	head, err := parsergraphql.Parse(testdataDir + "head.graphql")
 	if err != nil {
 		t.Fatalf("parse head: %v", err)
 	}
@@ -272,7 +272,7 @@ func TestClassify_GraphQL_FixtureNonBreakingChanges(t *testing.T) {
 }
 
 func TestClassify_GraphQL_IdenticalSchemas_NoChanges(t *testing.T) {
-	base, err := parser.ParseGraphQLFile(testdataDir + "base.graphql")
+	base, err := parsergraphql.Parse(testdataDir + "base.graphql")
 	if err != nil {
 		t.Fatalf("parse: %v", err)
 	}

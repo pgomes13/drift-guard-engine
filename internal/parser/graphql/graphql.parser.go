@@ -1,4 +1,4 @@
-package parser
+package graphql
 
 import (
 	"fmt"
@@ -19,8 +19,8 @@ var builtinTypes = map[string]bool{
 	"__DirectiveLocation": true,
 }
 
-// ParseGraphQLFile reads a .graphql / .gql SDL file and returns a normalized GQLSchema.
-func ParseGraphQLFile(path string) (*schema.GQLSchema, error) {
+// Parse reads a .graphql / .gql SDL file and returns a normalized GQLSchema.
+func Parse(path string) (*schema.GQLSchema, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("reading file %s: %w", path, err)
@@ -32,19 +32,16 @@ func ParseGraphQLFile(path string) (*schema.GQLSchema, error) {
 		return nil, fmt.Errorf("parsing GraphQL SDL %s: %w", path, parseErr)
 	}
 
-	return normalizeGQL(doc), nil
+	return normalize(doc), nil
 }
 
-func normalizeGQL(doc *ast.SchemaDocument) *schema.GQLSchema {
+func normalize(doc *ast.SchemaDocument) *schema.GQLSchema {
 	s := &schema.GQLSchema{}
 
 	for _, def := range doc.Definitions {
 		if builtinTypes[def.Name] {
 			continue
 		}
-		// Skip the synthetic Query/Mutation/Subscription root names
-		// emitted by some tools as schema { query: Query } — we keep the
-		// actual Query/Mutation/Subscription types since their fields are the API surface.
 
 		t := schema.GQLType{
 			Name:        def.Name,
@@ -54,14 +51,14 @@ func normalizeGQL(doc *ast.SchemaDocument) *schema.GQLSchema {
 		switch def.Kind {
 		case ast.Object:
 			t.Kind = schema.GQLTypeKindObject
-			t.Fields = normalizeGQLFields(def.Fields)
+			t.Fields = normalizeFields(def.Fields)
 			for _, iface := range def.Interfaces {
 				t.Interfaces = append(t.Interfaces, iface)
 			}
 
 		case ast.Interface:
 			t.Kind = schema.GQLTypeKindInterface
-			t.Fields = normalizeGQLFields(def.Fields)
+			t.Fields = normalizeFields(def.Fields)
 
 		case ast.Union:
 			t.Kind = schema.GQLTypeKindUnion
@@ -77,7 +74,7 @@ func normalizeGQL(doc *ast.SchemaDocument) *schema.GQLSchema {
 
 		case ast.InputObject:
 			t.Kind = schema.GQLTypeKindInput
-			t.Fields = normalizeGQLFields(def.Fields)
+			t.Fields = normalizeFields(def.Fields)
 
 		case ast.Scalar:
 			t.Kind = schema.GQLTypeKindScalar
@@ -92,7 +89,7 @@ func normalizeGQL(doc *ast.SchemaDocument) *schema.GQLSchema {
 	return s
 }
 
-func normalizeGQLFields(fields ast.FieldList) []schema.GQLField {
+func normalizeFields(fields ast.FieldList) []schema.GQLField {
 	result := make([]schema.GQLField, 0, len(fields))
 	for _, f := range fields {
 		gf := schema.GQLField{
@@ -103,13 +100,13 @@ func normalizeGQLFields(fields ast.FieldList) []schema.GQLField {
 		if f.Directives.ForName("deprecated") != nil {
 			gf.Deprecated = true
 		}
-		gf.Arguments = normalizeGQLArgs(f.Arguments)
+		gf.Arguments = normalizeArgs(f.Arguments)
 		result = append(result, gf)
 	}
 	return result
 }
 
-func normalizeGQLArgs(args ast.ArgumentDefinitionList) []schema.GQLArgument {
+func normalizeArgs(args ast.ArgumentDefinitionList) []schema.GQLArgument {
 	result := make([]schema.GQLArgument, 0, len(args))
 	for _, a := range args {
 		ga := schema.GQLArgument{

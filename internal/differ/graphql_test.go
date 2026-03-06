@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"drift-guard-diff-engine/internal/differ"
-	"drift-guard-diff-engine/internal/parser"
+	parsergraphql "drift-guard-diff-engine/internal/parser/graphql"
 	"drift-guard-diff-engine/pkg/schema"
 )
 
@@ -14,11 +14,11 @@ const testdataDir = "../testdata/"
 func loadFixtures(t *testing.T) (base, head *schema.GQLSchema) {
 	t.Helper()
 	var err error
-	base, err = parser.ParseGraphQLFile(testdataDir + "base.graphql")
+	base, err = parsergraphql.Parse(testdataDir + "base.graphql")
 	if err != nil {
 		t.Fatalf("parse base: %v", err)
 	}
-	head, err = parser.ParseGraphQLFile(testdataDir + "head.graphql")
+	head, err = parsergraphql.Parse(testdataDir + "head.graphql")
 	if err != nil {
 		t.Fatalf("parse head: %v", err)
 	}
@@ -266,7 +266,7 @@ func TestDiffGQL_TotalChanges(t *testing.T) {
 }
 
 func TestDiffGQL_IdenticalSchemas_NoChanges(t *testing.T) {
-	base, err := parser.ParseGraphQLFile(testdataDir + "base.graphql")
+	base, err := parsergraphql.Parse(testdataDir + "base.graphql")
 	if err != nil {
 		t.Fatalf("parse: %v", err)
 	}

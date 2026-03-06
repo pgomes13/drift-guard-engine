@@ -1,16 +1,16 @@
-package parser_test
+package graphql_test
 
 import (
 	"testing"
 
-	"drift-guard-diff-engine/internal/parser"
+	"drift-guard-diff-engine/internal/parser/graphql"
 	"drift-guard-diff-engine/pkg/schema"
 )
 
-const testdataDir = "../testdata/"
+const testdataDir = "../../testdata/"
 
-func TestParseGraphQLFile_ReturnsSchema(t *testing.T) {
-	s, err := parser.ParseGraphQLFile(testdataDir + "base.graphql")
+func TestParse_ReturnsSchema(t *testing.T) {
+	s, err := graphql.Parse(testdataDir + "base.graphql")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -19,8 +19,8 @@ func TestParseGraphQLFile_ReturnsSchema(t *testing.T) {
 	}
 }
 
-func TestParseGraphQLFile_TypeCount(t *testing.T) {
-	s, err := parser.ParseGraphQLFile(testdataDir + "base.graphql")
+func TestParse_TypeCount(t *testing.T) {
+	s, err := graphql.Parse(testdataDir + "base.graphql")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -31,8 +31,8 @@ func TestParseGraphQLFile_TypeCount(t *testing.T) {
 	}
 }
 
-func TestParseGraphQLFile_ObjectFields(t *testing.T) {
-	s, err := parser.ParseGraphQLFile(testdataDir + "base.graphql")
+func TestParse_ObjectFields(t *testing.T) {
+	s, err := graphql.Parse(testdataDir + "base.graphql")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -53,8 +53,8 @@ func TestParseGraphQLFile_ObjectFields(t *testing.T) {
 	}
 }
 
-func TestParseGraphQLFile_EnumValues(t *testing.T) {
-	s, err := parser.ParseGraphQLFile(testdataDir + "base.graphql")
+func TestParse_EnumValues(t *testing.T) {
+	s, err := graphql.Parse(testdataDir + "base.graphql")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -75,8 +75,8 @@ func TestParseGraphQLFile_EnumValues(t *testing.T) {
 	}
 }
 
-func TestParseGraphQLFile_UnionMembers(t *testing.T) {
-	s, err := parser.ParseGraphQLFile(testdataDir + "base.graphql")
+func TestParse_UnionMembers(t *testing.T) {
+	s, err := graphql.Parse(testdataDir + "base.graphql")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -93,8 +93,8 @@ func TestParseGraphQLFile_UnionMembers(t *testing.T) {
 	}
 }
 
-func TestParseGraphQLFile_InputFields(t *testing.T) {
-	s, err := parser.ParseGraphQLFile(testdataDir + "base.graphql")
+func TestParse_InputFields(t *testing.T) {
+	s, err := graphql.Parse(testdataDir + "base.graphql")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -116,8 +116,8 @@ func TestParseGraphQLFile_InputFields(t *testing.T) {
 	}
 }
 
-func TestParseGraphQLFile_FieldArguments(t *testing.T) {
-	s, err := parser.ParseGraphQLFile(testdataDir + "base.graphql")
+func TestParse_FieldArguments(t *testing.T) {
+	s, err := graphql.Parse(testdataDir + "base.graphql")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -142,8 +142,8 @@ func TestParseGraphQLFile_FieldArguments(t *testing.T) {
 	}
 }
 
-func TestParseGraphQLFile_InterfaceKind(t *testing.T) {
-	s, err := parser.ParseGraphQLFile(testdataDir + "base.graphql")
+func TestParse_InterfaceKind(t *testing.T) {
+	s, err := graphql.Parse(testdataDir + "base.graphql")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -157,15 +157,15 @@ func TestParseGraphQLFile_InterfaceKind(t *testing.T) {
 	}
 }
 
-func TestParseGraphQLFile_MissingFile(t *testing.T) {
-	_, err := parser.ParseGraphQLFile("/nonexistent/path.graphql")
+func TestParse_MissingFile(t *testing.T) {
+	_, err := graphql.Parse("/nonexistent/path.graphql")
 	if err == nil {
 		t.Fatal("expected error for missing file")
 	}
 }
 
-func TestParseGraphQLFile_InvalidSDL(t *testing.T) {
-	_, err := parser.ParseGraphQLFile(testdataDir + "base.graphql")
+func TestParse_ValidSDL_NoError(t *testing.T) {
+	_, err := graphql.Parse(testdataDir + "base.graphql")
 	if err != nil {
 		t.Fatalf("valid SDL should not error: %v", err)
 	}

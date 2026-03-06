@@ -1,4 +1,4 @@
-package parser
+package openapi
 
 import (
 	"encoding/json"
@@ -18,8 +18,8 @@ type rawOpenAPI struct {
 		Title   string `json:"title" yaml:"title"`
 		Version string `json:"version" yaml:"version"`
 	} `json:"info" yaml:"info"`
-	Paths      map[string]rawPathItem            `json:"paths" yaml:"paths"`
-	Components rawComponents                     `json:"components" yaml:"components"`
+	Paths      map[string]rawPathItem `json:"paths" yaml:"paths"`
+	Components rawComponents          `json:"components" yaml:"components"`
 }
 
 type rawComponents struct {
@@ -37,9 +37,9 @@ type rawPathItem struct {
 }
 
 type rawOperation struct {
-	OperationID string           `json:"operationId" yaml:"operationId"`
-	Parameters  []rawParameter   `json:"parameters" yaml:"parameters"`
-	RequestBody *rawRequestBody  `json:"requestBody" yaml:"requestBody"`
+	OperationID string                 `json:"operationId" yaml:"operationId"`
+	Parameters  []rawParameter         `json:"parameters" yaml:"parameters"`
+	RequestBody *rawRequestBody        `json:"requestBody" yaml:"requestBody"`
 	Responses   map[string]rawResponse `json:"responses" yaml:"responses"`
 }
 
@@ -52,8 +52,8 @@ type rawParameter struct {
 }
 
 type rawRequestBody struct {
-	Required bool                        `json:"required" yaml:"required"`
-	Content  map[string]rawMediaType     `json:"content" yaml:"content"`
+	Required bool                    `json:"required" yaml:"required"`
+	Content  map[string]rawMediaType `json:"content" yaml:"content"`
 }
 
 type rawMediaType struct {
@@ -61,8 +61,8 @@ type rawMediaType struct {
 }
 
 type rawResponse struct {
-	Ref     string                      `json:"$ref" yaml:"$ref"`
-	Content map[string]rawMediaType     `json:"content" yaml:"content"`
+	Ref     string                  `json:"$ref" yaml:"$ref"`
+	Content map[string]rawMediaType `json:"content" yaml:"content"`
 }
 
 type rawSchema struct {
@@ -76,8 +76,8 @@ type rawSchema struct {
 	Enum        []interface{}        `json:"enum" yaml:"enum"`
 }
 
-// ParseFile reads and parses an OpenAPI 3.x file (JSON or YAML) into a normalized Schema.
-func ParseFile(path string) (*schema.Schema, error) {
+// Parse reads and parses an OpenAPI 3.x file (JSON or YAML) into a normalized Schema.
+func Parse(path string) (*schema.Schema, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("reading file %s: %w", path, err)

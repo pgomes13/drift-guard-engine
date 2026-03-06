@@ -9,7 +9,8 @@ import (
 
 	"drift-guard-diff-engine/internal/classifier"
 	"drift-guard-diff-engine/internal/differ"
-	"drift-guard-diff-engine/internal/parser"
+	parsergraphql "drift-guard-diff-engine/internal/parser/graphql"
+	parseropenapi "drift-guard-diff-engine/internal/parser/openapi"
 	"drift-guard-diff-engine/internal/reporter"
 )
 
@@ -33,12 +34,12 @@ func main() {
 
 	switch kind {
 	case "graphql":
-		baseSchema, err := parser.ParseGraphQLFile(*baseFile)
+		baseSchema, err := parsergraphql.Parse(*baseFile)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error parsing base schema: %v\n", err)
 			os.Exit(2)
 		}
-		headSchema, err := parser.ParseGraphQLFile(*headFile)
+		headSchema, err := parsergraphql.Parse(*headFile)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error parsing head schema: %v\n", err)
 			os.Exit(2)
@@ -53,12 +54,12 @@ func main() {
 		}
 
 	default: // openapi
-		baseSchema, err := parser.ParseFile(*baseFile)
+		baseSchema, err := parseropenapi.Parse(*baseFile)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error parsing base schema: %v\n", err)
 			os.Exit(2)
 		}
-		headSchema, err := parser.ParseFile(*headFile)
+		headSchema, err := parseropenapi.Parse(*headFile)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error parsing head schema: %v\n", err)
 			os.Exit(2)
