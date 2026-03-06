@@ -13,7 +13,7 @@ A schema diff engine that detects and classifies breaking vs. non-breaking API c
 ## Install
 
 ```sh
-go build -o diffengine ./cmd/diffengine
+go build -o drift-guard ./cmd/drift-guard
 ```
 
 Or via Make:
@@ -25,39 +25,36 @@ make build
 ## Usage
 
 ```sh
-diffengine --base <base-schema> --head <head-schema> [--type <type>] [--format <format>] [--fail-on-breaking]
+drift-guard <command> --base <file> --head <file> [--format <format>] [--fail-on-breaking]
 ```
+
+| Command | Description |
+|---|---|
+| `openapi` | Diff two OpenAPI 3.x schemas (YAML or JSON) |
+| `graphql` | Diff two GraphQL SDL schemas |
+| `grpc` | Diff two Protobuf schemas (`.proto`) |
 
 | Flag | Description | Default |
 |---|---|---|
 | `--base` | Path to the base (before) schema file | required |
 | `--head` | Path to the head (after) schema file | required |
-| `--type` | Schema type: `openapi`, `graphql`, `grpc` | auto-detected from extension |
-| `--format` | Output format: `text`, `json`, `github` | `text` |
+| `-f, --format` | Output format: `text`, `json`, `github` | `text` |
 | `--fail-on-breaking` | Exit with code `1` if breaking changes are detected | `false` |
-
-Schema type is auto-detected from the file extension when `--type` is omitted:
-
-| Extension | Detected type |
-|---|---|
-| `.yaml`, `.yml`, `.json` | `openapi` |
-| `.graphql`, `.gql` | `graphql` |
-| `.proto` | `grpc` |
 
 ### Examples
 
 ```sh
 # OpenAPI — text output
-diffengine --base api/base.yaml --head api/head.yaml
+drift-guard openapi --base api/base.yaml --head api/head.yaml
 
 # GraphQL — JSON output
-diffengine --base schema/base.graphql --head schema/head.graphql --format json
+drift-guard graphql --base schema/base.graphql --head schema/head.graphql --format json
 
 # gRPC — fail CI on breaking changes
-diffengine --base proto/base.proto --head proto/head.proto --type grpc --fail-on-breaking
+drift-guard grpc --base proto/base.proto --head proto/head.proto --fail-on-breaking
 
 # GitHub Actions annotations
-diffengine --base base.yaml --head head.yaml --format github
+drift-guard openapi --base base.yaml --head head.yaml --format github
 ```
 
 ## Output formats
@@ -191,7 +188,7 @@ make run-graphql  # build and diff bundled GraphQL fixtures
 ## Architecture
 
 ```
-cmd/diffengine/          # CLI entry point
+cmd/drift-guard/          # CLI entry point
 internal/
   parser/
     openapi/             # OpenAPI YAML/JSON → schema.Schema
