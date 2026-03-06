@@ -6,14 +6,14 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"drift-guard-diff-engine/internal/classifier"
-	differgraphql "drift-guard-diff-engine/internal/differ/graphql"
-	differgrpc "drift-guard-diff-engine/internal/differ/grpc"
-	differopenapi "drift-guard-diff-engine/internal/differ/openapi"
-	parsergraphql "drift-guard-diff-engine/internal/parser/graphql"
-	parsergrpc "drift-guard-diff-engine/internal/parser/grpc"
-	parseropenapi "drift-guard-diff-engine/internal/parser/openapi"
-	"drift-guard-diff-engine/internal/reporter"
+	"drift-guard-engine/internal/classifier"
+	differgraphql "drift-guard-engine/internal/differ/graphql"
+	differgrpc "drift-guard-engine/internal/differ/grpc"
+	differopenapi "drift-guard-engine/internal/differ/openapi"
+	parsergraphql "drift-guard-engine/internal/parser/graphql"
+	parsergrpc "drift-guard-engine/internal/parser/grpc"
+	parseropenapi "drift-guard-engine/internal/parser/openapi"
+	"drift-guard-engine/internal/reporter"
 )
 
 func main() {

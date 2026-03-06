@@ -4,7 +4,7 @@ package helpers
 import (
 	"fmt"
 
-	"drift-guard-diff-engine/pkg/schema"
+	"drift-guard-engine/pkg/schema"
 )
 
 func IndexGQLTypes(s *schema.GQLSchema) map[string]schema.GQLType {

@@ -1,7 +1,7 @@
 package helpers
 
 import (
-	"drift-guard-diff-engine/pkg/schema"
+	"drift-guard-engine/pkg/schema"
 
 	"github.com/emicklei/proto"
 )

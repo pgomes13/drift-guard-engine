@@ -1,0 +1,7 @@
+services:
+  drift-guard-engine:
+    build: .
+    ports:
+      - "${PORT:-50051}:50051"
+    environment:
+      PORT: "50051"

@@ -1,6 +1,6 @@
 package openapi
 
-import "drift-guard-diff-engine/pkg/schema"
+import "drift-guard-engine/pkg/schema"
 
 // Severity returns the severity for OpenAPI change types.
 // The second return value is false if the change type is not an OpenAPI type.

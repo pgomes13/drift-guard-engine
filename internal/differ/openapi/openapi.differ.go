@@ -5,8 +5,8 @@ package openapi
 import (
 	"fmt"
 
-	"drift-guard-diff-engine/internal/differ/openapi/helpers"
-	"drift-guard-diff-engine/pkg/schema"
+	"drift-guard-engine/internal/differ/openapi/helpers"
+	"drift-guard-engine/pkg/schema"
 )
 
 // Diff computes all changes between base and head schemas.

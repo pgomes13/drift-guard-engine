@@ -3,7 +3,7 @@ package helpers
 import (
 	"strings"
 
-	"drift-guard-diff-engine/pkg/schema"
+	"drift-guard-engine/pkg/schema"
 
 	"github.com/vektah/gqlparser/v2/ast"
 )

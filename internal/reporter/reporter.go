@@ -7,7 +7,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"drift-guard-diff-engine/pkg/schema"
+	"drift-guard-engine/pkg/schema"
 )
 
 // Format controls the output format of the report.

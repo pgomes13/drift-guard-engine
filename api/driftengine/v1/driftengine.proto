@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package driftengine.v1;
+
+option go_package = "drift-guard-engine/api/driftengine/v1;driftenginev1";
+
+// DiffEngine compares two API schema files and returns a classified diff.
+service DiffEngine {
+  rpc Diff(DiffRequest) returns (DiffResponse);
+}
+
+message DiffRequest {
+  // Raw content of the base schema file.
+  bytes base_content = 1;
+  // Raw content of the head schema file.
+  bytes head_content = 2;
+  // Original filename of the base file (used for extension-based type detection).
+  string base_name   = 3;
+  // Original filename of the head file.
+  string head_name   = 4;
+  // Explicit schema type: "openapi", "graphql", or "grpc".
+  // If omitted, auto-detected from base_name extension.
+  string type        = 5;
+}
+
+message DiffResponse {
+  repeated Change changes = 1;
+  Summary         summary = 2;
+}
+
+message Change {
+  string type        = 1;
+  string severity    = 2;
+  string path        = 3;
+  string method      = 4;
+  string location    = 5;
+  string description = 6;
+  string before      = 7;
+  string after       = 8;
+}
+
+message Summary {
+  int32 total        = 1;
+  int32 breaking     = 2;
+  int32 non_breaking = 3;
+  int32 info         = 4;
+}

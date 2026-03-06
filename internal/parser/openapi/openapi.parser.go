@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"drift-guard-diff-engine/internal/parser/openapi/helpers"
-	"drift-guard-diff-engine/pkg/schema"
+	"drift-guard-engine/internal/parser/openapi/helpers"
+	"drift-guard-engine/pkg/schema"
 
 	"gopkg.in/yaml.v3"
 )

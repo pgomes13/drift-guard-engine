@@ -3,7 +3,7 @@ package helpers
 import (
 	"fmt"
 
-	"drift-guard-diff-engine/pkg/schema"
+	"drift-guard-engine/pkg/schema"
 )
 
 func DiffResponses(path, method string, base, head []schema.Response) []schema.Change {

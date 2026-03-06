@@ -3,7 +3,7 @@ package helpers
 import (
 	"fmt"
 
-	"drift-guard-diff-engine/pkg/schema"
+	"drift-guard-engine/pkg/schema"
 )
 
 // Normalize converts a raw OpenAPI document into a normalized Schema.

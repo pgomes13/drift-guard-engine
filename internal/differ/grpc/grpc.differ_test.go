@@ -3,9 +3,9 @@ package grpc_test
 import (
 	"testing"
 
-	differgrpc "drift-guard-diff-engine/internal/differ/grpc"
-	parsergrpc "drift-guard-diff-engine/internal/parser/grpc"
-	"drift-guard-diff-engine/pkg/schema"
+	differgrpc "drift-guard-engine/internal/differ/grpc"
+	parsergrpc "drift-guard-engine/internal/parser/grpc"
+	"drift-guard-engine/pkg/schema"
 )
 
 const testdataDir = "../../testdata/"

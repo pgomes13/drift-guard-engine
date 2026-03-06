@@ -1,10 +1,10 @@
 package classifier
 
 import (
-	"drift-guard-diff-engine/internal/classifier/graphql"
-	"drift-guard-diff-engine/internal/classifier/grpc"
-	"drift-guard-diff-engine/internal/classifier/openapi"
-	"drift-guard-diff-engine/pkg/schema"
+	"drift-guard-engine/internal/classifier/graphql"
+	"drift-guard-engine/internal/classifier/grpc"
+	"drift-guard-engine/internal/classifier/openapi"
+	"drift-guard-engine/pkg/schema"
 )
 
 // Classify assigns a Severity to each Change and builds a DiffResult.

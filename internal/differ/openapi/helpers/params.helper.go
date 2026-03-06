@@ -3,7 +3,7 @@ package helpers
 import (
 	"fmt"
 
-	"drift-guard-diff-engine/pkg/schema"
+	"drift-guard-engine/pkg/schema"
 )
 
 func IndexParams(params []schema.Parameter) map[string]schema.Parameter {

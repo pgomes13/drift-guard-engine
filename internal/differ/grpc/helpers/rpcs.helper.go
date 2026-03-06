@@ -3,7 +3,7 @@ package helpers
 import (
 	"fmt"
 
-	"drift-guard-diff-engine/pkg/schema"
+	"drift-guard-engine/pkg/schema"
 )
 
 func indexRPCs(rpcs []schema.GRPCRPC) map[string]schema.GRPCRPC {
