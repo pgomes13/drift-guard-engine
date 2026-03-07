@@ -3,7 +3,7 @@ CMD              := ./cmd/drift-guard
 HOMEBREW_TAP     := pgomes13/homebrew-tap
 FORMULA          := drift-guard
 
-.PHONY: build test vet lint clean run-openapi run-graphql run-grpc release major minor patch homebrew commit override
+.PHONY: build test vet lint clean run-openapi run-graphql run-grpc release major minor patch homebrew commit
 
 build:
 	go build -o $(BIN) $(CMD)
@@ -47,7 +47,6 @@ commit:
 ##   make release          # bump patch → tag → push
 ##   make release minor    # bump minor → tag → push
 ##   make release major    # bump major → tag → push
-##   make release override # re-tag current version (force) → push
 ##
 ## Pushing the semver tag triggers the release.yml workflow (goreleaser + Homebrew update).
 ifneq (,$(filter major,$(MAKECMDGOALS)))
@@ -58,40 +57,25 @@ else
   _bump := patch
 endif
 
-major minor patch homebrew override:
+major minor patch homebrew:
 	@true
 
 release:
-ifneq (,$(filter override,$(MAKECMDGOALS)))
 	@set -e; \
-	CURRENT=$$(git tag --list 'v*.*.*' --points-at HEAD --sort=-version:refname | head -1); \
-	if [ -z "$$CURRENT" ]; then \
-		CURRENT=$$(git log --decorate=short --pretty=format:"%D" | \
-		  while IFS= read -r _line; do \
-		    _t=$$(printf '%s' "$$_line" | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | sort -t. -k1,1 -k2,2n -k3,3n | tail -1); \
-		    if [ -n "$$_t" ]; then printf '%s\n' "$$_t"; break; fi; \
-		  done); \
+	_CURRENT_TAG=$$(git tag --list 'v*.*.*' --points-at HEAD --sort=-version:refname | head -1); \
+	if [ -n "$$_CURRENT_TAG" ]; then \
+		echo "error: HEAD is already tagged as $$_CURRENT_TAG — commit new changes before releasing."; \
+		exit 1; \
 	fi; \
-	if [ -z "$$CURRENT" ]; then \
-		echo "error: no semver tag found in repo (expected v<major>.<minor>.<patch>)"; exit 1; \
-	fi; \
-	echo "Re-tagging: $$CURRENT (force)"; \
-	git tag -f "$$CURRENT"; \
-	git push origin "$$CURRENT" --force
-else
-	@set -e; \
-	_TAG=$$(git tag --list 'v*.*.*' --points-at HEAD --sort=-version:refname | head -1); \
+	_TAG=$$(git log --decorate=short --pretty=format:"%D" | \
+	  while IFS= read -r _line; do \
+	    _t=$$(printf '%s' "$$_line" | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | sort -t. -k1,1 -k2,2n -k3,3n | tail -1); \
+	    if [ -n "$$_t" ]; then printf '%s\n' "$$_t"; break; fi; \
+	  done); \
 	if [ -z "$$_TAG" ]; then \
-		_TAG=$$(git log --decorate=short --pretty=format:"%D" | \
-		  while IFS= read -r _line; do \
-		    _t=$$(printf '%s' "$$_line" | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | sort -t. -k1,1 -k2,2n -k3,3n | tail -1); \
-		    if [ -n "$$_t" ]; then printf '%s\n' "$$_t"; break; fi; \
-		  done); \
+		echo "error: no semver tag found in repo (expected v<major>.<minor>.<patch>)"; exit 1; \
 	fi; \
 	CURRENT=$$(echo "$$_TAG" | sed 's/^v//'); \
-	if [ -z "$$CURRENT" ]; then \
-		echo "error: no semver tag found in repo (expected v<major>.<minor>.<patch>)"; exit 1; \
-	fi; \
 	echo "Current: v$$CURRENT"; \
 	MAJOR=$$(echo "$$CURRENT" | cut -d. -f1); \
 	MINOR=$$(echo "$$CURRENT" | cut -d. -f2); \
@@ -104,4 +88,3 @@ else
 	echo "Next:    $$NEXT"; \
 	git tag -f "$$NEXT"; \
 	git push origin "$$NEXT" --force
-endif
