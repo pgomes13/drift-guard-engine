@@ -14,9 +14,6 @@ brew install drift-guard
 ## Quick start
 
 ```sh
-# Diff two schema files
-drift-guard openapi --base api/base.yaml --head api/head.yaml --format github --fail-on-breaking
-
 # Auto-generate and compare specs between branches
 drift-guard compare
 
