@@ -87,7 +87,7 @@ runs:
       shell: bash
       run: |
         set +e
-        printf 'y\ny\ny\n' | drift-guard compare --format markdown > /tmp/drift-output.txt 2>&1
+        printf 'y\ny\ny\n' | drift-guard compare --format markdown > /tmp/drift-output.txt 2>/dev/null
         DRIFT_EXIT=$?
         if [ $DRIFT_EXIT -eq 0 ] && [ -s /tmp/drift-output.txt ]; then
           echo "has_changes=true" >> $GITHUB_OUTPUT
