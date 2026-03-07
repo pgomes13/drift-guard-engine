@@ -140,7 +140,7 @@ func runTsScript(projectDir, scriptPath, outputPath string) error {
 		"ts-node", "--transpile-only", "--skip-project",
 		"--compiler-options", `{"module":"CommonJS","moduleResolution":"node","experimentalDecorators":true,"emitDecoratorMetadata":true,"esModuleInterop":true,"allowSyntheticDefaultImports":true,"target":"ES2021","skipLibCheck":true}`,
 	}
-	if hasTsconfigPaths(projectDir) {
+	if HasTsconfigPaths(projectDir) {
 		args = append(args, "-r", "tsconfig-paths/register")
 	}
 	args = append(args, scriptPath)
@@ -163,7 +163,8 @@ func runTsScript(projectDir, scriptPath, outputPath string) error {
 	return nil
 }
 
-func hasTsconfigPaths(projectDir string) bool {
+// HasTsconfigPaths reports whether the project uses tsconfig path aliases.
+func HasTsconfigPaths(projectDir string) bool {
 	data, err := os.ReadFile(filepath.Join(projectDir, "tsconfig.json"))
 	if err != nil {
 		return false

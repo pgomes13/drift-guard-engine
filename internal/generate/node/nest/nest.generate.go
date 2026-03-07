@@ -3,7 +3,9 @@ package nest
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -67,29 +69,70 @@ func Nest(projectDir, outputDir string) error {
 }
 
 // nestSwagger scaffolds a temporary TypeScript script that uses @nestjs/swagger
-// to generate the OpenAPI document, then runs it via ts-node.
+// to generate the OpenAPI document, then runs it via ts-node with a CJS preload
+// that patches database drivers before any app module is imported.
 func nestSwagger(projectDir, outputPath string) error {
 	appModulePath, err := detectAppModulePath(projectDir)
 	if err != nil {
 		return err
 	}
 
-	script := buildNestSwaggerScript(appModulePath)
+	// Preload: pure CJS, runs before ts-node imports any module.
+	preload, err := os.CreateTemp(projectDir, ".dg-nestjs-preload-*.js")
+	if err != nil {
+		return fmt.Errorf("create preload: %w", err)
+	}
+	defer os.Remove(preload.Name())
+	if _, err := preload.WriteString(nestPreloadScript()); err != nil {
+		preload.Close()
+		return fmt.Errorf("write preload: %w", err)
+	}
+	preload.Close()
 
+	// Main script: TS generation logic only (no patches).
 	tmp, err := os.CreateTemp(projectDir, ".dg-nestjs-swagger-*.ts")
 	if err != nil {
 		return fmt.Errorf("create temp script: %w", err)
 	}
 	defer os.Remove(tmp.Name())
-
-	if _, err := tmp.WriteString(script); err != nil {
+	if _, err := tmp.WriteString(buildNestSwaggerScript(appModulePath)); err != nil {
 		tmp.Close()
 		return fmt.Errorf("write temp script: %w", err)
 	}
 	tmp.Close()
 
-	if err := express.RunScript(projectDir, tmp.Name(), outputPath); err != nil {
+	if err := runNestScript(projectDir, preload.Name(), tmp.Name(), outputPath); err != nil {
 		return fmt.Errorf("nestjs/swagger auto-generation failed")
+	}
+	return nil
+}
+
+// runNestScript runs the NestJS swagger generation script via ts-node, loading
+// preloadPath first via -r so DB patches execute before any module is imported.
+func runNestScript(projectDir, preloadPath, scriptPath, outputPath string) error {
+	args := []string{
+		"ts-node",
+		"-r", preloadPath,
+		"--transpile-only", "--skip-project",
+		"--compiler-options", `{"module":"CommonJS","moduleResolution":"node","experimentalDecorators":true,"emitDecoratorMetadata":true,"esModuleInterop":true,"allowSyntheticDefaultImports":true,"target":"ES2021","skipLibCheck":true}`,
+	}
+	if express.HasTsconfigPaths(projectDir) {
+		args = append(args, "-r", "tsconfig-paths/register")
+	}
+	args = append(args, scriptPath)
+
+	var errBuf strings.Builder
+	cmd := exec.Command("npx", args...)
+	cmd.Dir = projectDir
+	cmd.Env = append(os.Environ(), "SWAGGER_OUTPUT="+outputPath)
+	cmd.Stdout = express.SubprocessOutput
+	cmd.Stderr = io.MultiWriter(express.SubprocessOutput, &errBuf)
+	if err := cmd.Run(); err != nil {
+		detail := strings.TrimSpace(errBuf.String())
+		if detail != "" {
+			return fmt.Errorf("run NestJS swagger generator: %w\n\n%s", err, detail)
+		}
+		return fmt.Errorf("run NestJS swagger generator: %w", err)
 	}
 	return nil
 }
@@ -115,14 +158,13 @@ func detectAppModulePath(projectDir string) (string, error) {
 	)
 }
 
-// buildNestSwaggerScript returns a TypeScript snippet that boots the NestJS app,
-// generates the OpenAPI document, writes it to SWAGGER_OUTPUT, and exits.
-func buildNestSwaggerScript(appModuleAbsPath string) string {
-	return fmt.Sprintf(`// Load .env so ConfigModule can read env vars.
+// nestPreloadScript returns a CJS snippet that patches database drivers to
+// no-ops. It is loaded via ts-node -r before the main script so patches run
+// before any app module (and therefore any DB driver) is imported.
+func nestPreloadScript() string {
+	return `// drift-guard preload: patch DB drivers before any module is imported.
 try { require('dotenv').config({ quiet: true }); } catch (_) {}
 
-// Patch database drivers to no-ops BEFORE AppModule is imported so the app
-// boots without needing a live database connection.
 try {
   const t = require('typeorm');
   if (t && t.DataSource) {
@@ -132,14 +174,21 @@ try {
     };
   }
 } catch (_) {}
+
 try {
   const m = require('mongoose');
   if (m && m.Connection) {
     m.Connection.prototype.openUri = async function() { return this; };
   }
 } catch (_) {}
+`
+}
 
-import { NestFactory } from '@nestjs/core';
+// buildNestSwaggerScript returns a TypeScript snippet that boots the NestJS app,
+// generates the OpenAPI document, writes it to SWAGGER_OUTPUT, and exits.
+// DB patches are applied via a separate preload file (see nestPreloadScript).
+func buildNestSwaggerScript(appModuleAbsPath string) string {
+	return fmt.Sprintf(`import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as fs from 'fs';
 

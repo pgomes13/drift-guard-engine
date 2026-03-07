@@ -73,6 +73,65 @@ runs:
           npm ci
         fi
 
+    - name: Start database service (if needed)
+      shell: bash
+      run: |
+        pkg=$(cat package.json 2>/dev/null || echo '{}')
+
+        has_pg() {
+          echo "$pkg" | node -e "
+            const d=JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'));
+            const all={...(d.dependencies||{}), ...(d.devDependencies||{})};
+            process.exit(('pg' in all||'typeorm' in all||'@prisma/client' in all||'sequelize' in all)?0:1);
+          " 2>/dev/null
+        }
+
+        has_mongo() {
+          echo "$pkg" | node -e "
+            const d=JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'));
+            const all={...(d.dependencies||{}), ...(d.devDependencies||{})};
+            process.exit(('mongoose' in all||'mongodb' in all)?0:1);
+          " 2>/dev/null
+        }
+
+        if has_pg && [ -z "${DATABASE_HOST:-}${DATABASE_URL:-}${PGHOST:-}" ]; then
+          echo "Detected postgres dependency — starting container..."
+          docker run -d \
+            --name dg-postgres \
+            -e POSTGRES_PASSWORD=postgres \
+            -e POSTGRES_USER=postgres \
+            -e POSTGRES_DB=postgres \
+            -p 5432:5432 \
+            postgres:16-alpine
+          until docker exec dg-postgres pg_isready -U postgres 2>/dev/null; do sleep 1; done
+          {
+            echo "DATABASE_HOST=localhost"
+            echo "DATABASE_PORT=5432"
+            echo "DATABASE_USER=postgres"
+            echo "DATABASE_PASSWORD=postgres"
+            echo "DATABASE_NAME=postgres"
+            echo "PGHOST=localhost"
+            echo "PGPORT=5432"
+            echo "PGUSER=postgres"
+            echo "PGPASSWORD=postgres"
+            echo "PGDATABASE=postgres"
+          } >> $GITHUB_ENV
+        fi
+
+        if has_mongo && [ -z "${MONGODB_URI:-}${MONGO_URI:-}${MONGO_URL:-}" ]; then
+          echo "Detected mongodb dependency — starting container..."
+          docker run -d \
+            --name dg-mongo \
+            -p 27017:27017 \
+            mongo:7
+          until docker exec dg-mongo mongosh --eval "db.adminCommand('ping')" 2>/dev/null; do sleep 2; done
+          {
+            echo "MONGODB_URI=mongodb://localhost:27017/drift_guard"
+            echo "MONGO_URI=mongodb://localhost:27017/drift_guard"
+            echo "MONGO_URL=mongodb://localhost:27017/drift_guard"
+          } >> $GITHUB_ENV
+        fi
+
     - name: Install drift-guard
       shell: bash
       env:
