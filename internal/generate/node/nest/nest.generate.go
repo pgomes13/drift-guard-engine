@@ -118,30 +118,41 @@ func detectAppModulePath(projectDir string) (string, error) {
 // buildNestSwaggerScript returns a TypeScript snippet that boots the NestJS app,
 // generates the OpenAPI document, writes it to SWAGGER_OUTPUT, and exits.
 func buildNestSwaggerScript(appModuleAbsPath string) string {
-	return fmt.Sprintf(`// Load .env so ConfigModule / TypeORM can read credentials.
+	return fmt.Sprintf(`// Load .env so ConfigModule can read env vars.
 try { require('dotenv').config({ quiet: true }); } catch (_) {}
+
+// Patch database modules to no-ops BEFORE AppModule is imported,
+// so the app boots without needing a live database connection.
+const noopDynModule = { module: class NoopModule {}, providers: [], exports: [] };
+try {
+  const t = require('@nestjs/typeorm');
+  if (t && t.TypeOrmModule) {
+    t.TypeOrmModule.forRoot = () => noopDynModule;
+    t.TypeOrmModule.forRootAsync = () => noopDynModule;
+  }
+} catch (_) {}
+try {
+  const m = require('@nestjs/mongoose');
+  if (m && m.MongooseModule) {
+    m.MongooseModule.forRoot = () => noopDynModule;
+    m.MongooseModule.forRootAsync = () => noopDynModule;
+  }
+} catch (_) {}
+try {
+  const s = require('@nestjs/sequelize');
+  if (s && s.SequelizeModule) {
+    s.SequelizeModule.forRoot = () => noopDynModule;
+    s.SequelizeModule.forRootAsync = () => noopDynModule;
+  }
+} catch (_) {}
 
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as fs from 'fs';
 
-// If app initialisation hangs (e.g. TypeORM retrying a lost DB connection),
-// kill the process after 15 s with an actionable message.
-const deadline = setTimeout(() => {
-  process.stderr.write(
-    '\ndrift-guard: NestJS app did not finish initialising within 15 s.\n' +
-    'Ensure your database and other services are running, then retry.\n' +
-    'Alternatively, add scripts/generate-swagger.ts with a mocked AppModule.\n',
-  );
-  process.exit(1);
-}, 15_000);
-deadline.unref();
-
 async function generate(): Promise<void> {
   const { AppModule } = await import('%s');
-  // abortOnError: false makes NestJS throw on failure instead of process.exit(1).
-  const app = await NestFactory.create(AppModule, { abortOnError: false });
-  clearTimeout(deadline);
+  const app = await NestFactory.create(AppModule, { abortOnError: false, logger: false });
   const config = new DocumentBuilder()
     .setTitle('API')
     .setVersion('1.0')
@@ -149,12 +160,10 @@ async function generate(): Promise<void> {
   const document = SwaggerModule.createDocument(app, config);
   const output = process.env.SWAGGER_OUTPUT ?? 'swagger.json';
   fs.writeFileSync(output, JSON.stringify(document, null, 2));
-  // Force exit so open handles (DB pools, queues) do not block the process.
   process.exit(0);
 }
 
 generate().catch((err) => {
-  clearTimeout(deadline);
   process.stderr.write('Error: ' + String(err?.message ?? err) + '\n');
   process.exit(1);
 });

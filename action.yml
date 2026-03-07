@@ -88,10 +88,14 @@ runs:
       run: |
         set +e
         printf 'y\ny\ny\n' | drift-guard compare --format markdown > /tmp/drift-output.txt 2>&1
-        if [ -s /tmp/drift-output.txt ]; then
+        DRIFT_EXIT=$?
+        if [ $DRIFT_EXIT -eq 0 ] && [ -s /tmp/drift-output.txt ]; then
           echo "has_changes=true" >> $GITHUB_OUTPUT
         else
           echo "has_changes=false" >> $GITHUB_OUTPUT
+          if [ $DRIFT_EXIT -ne 0 ]; then
+            echo "::warning::drift-guard failed to generate the API spec. See logs for details."
+          fi
         fi
 
     - name: Comment on PR
