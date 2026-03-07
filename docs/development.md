@@ -44,13 +44,11 @@ pkg/schema/
 ## Releasing a new version
 
 ```sh
-# Homebrew release — bump patch / minor / major
-make release homebrew
-make release homebrew minor
-make release homebrew major
+make release          # bump patch
+make release minor    # bump minor
+make release major    # bump major
 
-# GitHub Action release — update floating v1 tag
-make release gha
+make release gha      # re-sync floating major tag only (no version bump)
 ```
 
-`make release homebrew` fetches the current version from the Homebrew tap, bumps it, tags the commit, and pushes the tag. This triggers the `release.yml` workflow which cross-compiles binaries for macOS, Linux, and Windows via [GoReleaser](https://goreleaser.com), publishes a GitHub Release, pushes the Homebrew formula to [`pgomes13/homebrew-tap`](https://github.com/pgomes13/homebrew-tap), and updates the floating `v1` major tag used by the GitHub Action.
+Each `make release` call bumps the version from the latest local git tag, pushes the semver tag, then force-updates the floating major tag (e.g. `v2`). Pushing the semver tag triggers the `release.yml` workflow which cross-compiles binaries via [GoReleaser](https://goreleaser.com), publishes a GitHub Release, updates the Homebrew formula in [`pgomes13/homebrew-tap`](https://github.com/pgomes13/homebrew-tap), and keeps the floating tag in sync for GitHub Action users.

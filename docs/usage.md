@@ -46,5 +46,3 @@ drift-guard compare
 ```
 
 Supported project types: **Go**, **Express**, **NestJS**, **Node.js**.
-
-On first run for a plain Express project, drift-guard scaffolds a `swagger-autogen` script into `drift-guard/scripts/generate-swagger.js` automatically. All generated files are cleaned up after the comparison.
