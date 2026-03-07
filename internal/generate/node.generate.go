@@ -111,7 +111,7 @@ func runScript(projectDir, scriptPath, outputPath string) error {
 	// not the project's own build output.
 	args := []string{
 		"ts-node", "--transpile-only",
-		"--compiler-options", `{"module":"CommonJS","moduleResolution":"node"}`,
+		"--compiler-options", `{"module":"CommonJS","moduleResolution":"node","resolvePackageJsonExports":false,"resolvePackageJsonImports":false}`,
 	}
 	if hasTsconfigPaths(projectDir) {
 		args = append(args, "-r", "tsconfig-paths/register")
