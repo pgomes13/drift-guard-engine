@@ -36,7 +36,7 @@ func init() {
 }
 
 func addOutputFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVarP(&flagFormat, "format", "f", "text", "Output format: text, json, github")
+	cmd.Flags().StringVarP(&flagFormat, "format", "f", "text", "Output format: text, json, github, markdown")
 	cmd.Flags().BoolVar(&flagFailOnBreak, "fail-on-breaking", false, "Exit with code 1 if breaking changes are detected")
 }
 

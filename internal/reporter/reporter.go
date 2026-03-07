@@ -14,9 +14,10 @@ import (
 type Format string
 
 const (
-	FormatJSON    Format = "json"
-	FormatText    Format = "text"
-	FormatGitHub  Format = "github" // GitHub Actions workflow commands
+	FormatJSON     Format = "json"
+	FormatText     Format = "text"
+	FormatGitHub   Format = "github"   // GitHub Actions workflow commands
+	FormatMarkdown Format = "markdown" // GitHub-flavored markdown table
 )
 
 // Write outputs the DiffResult to w in the requested format.
@@ -26,6 +27,8 @@ func Write(w io.Writer, result schema.DiffResult, format Format) error {
 		return writeJSON(w, result)
 	case FormatGitHub:
 		return writeGitHub(w, result)
+	case FormatMarkdown:
+		return writeMarkdown(w, result)
 	default:
 		return writeText(w, result)
 	}
@@ -67,6 +70,36 @@ func writeText(w io.Writer, result schema.DiffResult) error {
 	}
 
 	return tw.Flush()
+}
+
+func writeMarkdown(w io.Writer, result schema.DiffResult) error {
+	fmt.Fprintf(w, "**Total: %d** | Breaking: %d | Non-Breaking: %d | Info: %d\n\n",
+		result.Summary.Total,
+		result.Summary.Breaking,
+		result.Summary.NonBreaking,
+		result.Summary.Info,
+	)
+
+	if len(result.Changes) == 0 {
+		fmt.Fprintln(w, "No changes detected.")
+		return nil
+	}
+
+	fmt.Fprintln(w, "| Severity | Type | Path | Method | Location | Description |")
+	fmt.Fprintln(w, "|----------|------|------|--------|----------|-------------|")
+
+	for _, c := range result.Changes {
+		fmt.Fprintf(w, "| %s | %s | %s | %s | %s | %s |\n",
+			severityLabel(c.Severity),
+			c.Type,
+			c.Path,
+			c.Method,
+			c.Location,
+			c.Description,
+		)
+	}
+
+	return nil
 }
 
 // writeGitHub emits GitHub Actions workflow commands so that breaking changes
