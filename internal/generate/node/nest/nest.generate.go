@@ -121,28 +121,21 @@ func buildNestSwaggerScript(appModuleAbsPath string) string {
 	return fmt.Sprintf(`// Load .env so ConfigModule can read env vars.
 try { require('dotenv').config({ quiet: true }); } catch (_) {}
 
-// Patch database modules to no-ops BEFORE AppModule is imported,
-// so the app boots without needing a live database connection.
-const noopDynModule = { module: class NoopModule {}, providers: [], exports: [] };
+// Patch database drivers to no-ops BEFORE AppModule is imported so the app
+// boots without needing a live database connection.
 try {
-  const t = require('@nestjs/typeorm');
-  if (t && t.TypeOrmModule) {
-    t.TypeOrmModule.forRoot = () => noopDynModule;
-    t.TypeOrmModule.forRootAsync = () => noopDynModule;
+  const t = require('typeorm');
+  if (t && t.DataSource) {
+    t.DataSource.prototype.initialize = async function() {
+      this.isInitialized = true;
+      return this;
+    };
   }
 } catch (_) {}
 try {
-  const m = require('@nestjs/mongoose');
-  if (m && m.MongooseModule) {
-    m.MongooseModule.forRoot = () => noopDynModule;
-    m.MongooseModule.forRootAsync = () => noopDynModule;
-  }
-} catch (_) {}
-try {
-  const s = require('@nestjs/sequelize');
-  if (s && s.SequelizeModule) {
-    s.SequelizeModule.forRoot = () => noopDynModule;
-    s.SequelizeModule.forRootAsync = () => noopDynModule;
+  const m = require('mongoose');
+  if (m && m.Connection) {
+    m.Connection.prototype.openUri = async function() { return this; };
   }
 } catch (_) {}
 
