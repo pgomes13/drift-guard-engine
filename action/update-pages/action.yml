@@ -52,7 +52,7 @@ runs:
         PUT_ARGS=(
           --method PUT
           "repos/${REPO}/contents/index.html"
-          -f "message=chore: update drift log [PR #${PR_NUMBER}]"
+          -f "message=chore: update drift log"
           -f "content=${ENCODED}"
           -f "branch=${PAGES_BRANCH}"
         )
