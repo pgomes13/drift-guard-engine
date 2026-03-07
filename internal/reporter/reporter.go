@@ -40,7 +40,6 @@ func writeJSON(w io.Writer, result schema.DiffResult) error {
 func writeText(w io.Writer, result schema.DiffResult) error {
 	tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', 0)
 
-	fmt.Fprintf(tw, "Schema Diff: %s → %s\n", result.BaseFile, result.HeadFile)
 	fmt.Fprintf(tw, "Total: %d\tBreaking: %d\tNon-Breaking: %d\tInfo: %d\n\n",
 		result.Summary.Total,
 		result.Summary.Breaking,

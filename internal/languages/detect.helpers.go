@@ -45,7 +45,7 @@ func nestHasGraphQLDep(dir string) bool {
 // in the project's package.json.
 func nodeHasGraphQLDeps(dir string) bool {
 	for _, dep := range []string{
-		"graphql", "apollo-server-express", "apollo-server",
+		"apollo-server-express", "apollo-server",
 		"type-graphql", "@apollo/server", "graphql-yoga",
 	} {
 		if hasPackageJSONDep(dir, dep) {

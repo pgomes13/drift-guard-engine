@@ -17,6 +17,7 @@ import (
 	"github.com/pgomes13/drift-guard-engine/internal/generate/node/nest"
 	"github.com/pgomes13/drift-guard-engine/internal/languages"
 	"github.com/pgomes13/drift-guard-engine/internal/reporter"
+	"github.com/pgomes13/drift-guard-engine/pkg/schema"
 )
 
 var compareCmd = &cobra.Command{
@@ -39,10 +40,10 @@ func runCompare(cmd *cobra.Command, args []string) error {
 		return err
 	}
 	fmt.Fprintf(os.Stderr, "%s framework detected\n", info.TypeName)
+	fmt.Fprintf(os.Stderr, "%s API detected\n", strings.Join(detectAPITypes(cwd), " | "))
 
 	// --- Step 1b: offer GraphQL comparison if detected ---
 	if gqlInfo := languages.DetectGraphQLInfo(cwd); gqlInfo != nil {
-		fmt.Fprintf(os.Stderr, "GraphQL API detected\n")
 		if promptYesNo("Compare GraphQL schemas?") {
 			return runGraphQLCompare(cmd, cwd, gqlInfo)
 		}
@@ -162,8 +163,12 @@ func runCompare(cmd *cobra.Command, args []string) error {
 	}
 
 	// --- Step 6: diff base vs head ---
-	diffResult, err := compare.OpenAPI(baseOut, headOut)
-	if err != nil {
+	var diffResult schema.DiffResult
+	if err := runStep("Comparing", func() error {
+		var err error
+		diffResult, err = compare.OpenAPI(baseOut, headOut)
+		return err
+	}); err != nil {
 		return err
 	}
 	if err := reporter.Write(cmd.OutOrStdout(), diffResult, reporter.Format(flagFormat)); err != nil {
@@ -229,8 +234,12 @@ func runGraphQLCompare(cmd *cobra.Command, cwd string, info *languages.GraphQLPr
 		return err
 	}
 
-	diffResult, err := compare.GraphQL(baseOut, headOut)
-	if err != nil {
+	var diffResult schema.DiffResult
+	if err := runStep("Comparing", func() error {
+		var err error
+		diffResult, err = compare.GraphQL(baseOut, headOut)
+		return err
+	}); err != nil {
 		return err
 	}
 	if err := reporter.Write(cmd.OutOrStdout(), diffResult, reporter.Format(flagFormat)); err != nil {
@@ -288,6 +297,35 @@ func resolveBaseRef(baseRef string) string {
 
 func refExists(ref string) bool {
 	return exec.Command("git", "rev-parse", "--verify", ref).Run() == nil
+}
+
+// detectAPITypes returns the API types present in the project.
+// REST is always included; GraphQL and gRPC are added when detected.
+func detectAPITypes(dir string) []string {
+	types := []string{"REST"}
+	if languages.DetectGraphQLInfo(dir) != nil {
+		types = append(types, "GraphQL")
+	}
+	if hasProtoFiles(dir) {
+		types = append(types, "gRPC")
+	}
+	return types
+}
+
+// hasProtoFiles reports whether any .proto files exist under dir.
+func hasProtoFiles(dir string) bool {
+	found := false
+	_ = filepath.WalkDir(dir, func(path string, d os.DirEntry, err error) error {
+		if err != nil || d.IsDir() {
+			return nil
+		}
+		if strings.HasSuffix(path, ".proto") {
+			found = true
+			return filepath.SkipAll
+		}
+		return nil
+	})
+	return found
 }
 
 // --------------------------------------------------------------------------
