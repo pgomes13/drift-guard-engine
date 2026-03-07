@@ -40,51 +40,28 @@ jobs:
 
 ### NestJS apps with a database
 
-If your NestJS app connects to a database on startup (e.g. via TypeORM or Mongoose), the action needs a live database service to generate the OpenAPI spec. Add a `services` block to your job:
+The action automatically detects database dependencies in `package.json` and starts the appropriate container before spec generation:
+
+| Detected dependency | Container started |
+|---|---|
+| `typeorm`, `pg`, `@prisma/client`, `sequelize` | `postgres:16-alpine` on port 5432 |
+| `mongoose`, `mongodb` | `mongo:7` on port 27017 |
+
+Common connection env vars (`DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_USER`, `DATABASE_PASSWORD`, `DATABASE_NAME`, `PGHOST`, etc.) are exported automatically. No `services` block needed — the minimal workflow just works:
 
 ```yaml
-name: API Drift Check
-
-on:
-  pull_request:
-
-permissions:
-  contents: read
-  pull-requests: write
-  issues: write
-
-jobs:
-  drift:
-    runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: mydb
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: pgomes13/drift-guard-engine@v1
-        env:
-          DATABASE_HOST: localhost
-          DATABASE_PORT: 5432
-          DATABASE_USER: postgres
-          DATABASE_PASSWORD: postgres
-          DATABASE_NAME: mydb
+- uses: pgomes13/drift-guard-engine@v1
 ```
 
-Pass the database connection values as `env` variables matching what your app reads from the environment (e.g. `DATABASE_HOST`, `DB_URL`).
+**Custom database config:** If your app uses different env var names or a non-standard connection string, pass them via `env`:
+
+```yaml
+- uses: pgomes13/drift-guard-engine@v1
+  env:
+    DATABASE_URL: postgresql://myuser:mypassword@localhost:5432/mydb
+```
+
+When any DB connection env var is already set (`DATABASE_HOST`, `DATABASE_URL`, or `PGHOST`), the action skips auto-starting a container and uses the values you provided instead.
 
 ### Action inputs
 
