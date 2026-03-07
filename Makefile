@@ -3,7 +3,7 @@ CMD              := ./cmd/drift-guard
 HOMEBREW_TAP     := pgomes13/homebrew-tap
 FORMULA          := drift-guard
 
-.PHONY: build test vet lint clean run-openapi run-graphql run-grpc release major minor patch
+.PHONY: build test vet lint clean run-openapi run-graphql run-grpc release major minor patch commit
 
 build:
 	go build -o $(BIN) $(CMD)
@@ -29,6 +29,17 @@ run-graphql: build
 
 run-grpc: build
 	./$(BIN) grpc --base internal/testdata/base.proto --head internal/testdata/head.proto
+
+## Commit: stage all changes, commit with a message, and push to the current branch.
+##
+## Usage:
+##   make commit   # prompts for commit message
+##
+commit:
+	@read -p "Commit message: " msg; \
+	git add .; \
+	git commit -m "$$msg"; \
+	git push origin $$(git rev-parse --abbrev-ref HEAD)
 
 ## Release: bump major, minor, or patch version based on the current homebrew
 ## tap formula, then tag and push.
