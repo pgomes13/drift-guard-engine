@@ -17,6 +17,7 @@ export default defineConfig({
         items: [
           { text: 'Installation', link: '/install' },
           { text: 'Usage', link: '/usage' },
+          { text: 'Supported Languages & Frameworks', link: '/supported' },
         ],
       },
       {
