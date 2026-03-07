@@ -129,10 +129,14 @@ func runCompare(cmd *cobra.Command, args []string) error {
 	}
 	defer exec.Command("git", "worktree", "remove", "--force", worktreeDir).Run()
 
-	// Copy drift-guard/scripts/ into the worktree so the base branch can use
-	// the same generation script that was scaffolded for the head branch.
-	if err := copyDir(filepath.Join(driftGuardDir, "scripts"), filepath.Join(worktreeDir, "drift-guard", "scripts")); err != nil {
-		return fmt.Errorf("copy scripts to worktree: %w", err)
+	// Copy the generation script into the worktree at the same relative path
+	// so the base branch can use it even if it was never committed there.
+	if rel := findSwaggerScript(cwd); rel != "" {
+		src := filepath.Join(cwd, rel)
+		dst := filepath.Join(worktreeDir, rel)
+		if err := copyFile(src, dst); err != nil {
+			return fmt.Errorf("copy script to worktree: %w", err)
+		}
 	}
 
 	baseGenDir := filepath.Join(tmpDir, "base-gen")
@@ -230,6 +234,25 @@ func swaggerSpecExists(dir string) bool {
 
 // swaggerScriptExists reports whether a swagger generation script or tsoa
 // config is already present in the project.
+// findSwaggerScript returns the relative path of the first swagger generation
+// script found in dir, or empty string if none is found.
+func findSwaggerScript(dir string) string {
+	candidates := []string{
+		"drift-guard/scripts/generate-swagger.ts",
+		"drift-guard/scripts/generate-swagger.js",
+		"scripts/generate-swagger.ts",
+		"scripts/generate-swagger.js",
+		"src/generate-swagger.ts",
+		"generate-swagger.ts",
+	}
+	for _, rel := range candidates {
+		if _, err := os.Stat(filepath.Join(dir, rel)); err == nil {
+			return rel
+		}
+	}
+	return ""
+}
+
 func swaggerScriptExists(dir string) bool {
 	candidates := []string{
 		"tsoa.json",
