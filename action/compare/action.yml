@@ -1,0 +1,38 @@
+name: Run drift comparison and comment
+description: Runs drift-guard compare and posts a PR comment when API changes are detected.
+
+runs:
+  using: composite
+  steps:
+    - name: Run API drift comparison
+      id: drift
+      shell: bash
+      run: |
+        set +e
+        printf 'y\ny\ny\n' | drift-guard compare --format markdown > /tmp/drift-output.txt 2>/dev/null
+        DRIFT_EXIT=$?
+        if [ $DRIFT_EXIT -eq 0 ] && [ -s /tmp/drift-output.txt ]; then
+          echo "has_changes=true" >> $GITHUB_OUTPUT
+        else
+          echo "has_changes=false" >> $GITHUB_OUTPUT
+          if [ $DRIFT_EXIT -ne 0 ]; then
+            echo "::warning::drift-guard failed to generate the API spec. See logs for details."
+          fi
+        fi
+
+    - name: Comment on PR
+      if: github.event_name == 'pull_request' && steps.drift.outputs.has_changes == 'true'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        # Delete any existing Drift Guard comment on this PR.
+        gh api "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" \
+          --paginate --jq '.[] | select(.body | startswith("## Drift Guard Report")) | .id' \
+          | xargs -I{} gh api --method DELETE "repos/${{ github.repository }}/issues/comments/{}" || true
+
+        BODY="$(printf '## Drift Guard Report\n\n'; cat /tmp/drift-output.txt)"
+        gh api \
+          --method POST \
+          "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" \
+          -f body="$BODY"

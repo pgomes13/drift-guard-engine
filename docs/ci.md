@@ -38,37 +38,6 @@ jobs:
 
 > **Note:** Both `pull-requests: write` and `issues: write` are required. GitHub's PR comment API uses the Issues REST endpoint, which needs the `issues: write` permission.
 
-### NestJS apps with a database
-
-The action automatically detects database dependencies in `package.json` and starts the appropriate container before spec generation:
-
-| Detected dependency | Container started |
-|---|---|
-| `typeorm`, `pg`, `@prisma/client`, `sequelize` | `postgres:16-alpine` on port 5432 |
-| `mongoose`, `mongodb` | `mongo:7` on port 27017 |
-
-Common connection env vars (`DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_USER`, `DATABASE_PASSWORD`, `DATABASE_NAME`, `PGHOST`, etc.) are exported automatically. No `services` block needed — the minimal workflow just works:
-
-```yaml
-- uses: pgomes13/drift-guard-engine@v1
-```
-
-**Custom database config:** If your app uses different env var names or a non-standard connection string, pass them via `env`:
-
-```yaml
-- uses: pgomes13/drift-guard-engine@v1
-  env:
-    DATABASE_URL: postgresql://myuser:mypassword@localhost:5432/mydb
-```
-
-When any DB connection env var is already set (`DATABASE_HOST`, `DATABASE_URL`, or `PGHOST`), the action skips auto-starting a container and uses the values you provided instead.
-
-### Action inputs
-
-| Input | Description | Default |
-|---|---|---|
-| `node-version` | Node.js version for spec generation | `20` |
-
 ## Manual install + diff
 
 For diffing two existing schema files directly:

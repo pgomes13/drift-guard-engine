@@ -1,0 +1,73 @@
+name: Setup project dependencies
+description: Detects the package manager, sets up Node.js, and installs project dependencies.
+
+inputs:
+  node-version:
+    description: Node.js version to use.
+    required: false
+    default: "20"
+
+runs:
+  using: composite
+  steps:
+    - name: Detect package manager
+      id: pm
+      shell: bash
+      run: |
+        PKG_MANAGER_FIELD=$(node -p "require('./package.json').packageManager" 2>/dev/null || true)
+        if [ -f "pnpm-lock.yaml" ]; then
+          echo "manager=pnpm" >> $GITHUB_OUTPUT
+          echo "cache=pnpm" >> $GITHUB_OUTPUT
+          PNPM_VERSION=$(echo "$PKG_MANAGER_FIELD" | grep -oE 'pnpm@[0-9]+\.[0-9]+\.[0-9]+' | cut -d@ -f2 || true)
+          echo "pnpm-version=${PNPM_VERSION:-latest}" >> $GITHUB_OUTPUT
+        elif [ -f "yarn.lock" ]; then
+          echo "manager=yarn" >> $GITHUB_OUTPUT
+          echo "cache=yarn" >> $GITHUB_OUTPUT
+          YARN_VERSION=$(echo "$PKG_MANAGER_FIELD" | grep -oE 'yarn@[0-9]+\.[0-9]+\.[0-9]+' | cut -d@ -f2 || true)
+          echo "yarn-version=${YARN_VERSION:-classic}" >> $GITHUB_OUTPUT
+        else
+          echo "manager=npm" >> $GITHUB_OUTPUT
+          echo "cache=npm" >> $GITHUB_OUTPUT
+          NPM_VERSION=$(node -p "require('./package.json').engines && require('./package.json').engines.npm" 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' || true)
+          echo "npm-version=${NPM_VERSION}" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Set up pnpm
+      if: steps.pm.outputs.manager == 'pnpm'
+      uses: pnpm/action-setup@v4
+      with:
+        version: ${{ steps.pm.outputs.pnpm-version }}
+
+    - name: Set up yarn
+      if: steps.pm.outputs.manager == 'yarn'
+      shell: bash
+      run: |
+        YARN_VERSION="${{ steps.pm.outputs.yarn-version }}"
+        if [ "$YARN_VERSION" = "classic" ] || [[ "$YARN_VERSION" == 1.* ]]; then
+          npm install -g yarn@"${YARN_VERSION/classic/}"
+        else
+          corepack enable
+          corepack prepare yarn@"$YARN_VERSION" --activate
+        fi
+
+    - name: Set up npm
+      if: steps.pm.outputs.manager == 'npm' && steps.pm.outputs.npm-version != ''
+      shell: bash
+      run: npm install -g npm@${{ steps.pm.outputs.npm-version }}
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: ${{ steps.pm.outputs.cache }}
+
+    - name: Install project dependencies
+      shell: bash
+      run: |
+        if [ "${{ steps.pm.outputs.manager }}" = "pnpm" ]; then
+          pnpm install --frozen-lockfile
+        elif [ "${{ steps.pm.outputs.manager }}" = "yarn" ]; then
+          yarn install --frozen-lockfile
+        else
+          npm ci
+        fi
