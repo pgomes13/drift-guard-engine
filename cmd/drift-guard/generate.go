@@ -10,7 +10,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/pgomes13/drift-guard-engine/internal/generate"
+	"github.com/pgomes13/drift-guard-engine/internal/generate/nestjs"
+	"github.com/pgomes13/drift-guard-engine/internal/generate/node"
 	"github.com/pgomes13/drift-guard-engine/internal/languages"
 )
 
@@ -51,14 +52,14 @@ func runGenerateWizard(cmd *cobra.Command, args []string) error {
 			if !promptYesNo("Proceed to add script?") {
 				return nil
 			}
-			written, err := generate.ScaffoldNestSwaggerScript(cwd)
+			written, err := nestjs.ScaffoldNestSwaggerScript(cwd)
 			if err != nil {
 				return err
 			}
 			fmt.Fprintf(os.Stderr, "scaffold written to %s\n", written)
 
 		case "Node.js":
-			if !generate.HasTsoaControllers(cwd) {
+			if !node.HasTsoaControllers(cwd) {
 				fmt.Fprintf(os.Stderr, "\nThis project uses plain Express routes (no tsoa @Route decorators found).\n"+
 					"Zero-config generation requires tsoa decorators (@Route, @Get, etc.).\n\n"+
 					"Use --cmd with a custom generation script instead:\n\n"+
@@ -69,13 +70,13 @@ func runGenerateWizard(cmd *cobra.Command, args []string) error {
 			if !promptYesNo("Set up tsoa for zero-config generation?") {
 				return nil
 			}
-			written, err := generate.ScaffoldTsoa(cwd)
+			written, err := node.ScaffoldTsoa(cwd)
 			if err != nil {
 				return err
 			}
 			fmt.Fprintf(os.Stderr, "tsoa.json written to %s\n", written)
 			fmt.Fprintf(os.Stderr, "Installing tsoa...\n")
-			if err := generate.InstallTsoa(cwd); err != nil {
+			if err := node.InstallTsoa(cwd); err != nil {
 				return err
 			}
 		}

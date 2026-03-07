@@ -1,4 +1,4 @@
-package generate
+package node
 
 import (
 	"encoding/json"
@@ -19,7 +19,7 @@ import (
 func Node(projectDir, outputDir string) error {
 	// 1. tsoa
 	if _, err := os.Stat(filepath.Join(projectDir, "tsoa.json")); err == nil {
-		return tsoaSpec(projectDir, outputDir)
+		return TsoaSpec(projectDir, outputDir)
 	}
 
 	outputPath := filepath.Join(outputDir, "swagger.json")
@@ -34,7 +34,7 @@ func Node(projectDir, outputDir string) error {
 	for _, rel := range candidates {
 		full := filepath.Join(projectDir, rel)
 		if _, err := os.Stat(full); err == nil {
-			return runScript(projectDir, full, outputPath)
+			return RunScript(projectDir, full, outputPath)
 		}
 	}
 
@@ -61,7 +61,8 @@ type tsoaConfig struct {
 	} `json:"spec"`
 }
 
-func tsoaSpec(projectDir, outputDir string) error {
+// TsoaSpec runs `npx tsoa spec` in projectDir and copies the result to outputDir.
+func TsoaSpec(projectDir, outputDir string) error {
 	cmd := exec.Command("npx", "tsoa", "spec")
 	cmd.Dir = projectDir
 	cmd.Stdout = os.Stderr
@@ -105,7 +106,9 @@ func tsoaSpecFile(projectDir string) (string, error) {
 // ts-node script runner
 // --------------------------------------------------------------------------
 
-func runScript(projectDir, scriptPath, outputPath string) error {
+// RunScript executes scriptPath via ts-node with the project's settings,
+// setting SWAGGER_OUTPUT to outputPath.
+func RunScript(projectDir, scriptPath, outputPath string) error {
 	// --skip-project avoids inheriting the project's tsconfig (which may use
 	// "module":"nodenext" / ESM, incompatible with require-hooks). We supply a
 	// minimal known-good CJS config. tsconfig-paths/register still reads the
