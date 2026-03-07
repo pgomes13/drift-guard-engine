@@ -78,8 +78,8 @@ runs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        gh release download --repo pgomes13/drift-guard-engine --pattern "drift-guard_Linux_x86_64.tar.gz"
-        tar -xzf drift-guard_Linux_x86_64.tar.gz
+        gh release download --repo pgomes13/drift-guard-engine --pattern "drift-guard_*_linux_amd64.tar.gz"
+        tar -xzf drift-guard_*_linux_amd64.tar.gz
         sudo mv drift-guard /usr/local/bin/drift-guard
 
     - name: Run API drift comparison
