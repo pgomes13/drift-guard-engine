@@ -38,7 +38,7 @@ var (
 )
 
 func init() {
-	rootCmd.AddCommand(openapiCmd, graphqlCmd, grpcCmd, compareCmd)
+	rootCmd.AddCommand(openapiCmd, graphqlCmd, grpcCmd, compareCmd, generateCmd)
 }
 
 func addOutputFlags(cmd *cobra.Command) {

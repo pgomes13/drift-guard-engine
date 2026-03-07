@@ -21,14 +21,14 @@ func DetectGenerator(dir string) (GeneratorFunc, error) {
 
 	// Node.js project
 	if _, err := os.Stat(filepath.Join(dir, "package.json")); err == nil {
-		if isJavascriptProject(dir) {
+		if isNodeProject(dir) {
 			return nil, fmt.Errorf(
 				"detected JavaScript project\n\n" +
 					"Auto-generation requires @nestjs/swagger. Use --cmd for other frameworks:\n\n" +
 					`    drift-guard compare openapi --cmd "node scripts/generate-swagger.js" --output swagger.json`,
 			)
 		}
-		return GenerateNestJS, nil
+		return GenerateNode, nil
 	}
 
 	// Python project

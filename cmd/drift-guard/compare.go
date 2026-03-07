@@ -13,7 +13,6 @@ import (
 	differgraphql "github.com/pgomes13/drift-guard-engine/internal/differ/graphql"
 	differgrpc "github.com/pgomes13/drift-guard-engine/internal/differ/grpc"
 	differopenapi "github.com/pgomes13/drift-guard-engine/internal/differ/openapi"
-	"github.com/pgomes13/drift-guard-engine/internal/languages"
 	parsergraphql "github.com/pgomes13/drift-guard-engine/internal/parser/graphql"
 	parsergrpc "github.com/pgomes13/drift-guard-engine/internal/parser/grpc"
 	parseropenapi "github.com/pgomes13/drift-guard-engine/internal/parser/openapi"
@@ -120,15 +119,10 @@ func runCompareAutoOpenAPI(baseRef string) (basePath, headPath string, cleanup f
 		os.RemoveAll(headOut)
 	}
 
-	gen, err := languages.DetectGenerator(cwd)
-	if err != nil {
-		return "", "", cleanup, err
-	}
-
-	if err := gen(worktreeDir, baseOut); err != nil {
+	if err := runGenerate(worktreeDir, baseOut); err != nil {
 		return "", "", cleanup, fmt.Errorf("generate base schema: %w", err)
 	}
-	if err := gen(cwd, headOut); err != nil {
+	if err := runGenerate(cwd, headOut); err != nil {
 		return "", "", cleanup, fmt.Errorf("generate head schema: %w", err)
 	}
 
