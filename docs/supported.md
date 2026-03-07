@@ -1,4 +1,4 @@
-# Supported Languages & Frameworks
+# Supported
 
 ## Schema formats
 
