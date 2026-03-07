@@ -45,4 +45,4 @@ drift-guard openapi --base base.yaml --head head.yaml --format github
 drift-guard compare
 ```
 
-Supported project types: **Go**, **Express**, **NestJS**, **Node.js**.
+Supported Node.js frameworks: **Express**, **NestJS**. More language and framework support coming soon.

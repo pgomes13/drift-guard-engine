@@ -10,6 +10,8 @@ Add API drift detection to any pull request in one line:
 - uses: pgomes13/drift-guard-engine@v1
 ```
 
+When API drift is detected, the action automatically posts a PR comment with the full diff report. Supported Node.js frameworks: **Express**, **NestJS**. More language and framework support coming soon.
+
 Full workflow example:
 
 ```yaml
@@ -31,9 +33,6 @@ jobs:
           fetch-depth: 0
 
       - uses: pgomes13/drift-guard-engine@v1
-        with:
-          fail-on-breaking: "true"
-          format: github
 ```
 
 ### Action inputs
@@ -41,8 +40,6 @@ jobs:
 | Input | Description | Default |
 |---|---|---|
 | `node-version` | Node.js version for spec generation | `20` |
-| `fail-on-breaking` | Exit `1` if breaking changes detected | `true` |
-| `format` | Output format: `text`, `json`, `github` | `github` |
 
 ## Manual install + diff
 

@@ -7,14 +7,6 @@ inputs:
     description: Node.js version to use for generating the OpenAPI spec.
     required: false
     default: "20"
-  fail-on-breaking:
-    description: Exit with code 1 if breaking changes are detected.
-    required: false
-    default: "true"
-  format:
-    description: Output format — text, json, or github.
-    required: false
-    default: github
 
 runs:
   using: composite
@@ -37,13 +29,28 @@ runs:
         sudo mv drift-guard /usr/local/bin/drift-guard
 
     - name: Run API drift comparison
+      id: drift
       shell: bash
       run: |
-        ARGS="--format ${{ inputs.format }}"
-        if [ "${{ inputs.fail-on-breaking }}" = "true" ]; then
-          ARGS="$ARGS --fail-on-breaking"
+        set +e
+        printf 'y\ny\ny\n' | drift-guard compare --format text > /tmp/drift-output.txt 2>&1
+        if [ -s /tmp/drift-output.txt ]; then
+          echo "has_changes=true" >> $GITHUB_OUTPUT
+        else
+          echo "has_changes=false" >> $GITHUB_OUTPUT
         fi
-        printf 'y\ny\ny\n' | drift-guard compare $ARGS
+
+    - name: Comment on PR
+      if: github.event_name == 'pull_request' && steps.drift.outputs.has_changes == 'true'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        gh pr comment "${{ github.event.pull_request.number }}" \
+          --repo "${{ github.repository }}" \
+          --body "## Drift Guard Report
+
+        $(cat /tmp/drift-output.txt)"
 
 branding:
   icon: shield
