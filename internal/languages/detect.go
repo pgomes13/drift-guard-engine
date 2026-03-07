@@ -19,16 +19,18 @@ func DetectGenerator(dir string) (GeneratorFunc, error) {
 		return GenerateGo, nil
 	}
 
-	// Node.js project
-	if _, err := os.Stat(filepath.Join(dir, "package.json")); err == nil {
-		if isNodeProject(dir) {
-			return nil, fmt.Errorf(
-				"detected JavaScript project\n\n" +
-					"Auto-generation requires @nestjs/swagger. Use --cmd for other frameworks:\n\n" +
-					`    drift-guard compare openapi --cmd "node scripts/generate-swagger.js" --output swagger.json`,
-			)
-		}
+	// NestJS project (Node.js + @nestjs/swagger)
+	if isNestJSProject(dir) {
 		return GenerateNode, nil
+	}
+
+	// Plain Node.js project (package.json without NestJS)
+	if isNodeJSProject(dir) {
+		return nil, fmt.Errorf(
+			"detected Node.js project\n\n" +
+				"Auto-generation requires @nestjs/swagger. Use --cmd for other frameworks:\n\n" +
+				`    drift-guard compare openapi --cmd "node scripts/generate-swagger.js" --output swagger.json`,
+		)
 	}
 
 	// Python project
@@ -48,3 +50,4 @@ func DetectGenerator(dir string) (GeneratorFunc, error) {
 		dir,
 	)
 }
+
