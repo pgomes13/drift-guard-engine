@@ -1,0 +1,50 @@
+name: drift-guard
+description: Detect breaking API changes between the current branch and the base branch.
+author: pgomes13
+
+inputs:
+  node-version:
+    description: Node.js version to use for generating the OpenAPI spec.
+    required: false
+    default: "20"
+  fail-on-breaking:
+    description: Exit with code 1 if breaking changes are detected.
+    required: false
+    default: "true"
+  format:
+    description: Output format — text, json, or github.
+    required: false
+    default: github
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: npm
+
+    - name: Install project dependencies
+      shell: bash
+      run: npm ci
+
+    - name: Install drift-guard
+      shell: bash
+      run: |
+        LATEST=$(curl -s https://api.github.com/repos/pgomes13/drift-guard-engine/releases/latest | jq -r '.tag_name')
+        curl -sSL "https://github.com/pgomes13/drift-guard-engine/releases/download/${LATEST}/drift-guard_Linux_x86_64.tar.gz" | tar -xz
+        sudo mv drift-guard /usr/local/bin/drift-guard
+
+    - name: Run API drift comparison
+      shell: bash
+      run: |
+        ARGS="--format ${{ inputs.format }}"
+        if [ "${{ inputs.fail-on-breaking }}" = "true" ]; then
+          ARGS="$ARGS --fail-on-breaking"
+        fi
+        printf 'y\ny\ny\n' | drift-guard compare $ARGS
+
+branding:
+  icon: shield
+  color: blue
