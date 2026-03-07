@@ -20,10 +20,13 @@
 |-----------|---------------|---------|------|
 | Express | Yes | Yes | Yes |
 | NestJS | Yes | Yes | Yes |
+| Generic Node.js | Yes | Yes | Yes |
 
 ### Go
 
 | Framework | REST (OpenAPI) |
 |-----------|---------------|
 | Any (swag annotations) | Yes |
+
+> More languages and frameworks coming soon.
 
