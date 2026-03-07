@@ -106,9 +106,29 @@ func tsoaSpecFile(projectDir string) (string, error) {
 // ts-node script runner
 // --------------------------------------------------------------------------
 
-// RunScript executes scriptPath via ts-node with the project's settings,
-// setting SWAGGER_OUTPUT to outputPath.
+// RunScript executes scriptPath with the project's settings, setting
+// SWAGGER_OUTPUT to outputPath. Plain .js files are run with node; .ts files
+// are run with ts-node.
 func RunScript(projectDir, scriptPath, outputPath string) error {
+	if filepath.Ext(scriptPath) == ".js" {
+		return runJsScript(projectDir, scriptPath, outputPath)
+	}
+	return runTsScript(projectDir, scriptPath, outputPath)
+}
+
+func runJsScript(projectDir, scriptPath, outputPath string) error {
+	cmd := exec.Command("node", scriptPath)
+	cmd.Dir = projectDir
+	cmd.Env = append(os.Environ(), "SWAGGER_OUTPUT="+outputPath)
+	cmd.Stdout = os.Stderr
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("run Node swagger generator: %w", err)
+	}
+	return nil
+}
+
+func runTsScript(projectDir, scriptPath, outputPath string) error {
 	// --skip-project avoids inheriting the project's tsconfig (which may use
 	// "module":"nodenext" / ESM, incompatible with require-hooks). We supply a
 	// minimal known-good CJS config. tsconfig-paths/register still reads the

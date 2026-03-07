@@ -60,12 +60,19 @@ func runGenerateWizard(cmd *cobra.Command, args []string) error {
 
 		case "Node.js":
 			if !node.HasTsoaControllers(cwd) {
-				fmt.Fprintf(os.Stderr, "\nThis project uses plain Express routes (no tsoa @Route decorators found).\n"+
-					"Zero-config generation requires tsoa decorators (@Route, @Get, etc.).\n\n"+
-					"Use --cmd with a custom generation script instead:\n\n"+
-					"  drift-guard compare openapi --cmd \"node scripts/gen.js\" --output swagger.json\n\n"+
-					"Or adopt tsoa for zero-config: https://tsoa-community.github.io/docs\n")
-				return nil
+				if !promptYesNo("Set up swagger-autogen for plain Express generation?") {
+					break
+				}
+				written, err := node.ScaffoldSwaggerAutogenScript(cwd)
+				if err != nil {
+					return err
+				}
+				fmt.Fprintf(os.Stderr, "script written to %s\n", written)
+				fmt.Fprintf(os.Stderr, "Installing swagger-autogen...\n")
+				if err := node.InstallSwaggerAutogen(cwd); err != nil {
+					return err
+				}
+				break
 			}
 			if !promptYesNo("Set up tsoa for zero-config generation?") {
 				return nil
@@ -114,12 +121,15 @@ func runGenerate(projectDir, outputDir string) error {
 // helpers
 // --------------------------------------------------------------------------
 
+// stdinReader is shared across all promptYesNo calls so that bufio buffering
+// doesn't consume input intended for a subsequent prompt.
+var stdinReader = bufio.NewReader(os.Stdin)
+
 // promptYesNo prints prompt and reads a Y/n response from stdin.
 // An empty response (just Enter) defaults to Yes.
 func promptYesNo(prompt string) bool {
 	fmt.Fprintf(os.Stderr, "%s [Y/n]: ", prompt)
-	reader := bufio.NewReader(os.Stdin)
-	line, _ := reader.ReadString('\n')
+	line, _ := stdinReader.ReadString('\n')
 	line = strings.TrimSpace(strings.ToLower(line))
 	return line == "" || line == "y" || line == "yes"
 }
