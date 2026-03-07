@@ -106,7 +106,13 @@ func tsoaSpecFile(projectDir string) (string, error) {
 // --------------------------------------------------------------------------
 
 func runScript(projectDir, scriptPath, outputPath string) error {
-	args := []string{"ts-node", "--transpile-only"}
+	// Force CommonJS compilation so require-hooks work even when the project's
+	// tsconfig uses "module": "nodenext" / ESM. This only affects transpilation,
+	// not the project's own build output.
+	args := []string{
+		"ts-node", "--transpile-only",
+		"--compiler-options", `{"module":"CommonJS","moduleResolution":"node"}`,
+	}
 	if hasTsconfigPaths(projectDir) {
 		args = append(args, "-r", "tsconfig-paths/register")
 	}
@@ -121,7 +127,7 @@ func runScript(projectDir, scriptPath, outputPath string) error {
 		hint := "Hint: create scripts/generate-swagger.ts in your project that writes the\n" +
 			"OpenAPI document to process.env.SWAGGER_OUTPUT, then re-run drift-guard."
 		if hasTsconfigPaths(projectDir) {
-			hint = "Your tsconfig.json defines path aliases. Ensure tsconfig-paths is installed:\n\n" +
+			hint = "Your tsconfig.json uses baseUrl/paths. Ensure tsconfig-paths is installed:\n\n" +
 				"  npm install --save-dev tsconfig-paths"
 		}
 		return fmt.Errorf("run Node swagger generator: %w\n\n%s", err, hint)
