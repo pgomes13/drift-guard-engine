@@ -16,7 +16,9 @@ runs:
         TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M UTC')
 
         # Detect configured Pages branch; fall back to gh-pages.
-        PAGES_BRANCH=$(gh api "repos/${REPO}/pages" --jq '.source.branch' 2>/dev/null || echo "gh-pages")
+        if ! PAGES_BRANCH=$(gh api "repos/${REPO}/pages" --jq '.source.branch' 2>/dev/null); then
+          PAGES_BRANCH="gh-pages"
+        fi
 
         # Build the new log entry.
         if [ -s /tmp/drift-output.txt ]; then
