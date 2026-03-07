@@ -50,3 +50,20 @@ Emits GitHub Actions [workflow commands](https://docs.github.com/en/actions/writ
 ```
 
 Use `--format github` in CI to get inline PR annotations automatically.
+
+## `markdown`
+
+Renders a GitHub-flavored Markdown table — ideal for posting as a PR comment:
+
+```
+**Total: 4** | Breaking: 2 | Non-Breaking: 1 | Info: 1
+
+| Severity | Type | Path | Method | Location | Description |
+|----------|------|------|--------|----------|-------------|
+| [BREAKING] | endpoint_removed | /users/{id} | DELETE |  | Endpoint '/users/{id}' method DELETE was removed |
+| [BREAKING] | param_type_changed | /users/{id} | GET | path.id | Param 'id' type changed from 'string' to 'integer' |
+| [non-breaking] | endpoint_added | /posts |  |  | Endpoint '/posts' was added |
+| [info] | field_added | /users | POST | request.role | Field 'role' was added |
+```
+
+This is the format used by the [GitHub Action](./ci.md) when posting automatic PR comments.

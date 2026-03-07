@@ -18,7 +18,7 @@ drift-guard <command> --base <file> --head <file> [--format <format>] [--fail-on
 | -------------------- | --------------------------------------------------- | -------- |
 | `--base`             | Path to the base (before) schema file               | required |
 | `--head`             | Path to the head (after) schema file                | required |
-| `-f, --format`       | Output format: `text`, `json`, `github`             | `text`   |
+| `-f, --format`       | Output format: `text`, `json`, `github`, `markdown` | `text`   |
 | `--fail-on-breaking` | Exit with code `1` if breaking changes are detected | `false`  |
 
 ### Examples
