@@ -15,8 +15,8 @@ import (
 	"github.com/pgomes13/drift-guard-engine/internal/languages"
 )
 
-var generateCmd = &cobra.Command{
-	Use:   "generate",
+var compareCmd = &cobra.Command{
+	Use:   "compare",
 	Short: "Generate an API schema from source code",
 	Long: `Interactively detect the project type, optionally scaffold a swagger
 generation script, and build the OpenAPI schema.`,
@@ -212,5 +212,5 @@ func copyFile(src, dst string) error {
 }
 
 func init() {
-	generateCmd.PersistentFlags().StringVar(&flagGenOutPath, "output", "swagger.json", "Path to write the generated schema file")
+	compareCmd.PersistentFlags().StringVar(&flagGenOutPath, "output", "swagger.json", "Path to write the generated schema file")
 }
