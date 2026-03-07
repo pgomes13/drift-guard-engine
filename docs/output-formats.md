@@ -3,15 +3,14 @@
 ## `text` (default)
 
 ```
-Schema Diff: base.yaml → head.yaml
 Total: 4  Breaking: 2  Non-Breaking: 1  Info: 1
 
-SEVERITY        TYPE                    PATH            METHOD  LOCATION        DESCRIPTION
+SEVERITY        TYPE                    PATH            DESCRIPTION
 ----------------------------------------------------------------------------------------------------
-[BREAKING]      endpoint_removed        /users/{id}     DELETE                  Endpoint '/users/{id}' method DELETE was removed
-[BREAKING]      param_type_changed      /users/{id}     GET     path.id         Param 'id' type changed from 'string' to 'integer'
-[non-breaking]  endpoint_added          /posts                                  Endpoint '/posts' was added
-[info]          field_added             /users          POST    request.role    Field 'role' was added
+[BREAKING]      endpoint_removed        /users/{id}     Endpoint '/users/{id}' method DELETE was removed
+[BREAKING]      param_type_changed      /users/{id}     Param 'id' type changed from 'string' to 'integer'
+[non-breaking]  endpoint_added          /posts          Endpoint '/posts' was added
+[info]          field_added             /users          Field 'role' was added
 ```
 
 ## `json`
@@ -58,12 +57,12 @@ Renders a GitHub-flavored Markdown table — ideal for posting as a PR comment:
 ```
 **Total: 4** | Breaking: 2 | Non-Breaking: 1 | Info: 1
 
-| Severity | Type | Path | Method | Location | Description |
-|----------|------|------|--------|----------|-------------|
-| [BREAKING] | endpoint_removed | /users/{id} | DELETE |  | Endpoint '/users/{id}' method DELETE was removed |
-| [BREAKING] | param_type_changed | /users/{id} | GET | path.id | Param 'id' type changed from 'string' to 'integer' |
-| [non-breaking] | endpoint_added | /posts |  |  | Endpoint '/posts' was added |
-| [info] | field_added | /users | POST | request.role | Field 'role' was added |
+| Severity | Type | Path | Description |
+|----------|------|------|-------------|
+| [BREAKING] | endpoint_removed | /users/{id} | Endpoint '/users/{id}' method DELETE was removed |
+| [BREAKING] | param_type_changed | /users/{id} | Param 'id' type changed from 'string' to 'integer' |
+| [non-breaking] | endpoint_added | /posts | Endpoint '/posts' was added |
+| [info] | field_added | /users | Field 'role' was added |
 ```
 
 This is the format used by the [GitHub Action](./ci.md) when posting automatic PR comments.

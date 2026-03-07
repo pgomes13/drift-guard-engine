@@ -55,16 +55,14 @@ func writeText(w io.Writer, result schema.DiffResult) error {
 		return tw.Flush()
 	}
 
-	fmt.Fprintf(tw, "SEVERITY\tTYPE\tPATH\tMETHOD\tLOCATION\tDESCRIPTION\n")
+	fmt.Fprintf(tw, "SEVERITY\tTYPE\tPATH\tDESCRIPTION\n")
 	fmt.Fprintf(tw, "%s\n", strings.Repeat("-", 100))
 
 	for _, c := range result.Changes {
-		fmt.Fprintf(tw, "%s\t%s\t%s\t%s\t%s\t%s\n",
+		fmt.Fprintf(tw, "%s\t%s\t%s\t%s\n",
 			severityLabel(c.Severity),
 			c.Type,
 			c.Path,
-			c.Method,
-			c.Location,
 			c.Description,
 		)
 	}
@@ -85,16 +83,14 @@ func writeMarkdown(w io.Writer, result schema.DiffResult) error {
 		return nil
 	}
 
-	fmt.Fprintln(w, "| Severity | Type | Path | Method | Location | Description |")
-	fmt.Fprintln(w, "|----------|------|------|--------|----------|-------------|")
+	fmt.Fprintln(w, "| Severity | Type | Path | Description |")
+	fmt.Fprintln(w, "|----------|------|------|-------------|")
 
 	for _, c := range result.Changes {
-		fmt.Fprintf(w, "| %s | %s | %s | %s | %s | %s |\n",
+		fmt.Fprintf(w, "| %s | %s | %s | %s |\n",
 			severityLabel(c.Severity),
 			c.Type,
 			c.Path,
-			c.Method,
-			c.Location,
 			c.Description,
 		)
 	}
