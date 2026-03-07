@@ -10,6 +10,8 @@ runs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
+        [ -s /tmp/drift-output.txt ] || exit 0
+
         REPO="${{ github.repository }}"
         PR_NUMBER="${{ github.event.pull_request.number }}"
         PR_URL="${{ github.event.pull_request.html_url }}"
