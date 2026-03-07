@@ -1,4 +1,4 @@
-package generate
+package nestjs
 
 import (
 	"encoding/json"
@@ -6,6 +6,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/pgomes13/drift-guard-engine/internal/generate/node"
 )
 
 // Nest generates a swagger.json in outputDir for the NestJS project rooted at
@@ -19,7 +21,7 @@ import (
 func Nest(projectDir, outputDir string) error {
 	// 1. tsoa
 	if _, err := os.Stat(filepath.Join(projectDir, "tsoa.json")); err == nil {
-		return tsoaSpec(projectDir, outputDir)
+		return node.TsoaSpec(projectDir, outputDir)
 	}
 
 	outputPath := filepath.Join(outputDir, "swagger.json")
@@ -34,7 +36,7 @@ func Nest(projectDir, outputDir string) error {
 	for _, rel := range candidates {
 		full := filepath.Join(projectDir, rel)
 		if _, err := os.Stat(full); err == nil {
-			return runScript(projectDir, full, outputPath)
+			return node.RunScript(projectDir, full, outputPath)
 		}
 	}
 
@@ -48,9 +50,6 @@ func Nest(projectDir, outputDir string) error {
 	}
 
 	// 4. No auto-generation possible — guide the user.
-	// Booting the full NestJS app is not safe here because it would start
-	// database connections and other side effects. The user must provide a
-	// generation script that handles their app's dependencies.
 	return fmt.Errorf(
 		"no OpenAPI generator found in %s\n\n"+
 			"NestJS auto-generation requires a dedicated generation script.\n\n"+
@@ -66,9 +65,7 @@ func Nest(projectDir, outputDir string) error {
 }
 
 // nestSwagger scaffolds a temporary TypeScript script that uses @nestjs/swagger
-// to generate the OpenAPI document, then runs it via ts-node. It calls
-// process.exit(0) after writing the spec to avoid hanging on open connections
-// (databases, message queues, etc.).
+// to generate the OpenAPI document, then runs it via ts-node.
 func nestSwagger(projectDir, outputPath string) error {
 	appModulePath, err := detectAppModulePath(projectDir)
 	if err != nil {
@@ -77,8 +74,6 @@ func nestSwagger(projectDir, outputPath string) error {
 
 	script := buildNestSwaggerScript(appModulePath)
 
-	// Write the temp script inside projectDir so Node resolves node_modules
-	// relative to the project, not the system temp directory.
 	tmp, err := os.CreateTemp(projectDir, ".dg-nestjs-swagger-*.ts")
 	if err != nil {
 		return fmt.Errorf("create temp script: %w", err)
@@ -91,18 +86,14 @@ func nestSwagger(projectDir, outputPath string) error {
 	}
 	tmp.Close()
 
-	if err := runScript(projectDir, tmp.Name(), outputPath); err != nil {
-		// The subprocess has already written diagnostic output (NestJS logs,
-		// TypeORM errors, timeout message) directly to stderr. Return a short
-		// sentinel so the caller falls through to the actionable guidance,
-		// rather than repeating the tsconfig-paths hint which is unrelated here.
+	if err := node.RunScript(projectDir, tmp.Name(), outputPath); err != nil {
 		return fmt.Errorf("nestjs/swagger auto-generation failed")
 	}
 	return nil
 }
 
-// detectAppModulePath returns the path to the project's AppModule relative to
-// projectDir, trying common NestJS conventions.
+// detectAppModulePath returns the absolute path to the project's AppModule
+// (without extension), trying common NestJS conventions.
 func detectAppModulePath(projectDir string) (string, error) {
 	candidates := []string{
 		"src/app.module.ts",
@@ -112,28 +103,18 @@ func detectAppModulePath(projectDir string) (string, error) {
 	}
 	for _, rel := range candidates {
 		if _, err := os.Stat(filepath.Join(projectDir, rel)); err == nil {
-			// Return an absolute POSIX path so the generated import works from any
-			// temp directory.
 			abs := filepath.Join(projectDir, strings.TrimSuffix(rel, filepath.Ext(rel)))
 			return filepath.ToSlash(abs), nil
 		}
 	}
 	return "", fmt.Errorf(
-		"could not find AppModule (tried src/app.module.ts and others); "+
+		"could not find AppModule (tried src/app.module.ts and others); " +
 			"add scripts/generate-swagger.ts to your project instead",
 	)
 }
 
 // buildNestSwaggerScript returns a TypeScript snippet that boots the NestJS app,
 // generates the OpenAPI document, writes it to SWAGGER_OUTPUT, and exits.
-//
-// Key design choices:
-//   - abortOnError: false — makes NestJS throw instead of calling process.exit(1)
-//     on initialisation failure, so our catch handler can surface the real error.
-//   - 15-second timeout — kills the process if app initialisation hangs (e.g.
-//     TypeORM retrying a database connection).
-//   - dotenv is loaded opportunistically; if the package is absent the app's own
-//     ConfigModule will still handle environment loading.
 func buildNestSwaggerScript(appModuleAbsPath string) string {
 	return fmt.Sprintf(`// Load .env so ConfigModule / TypeORM can read credentials.
 try { require('dotenv').config({ quiet: true }); } catch (_) {}

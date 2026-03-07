@@ -1,4 +1,4 @@
-package generate
+package nestjs
 
 import (
 	"fmt"
@@ -9,12 +9,6 @@ import (
 // ScaffoldNestSwaggerScript writes a starter scripts/generate-swagger.ts to
 // projectDir (creating the scripts/ directory if needed). It returns the path
 // of the file that was written.
-//
-// The generated script uses NestFactory to boot the app, calls
-// SwaggerModule.createDocument, and writes the spec to the path given by the
-// SWAGGER_OUTPUT environment variable — exactly what drift-guard expects.
-// Inline comments guide the user on how to mock heavy providers (TypeORM,
-// Redis, etc.) when running outside of a live environment.
 func ScaffoldNestSwaggerScript(projectDir string) (string, error) {
 	outPath := filepath.Join(projectDir, "scripts", "generate-swagger.ts")
 
@@ -23,7 +17,6 @@ func ScaffoldNestSwaggerScript(projectDir string) (string, error) {
 	}
 
 	appModuleRelPath := detectAppModuleRelPath(projectDir)
-
 	content := buildNestSwaggerScaffold(appModuleRelPath)
 
 	if err := os.WriteFile(outPath, []byte(content), 0o644); err != nil {
@@ -36,8 +29,8 @@ func ScaffoldNestSwaggerScript(projectDir string) (string, error) {
 // suitable for use inside scripts/generate-swagger.ts.
 func detectAppModuleRelPath(projectDir string) string {
 	candidates := []struct {
-		rel    string // file to stat
-		import_ string // import path to use
+		rel     string
+		import_ string
 	}{
 		{"src/app.module.ts", "../src/app.module"},
 		{"src/app.module.js", "../src/app.module"},
@@ -49,7 +42,7 @@ func detectAppModuleRelPath(projectDir string) string {
 			return c.import_
 		}
 	}
-	return "../src/app.module" // sensible default
+	return "../src/app.module"
 }
 
 // buildNestSwaggerScaffold returns the TypeScript source for the scaffold.
@@ -61,7 +54,7 @@ func buildNestSwaggerScaffold(appModuleRelPath string) string {
  * writes it to the path specified by the SWAGGER_OUTPUT environment variable.
  *
  * Run via drift-guard:
- *   drift-guard generate openapi
+ *   drift-guard generate
  *
  * Or directly:
  *   SWAGGER_OUTPUT=swagger.json npx ts-node --transpile-only scripts/generate-swagger.ts
