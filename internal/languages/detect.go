@@ -48,6 +48,36 @@ func DetectProjectInfo(dir string) (ProjectInfo, error) {
 	)
 }
 
+// GraphQLProjectInfo holds the human-readable project type name alongside the
+// GraphQL generator function resolved for that project.
+type GraphQLProjectInfo struct {
+	TypeName    string
+	GenerateGQL GeneratorFunc
+}
+
+// DetectGraphQLInfo returns GraphQL project info if the project uses GraphQL,
+// or nil if no GraphQL API is detected.
+func DetectGraphQLInfo(dir string) *GraphQLProjectInfo {
+	if isNestJSProject(dir) && (nestHasGraphQLDep(dir) || hasGraphQLSchema(dir)) {
+		return &GraphQLProjectInfo{"NestJS", GenerateNestGraphQL}
+	}
+	if (isExpressProject(dir) || isNodeJSProject(dir)) && (nodeHasGraphQLDeps(dir) || hasGraphQLSchema(dir)) {
+		return &GraphQLProjectInfo{"Express", GenerateNodeGraphQL}
+	}
+	return nil
+}
+
+// DetectGraphQLGenerator returns the GraphQL generator for the project at dir.
+func DetectGraphQLGenerator(dir string) (GeneratorFunc, error) {
+	if isNestJSProject(dir) {
+		return GenerateNestGraphQL, nil
+	}
+	if isExpressProject(dir) || isNodeJSProject(dir) {
+		return GenerateNodeGraphQL, nil
+	}
+	return nil, fmt.Errorf("could not detect project type for GraphQL generation in %s", dir)
+}
+
 // DetectGenerator inspects dir and returns the appropriate schema generation
 // function, or an error with actionable instructions when auto-generation is
 // not supported.

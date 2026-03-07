@@ -3,11 +3,16 @@ package express
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 )
+
+// SubprocessOutput controls where subprocess (npm/npx/node) output is written.
+// Set to io.Discard to suppress it (e.g. when showing a progress spinner).
+var SubprocessOutput io.Writer = os.Stderr
 
 // Node generates a swagger.json in outputDir for the Node/Express project
 // rooted at projectDir.
@@ -67,8 +72,8 @@ type tsoaConfig struct {
 func TsoaSpec(projectDir, outputDir string) error {
 	cmd := exec.Command("npx", "tsoa", "spec")
 	cmd.Dir = projectDir
-	cmd.Stdout = os.Stderr
-	cmd.Stderr = os.Stderr
+	cmd.Stdout = SubprocessOutput
+	cmd.Stderr = SubprocessOutput
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("npx tsoa spec: %w", err)
 	}
@@ -122,8 +127,8 @@ func runJsScript(projectDir, scriptPath, outputPath string) error {
 	cmd := exec.Command("node", scriptPath)
 	cmd.Dir = projectDir
 	cmd.Env = append(os.Environ(), "SWAGGER_OUTPUT="+outputPath)
-	cmd.Stdout = os.Stderr
-	cmd.Stderr = os.Stderr
+	cmd.Stdout = SubprocessOutput
+	cmd.Stderr = SubprocessOutput
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("run Node swagger generator: %w", err)
 	}
@@ -143,8 +148,8 @@ func runTsScript(projectDir, scriptPath, outputPath string) error {
 	cmd := exec.Command("npx", args...)
 	cmd.Dir = projectDir
 	cmd.Env = append(os.Environ(), "SWAGGER_OUTPUT="+outputPath)
-	cmd.Stdout = os.Stderr
-	cmd.Stderr = os.Stderr
+	cmd.Stdout = SubprocessOutput
+	cmd.Stderr = SubprocessOutput
 	if err := cmd.Run(); err != nil {
 		hint := "Hint: create scripts/generate-swagger.ts in your project that writes the\n" +
 			"OpenAPI document to process.env.SWAGGER_OUTPUT, then re-run drift-guard."

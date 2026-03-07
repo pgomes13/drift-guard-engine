@@ -99,8 +99,8 @@ func InstallSwaggerAutogen(projectDir string) error {
 	}
 	cmd := exec.Command(pm, args...)
 	cmd.Dir = projectDir
-	cmd.Stdout = os.Stderr
-	cmd.Stderr = os.Stderr
+	cmd.Stdout = SubprocessOutput
+	cmd.Stderr = SubprocessOutput
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("%s install swagger-autogen: %w", pm, err)
 	}
@@ -154,8 +154,8 @@ func InstallTsoa(projectDir string) error {
 	}
 	cmd := exec.Command(pm, args...)
 	cmd.Dir = projectDir
-	cmd.Stdout = os.Stderr
-	cmd.Stderr = os.Stderr
+	cmd.Stdout = SubprocessOutput
+	cmd.Stderr = SubprocessOutput
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("%s install tsoa: %w", pm, err)
 	}

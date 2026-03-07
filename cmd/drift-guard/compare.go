@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 
@@ -37,7 +38,16 @@ func runCompare(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Fprintf(os.Stderr, "Project detected: %s\n", info.TypeName)
+	fmt.Fprintf(os.Stderr, "%s framework detected\n", info.TypeName)
+
+	// --- Step 1b: offer GraphQL comparison if detected ---
+	if gqlInfo := languages.DetectGraphQLInfo(cwd); gqlInfo != nil {
+		fmt.Fprintf(os.Stderr, "GraphQL API detected\n")
+		if promptYesNo("Compare GraphQL schemas?") {
+			return runGraphQLCompare(cmd, cwd, gqlInfo)
+		}
+	}
+
 	if !promptYesNo("Proceed?") {
 		return nil
 	}
@@ -49,7 +59,6 @@ func runCompare(cmd *cobra.Command, args []string) error {
 	// --- Step 2: scaffold generation script if needed ---
 	specFound := swaggerSpecExists(cwd)
 	scriptFound := swaggerScriptExists(cwd)
-	fmt.Fprintf(os.Stderr, "\nSwagger (openapi) file detected: %s\n", yesNo(specFound || scriptFound))
 
 	if !(specFound || scriptFound) {
 		switch info.TypeName {
@@ -57,24 +66,21 @@ func runCompare(cmd *cobra.Command, args []string) error {
 			if !promptYesNo("Proceed to add script?") {
 				return nil
 			}
-			written, err := nest.ScaffoldNestSwaggerScript(driftGuardDir)
-			if err != nil {
+			if _, err := nest.ScaffoldNestSwaggerScript(driftGuardDir); err != nil {
 				return err
 			}
-			fmt.Fprintf(os.Stderr, "scaffold written to %s\n", written)
 
 		case "Express", "Node.js":
 			if !express.HasTsoaControllers(cwd) {
 				if !promptYesNo("Set up swagger-autogen for plain Express generation?") {
 					break
 				}
-				written, err := express.ScaffoldSwaggerAutogenScript(driftGuardDir)
-				if err != nil {
+				if _, err := express.ScaffoldSwaggerAutogenScript(driftGuardDir); err != nil {
 					return err
 				}
-				fmt.Fprintf(os.Stderr, "script written to %s\n", written)
-				fmt.Fprintf(os.Stderr, "Installing swagger-autogen...\n")
-				if err := express.InstallSwaggerAutogen(cwd); err != nil {
+				if err := runStep("Installing swagger-autogen", func() error {
+					return express.InstallSwaggerAutogen(cwd)
+				}); err != nil {
 					return err
 				}
 				break
@@ -82,17 +88,19 @@ func runCompare(cmd *cobra.Command, args []string) error {
 			if !promptYesNo("Set up tsoa for zero-config generation?") {
 				return nil
 			}
-			written, err := express.ScaffoldTsoa(cwd)
-			if err != nil {
+			if _, err := express.ScaffoldTsoa(cwd); err != nil {
 				return err
 			}
-			fmt.Fprintf(os.Stderr, "tsoa.json written to %s\n", written)
-			fmt.Fprintf(os.Stderr, "Installing tsoa...\n")
-			if err := express.InstallTsoa(cwd); err != nil {
+			if err := runStep("Installing tsoa", func() error {
+				return express.InstallTsoa(cwd)
+			}); err != nil {
 				return err
 			}
 		}
 	}
+
+	// Suppress subprocess output — spinner is active from here on.
+	express.SubprocessOutput = io.Discard
 
 	// --- Step 3: create temp dir inside drift-guard/ ---
 	tmpDir := filepath.Join(driftGuardDir, "tmp")
@@ -102,72 +110,157 @@ func runCompare(cmd *cobra.Command, args []string) error {
 	defer os.RemoveAll(driftGuardDir)
 
 	// --- Step 4: generate head spec from current branch ---
-	fmt.Fprintf(os.Stderr, "\nGenerating head spec from current branch...\n")
-	headGenDir := filepath.Join(tmpDir, "head-gen")
-	if err := os.MkdirAll(headGenDir, 0o755); err != nil {
-		return err
-	}
-	if err := info.Generate(cwd, headGenDir); err != nil {
-		return fmt.Errorf("generate head schema: %w", err)
-	}
-	headSpec, err := findSchemaFile(headGenDir)
-	if err != nil {
-		return fmt.Errorf("head spec: %w", err)
-	}
 	headOut := filepath.Join(tmpDir, "head.json")
-	if err := copyFile(headSpec, headOut); err != nil {
+	if err := runStep("Generating head spec", func() error {
+		headGenDir := filepath.Join(tmpDir, "head-gen")
+		if err := os.MkdirAll(headGenDir, 0o755); err != nil {
+			return err
+		}
+		if err := info.Generate(cwd, headGenDir); err != nil {
+			return fmt.Errorf("generate head schema: %w", err)
+		}
+		headSpec, err := findSchemaFile(headGenDir)
+		if err != nil {
+			return fmt.Errorf("head spec: %w", err)
+		}
+		return copyFile(headSpec, headOut)
+	}); err != nil {
 		return err
 	}
 
 	// --- Step 5: checkout base branch and generate base spec ---
 	baseRef := resolveBaseRef("origin/main")
-	fmt.Fprintf(os.Stderr, "Generating base spec from %s...\n", baseRef)
-
+	baseOut := filepath.Join(tmpDir, "base.json")
 	worktreeDir := filepath.Join(tmpDir, "worktree")
-	if out, err := exec.Command("git", "worktree", "add", "--detach", worktreeDir, baseRef).CombinedOutput(); err != nil {
-		return fmt.Errorf("git worktree add %s: %w\n%s", baseRef, err, out)
-	}
 	defer exec.Command("git", "worktree", "remove", "--force", worktreeDir).Run()
 
-	// Copy the generation script into the worktree at the same relative path
-	// so the base branch can use it even if it was never committed there.
-	if rel := findSwaggerScript(cwd); rel != "" {
-		src := filepath.Join(cwd, rel)
-		dst := filepath.Join(worktreeDir, rel)
-		if err := copyFile(src, dst); err != nil {
-			return fmt.Errorf("copy script to worktree: %w", err)
+	if err := runStep(fmt.Sprintf("Generating base spec (%s)", baseRef), func() error {
+		if out, err := exec.Command("git", "worktree", "add", "--detach", worktreeDir, baseRef).CombinedOutput(); err != nil {
+			return fmt.Errorf("git worktree add %s: %w\n%s", baseRef, err, out)
 		}
-	}
-
-	baseGenDir := filepath.Join(tmpDir, "base-gen")
-	if err := os.MkdirAll(baseGenDir, 0o755); err != nil {
-		return err
-	}
-	if err := runGenerate(worktreeDir, baseGenDir); err != nil {
-		return fmt.Errorf("generate base schema: %w", err)
-	}
-	baseSpec, err := findSchemaFile(baseGenDir)
-	if err != nil {
-		return fmt.Errorf("base spec: %w", err)
-	}
-	baseOut := filepath.Join(tmpDir, "base.json")
-	if err := copyFile(baseSpec, baseOut); err != nil {
+		if rel := findSwaggerScript(cwd); rel != "" {
+			src := filepath.Join(cwd, rel)
+			dst := filepath.Join(worktreeDir, rel)
+			if err := copyFile(src, dst); err != nil {
+				return fmt.Errorf("copy script to worktree: %w", err)
+			}
+		}
+		baseGenDir := filepath.Join(tmpDir, "base-gen")
+		if err := os.MkdirAll(baseGenDir, 0o755); err != nil {
+			return err
+		}
+		if err := runGenerate(worktreeDir, baseGenDir); err != nil {
+			return fmt.Errorf("generate base schema: %w", err)
+		}
+		baseSpec, err := findSchemaFile(baseGenDir)
+		if err != nil {
+			return fmt.Errorf("base spec: %w", err)
+		}
+		return copyFile(baseSpec, baseOut)
+	}); err != nil {
 		return err
 	}
 
 	// --- Step 6: diff base vs head ---
-	fmt.Fprintf(os.Stderr, "\nDiffing base.json vs head.json...\n")
-	result, err := compare.OpenAPI(baseOut, headOut)
+	diffResult, err := compare.OpenAPI(baseOut, headOut)
 	if err != nil {
 		return err
 	}
-	if err := reporter.Write(cmd.OutOrStdout(), result, reporter.Format(flagFormat)); err != nil {
+	if err := reporter.Write(cmd.OutOrStdout(), diffResult, reporter.Format(flagFormat)); err != nil {
 		return err
 	}
-	if flagFailOnBreak && reporter.HasBreakingChanges(result) {
+	if flagFailOnBreak && reporter.HasBreakingChanges(diffResult) {
 		os.Exit(1)
 	}
 	return nil
+}
+
+// runGraphQLCompare generates GraphQL schemas for head and base branches and diffs them.
+func runGraphQLCompare(cmd *cobra.Command, cwd string, info *languages.GraphQLProjectInfo) error {
+	driftGuardDir := filepath.Join(cwd, "drift-guard")
+	tmpDir := filepath.Join(driftGuardDir, "tmp")
+	if err := os.MkdirAll(tmpDir, 0o755); err != nil {
+		return fmt.Errorf("create temp dir: %w", err)
+	}
+	defer os.RemoveAll(driftGuardDir)
+
+	express.SubprocessOutput = io.Discard
+
+	headOut := filepath.Join(tmpDir, "head.graphql")
+	if err := runStep("Generating head GraphQL schema", func() error {
+		headGenDir := filepath.Join(tmpDir, "head-gen")
+		if err := os.MkdirAll(headGenDir, 0o755); err != nil {
+			return err
+		}
+		if err := info.GenerateGQL(cwd, headGenDir); err != nil {
+			return fmt.Errorf("generate head schema: %w", err)
+		}
+		headSchema, err := findGraphQLFile(headGenDir)
+		if err != nil {
+			return fmt.Errorf("head schema: %w", err)
+		}
+		return copyFile(headSchema, headOut)
+	}); err != nil {
+		return err
+	}
+
+	baseRef := resolveBaseRef("origin/main")
+	baseOut := filepath.Join(tmpDir, "base.graphql")
+	worktreeDir := filepath.Join(tmpDir, "worktree")
+	defer exec.Command("git", "worktree", "remove", "--force", worktreeDir).Run()
+
+	if err := runStep(fmt.Sprintf("Generating base GraphQL schema (%s)", baseRef), func() error {
+		if out, err := exec.Command("git", "worktree", "add", "--detach", worktreeDir, baseRef).CombinedOutput(); err != nil {
+			return fmt.Errorf("git worktree add %s: %w\n%s", baseRef, err, out)
+		}
+		baseGenDir := filepath.Join(tmpDir, "base-gen")
+		if err := os.MkdirAll(baseGenDir, 0o755); err != nil {
+			return err
+		}
+		if err := runGraphQLGenerate(worktreeDir, baseGenDir); err != nil {
+			return fmt.Errorf("generate base schema: %w", err)
+		}
+		baseSchema, err := findGraphQLFile(baseGenDir)
+		if err != nil {
+			return fmt.Errorf("base schema: %w", err)
+		}
+		return copyFile(baseSchema, baseOut)
+	}); err != nil {
+		return err
+	}
+
+	diffResult, err := compare.GraphQL(baseOut, headOut)
+	if err != nil {
+		return err
+	}
+	if err := reporter.Write(cmd.OutOrStdout(), diffResult, reporter.Format(flagFormat)); err != nil {
+		return err
+	}
+	if flagFailOnBreak && reporter.HasBreakingChanges(diffResult) {
+		os.Exit(1)
+	}
+	return nil
+}
+
+// runGraphQLGenerate auto-detects the project type and generates a GraphQL schema
+// for the project at projectDir, writing output files into outputDir.
+func runGraphQLGenerate(projectDir, outputDir string) error {
+	gen, err := languages.DetectGraphQLGenerator(projectDir)
+	if err != nil {
+		return err
+	}
+	return gen(projectDir, outputDir)
+}
+
+// findGraphQLFile finds the generated GraphQL schema file in dir.
+func findGraphQLFile(dir string) (string, error) {
+	for _, name := range []string{"schema.graphql", "schema.gql"} {
+		p := filepath.Join(dir, name)
+		if _, err := os.Stat(p); err == nil {
+			return p, nil
+		}
+	}
+	return "", fmt.Errorf("no GraphQL schema file found in %s", dir)
 }
 
 // runGenerate auto-detects the project type and generates an OpenAPI schema
@@ -187,7 +280,6 @@ func resolveBaseRef(baseRef string) string {
 	}
 	for _, candidate := range []string{"origin/master", "HEAD~1"} {
 		if refExists(candidate) {
-			fmt.Fprintf(os.Stderr, "base-ref %q not found, using %q\n", baseRef, candidate)
 			return candidate
 		}
 	}
@@ -196,6 +288,46 @@ func resolveBaseRef(baseRef string) string {
 
 func refExists(ref string) bool {
 	return exec.Command("git", "rev-parse", "--verify", ref).Run() == nil
+}
+
+// --------------------------------------------------------------------------
+// progress spinner
+// --------------------------------------------------------------------------
+
+var spinnerFrames = []string{"⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"}
+
+// runStep displays an animated spinner while fn executes, then prints ✓ or ✗.
+func runStep(label string, fn func() error) error {
+	stop := make(chan struct{})
+	spinDone := make(chan struct{})
+	var fnErr error
+
+	go func() {
+		defer close(spinDone)
+		ticker := time.NewTicker(80 * time.Millisecond)
+		defer ticker.Stop()
+		i := 0
+		fmt.Fprintf(os.Stderr, "  %s  %s", spinnerFrames[0], label)
+		for {
+			select {
+			case <-stop:
+				if fnErr != nil {
+					fmt.Fprintf(os.Stderr, "\r  ✗  %s\n", label)
+				} else {
+					fmt.Fprintf(os.Stderr, "\r  ✓  %s\n", label)
+				}
+				return
+			case <-ticker.C:
+				i++
+				fmt.Fprintf(os.Stderr, "\r  %s  %s", spinnerFrames[i%len(spinnerFrames)], label)
+			}
+		}
+	}()
+
+	fnErr = fn()
+	close(stop)
+	<-spinDone
+	return fnErr
 }
 
 // --------------------------------------------------------------------------
@@ -232,8 +364,6 @@ func swaggerSpecExists(dir string) bool {
 	return false
 }
 
-// swaggerScriptExists reports whether a swagger generation script or tsoa
-// config is already present in the project.
 // findSwaggerScript returns the relative path of the first swagger generation
 // script found in dir, or empty string if none is found.
 func findSwaggerScript(dir string) string {
@@ -269,13 +399,6 @@ func swaggerScriptExists(dir string) bool {
 		}
 	}
 	return false
-}
-
-func yesNo(b bool) string {
-	if b {
-		return "Yes"
-	}
-	return "No"
 }
 
 // findSchemaFile finds the generated schema file in dir.
@@ -319,11 +442,8 @@ func copyFile(src, dst string) error {
 	}
 	defer out.Close()
 
-	if _, err := io.Copy(out, in); err != nil {
-		return err
-	}
-	fmt.Fprintf(os.Stderr, "schema written to %s\n", dst)
-	return nil
+	_, err = io.Copy(out, in)
+	return err
 }
 
 func init() {
