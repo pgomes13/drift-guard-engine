@@ -1,5 +1,7 @@
 # Go
 /drift-guard
+/drift-guard-mcp
+/mcp-server
 *.exe
 *.out
 vendor/

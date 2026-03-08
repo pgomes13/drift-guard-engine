@@ -1,0 +1,12 @@
+{
+  "name": "drift-guard",
+  "description": "Detect breaking and non-breaking API schema changes across OpenAPI, GraphQL, and gRPC. Supports Go, Node.js (Express, NestJS), and legacy projects.",
+  "version": "1.0.0",
+  "author": {
+    "name": "pgomes13",
+    "url": "https://github.com/pgomes13"
+  },
+  "homepage": "https://github.com/pgomes13/drift-guard-engine",
+  "repository": "https://github.com/pgomes13/drift-guard-engine",
+  "license": "MIT"
+}

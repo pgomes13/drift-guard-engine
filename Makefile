@@ -1,12 +1,17 @@
 BIN              := drift-guard
+MCP_BIN          := drift-guard-mcp
 CMD              := ./cmd/drift-guard
+MCP_CMD          := ./cmd/mcp-server
 HOMEBREW_TAP     := pgomes13/homebrew-tap
 FORMULA          := drift-guard
 
-.PHONY: build test vet lint clean run-openapi run-graphql run-grpc release major minor patch homebrew commit
+.PHONY: build build-mcp test vet lint clean run-openapi run-graphql run-grpc release major minor patch homebrew commit
 
 build:
 	go build -o $(BIN) $(CMD)
+
+build-mcp:
+	go build -o $(MCP_BIN) $(MCP_CMD)
 
 test:
 	go test ./...
@@ -18,7 +23,7 @@ lint: vet
 	staticcheck ./...
 
 clean:
-	rm -f $(BIN)
+	rm -f $(BIN) $(MCP_BIN)
 
 ## Quick smoke runs against the bundled fixtures
 run-openapi: build
