@@ -2,7 +2,7 @@
 layout: home
 
 hero:
-  name: drift-guard
+  name: DriftGuard
   text: API Contract Change Detection
   tagline: Detect and classify breaking vs. non-breaking schema changes across OpenAPI, GraphQL, and gRPC.
   actions:

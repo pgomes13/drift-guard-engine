@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: 'drift-guard',
+  title: 'DriftGuard',
   description: 'Detect and classify breaking vs. non-breaking API contract changes across OpenAPI, GraphQL, and gRPC.',
   base: '/drift-guard-engine/',
 
