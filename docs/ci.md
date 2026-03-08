@@ -16,7 +16,7 @@ The action automatically:
 - Posts a PR comment with the full diff report when drift is detected
 - Updates a drift log on your GitHub Pages site, with one entry per PR showing timestamps in your local time
 
-Supported Node.js frameworks: **Express**, **NestJS**. More language and framework support coming soon.
+See [Supported](/supported) for all supported languages and frameworks.
 
 Full workflow example:
 
