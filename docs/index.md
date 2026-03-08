@@ -10,6 +10,9 @@ hero:
       text: Get Started
       link: /install
     - theme: alt
+      text: GitHub Marketplace
+      link: https://github.com/marketplace/actions/drift-guard
+    - theme: alt
       text: View on GitHub
       link: https://github.com/pgomes13/drift-guard-engine
 

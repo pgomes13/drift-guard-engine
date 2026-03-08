@@ -4,7 +4,7 @@ drift-guard is designed to run in CI as a schema diff gate on pull requests.
 
 ## GitHub Action (recommended)
 
-Add API drift detection to any pull request in one line:
+Available on the [GitHub Marketplace](https://github.com/marketplace/actions/drift-guard). Add API drift detection to any pull request in one line:
 
 ```yaml
 - uses: pgomes13/drift-guard-engine@v1
