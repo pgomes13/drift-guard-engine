@@ -44,6 +44,10 @@ jobs:
 
 > **Note:** `contents: write` is required to update the drift log on your GitHub Pages branch. `issues: write` is required because GitHub's PR comment API uses the Issues REST endpoint.
 
+## Live example
+
+See drift-guard in action on a real pull request: [pgomes13/nest-coffee#8](https://github.com/pgomes13/nest-coffee/pull/8)
+
 ## Key flags
 
 | Flag | Purpose |
