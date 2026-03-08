@@ -74,6 +74,33 @@ func TestDetectGenerator_Go(t *testing.T) {
 	}
 }
 
+func TestDetectGenerator_GoLegacy_GopkgTOML(t *testing.T) {
+	dir := makeTempDir(t)
+	writeFile(t, dir, "Gopkg.toml", "[[constraint]]\n  name = \"github.com/gorilla/mux\"\n")
+	writeFile(t, dir, "main.go", "package main\n")
+
+	gen, err := languages.DetectGenerator(dir)
+	if err != nil {
+		t.Fatalf("unexpected error for legacy Go project: %v", err)
+	}
+	if gen == nil {
+		t.Fatal("expected non-nil generator for legacy Go project")
+	}
+}
+
+func TestDetectGenerator_GoLegacy_GoSourceOnly(t *testing.T) {
+	dir := makeTempDir(t)
+	writeFile(t, dir, "main.go", "package main\n")
+
+	gen, err := languages.DetectGenerator(dir)
+	if err != nil {
+		t.Fatalf("unexpected error for Go-source-only project: %v", err)
+	}
+	if gen == nil {
+		t.Fatal("expected non-nil generator for Go-source-only project")
+	}
+}
+
 func TestDetectGenerator_GoGin(t *testing.T) {
 	dir := makeTempDir(t)
 	writeFile(t, dir, "go.mod", "module example.com/app\n\ngo 1.21\n\nrequire github.com/gin-gonic/gin v1.9.1\n")
@@ -243,6 +270,48 @@ func TestDetectProjectInfo_GoNoFramework(t *testing.T) {
 	}
 	if info.TypeName != "Go" {
 		t.Errorf("expected TypeName='Go' for plain Go project, got '%s'", info.TypeName)
+	}
+}
+
+func TestDetectProjectInfo_GoGorillaMux_ModFile(t *testing.T) {
+	dir := makeTempDir(t)
+	writeFile(t, dir, "go.mod", "module example.com/app\n\ngo 1.21\n\nrequire github.com/gorilla/mux v1.8.0\n")
+
+	info, err := languages.DetectProjectInfo(dir)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if info.TypeName != "Go (Gorilla Mux)" {
+		t.Errorf("expected TypeName='Go (Gorilla Mux)', got '%s'", info.TypeName)
+	}
+}
+
+func TestDetectProjectInfo_GoGorillaMux_GopkgTOML(t *testing.T) {
+	dir := makeTempDir(t)
+	// No go.mod — legacy dep project
+	writeFile(t, dir, "Gopkg.toml", "[[constraint]]\n  name = \"github.com/gorilla/mux\"\n  version = \"1.6.2\"\n")
+	writeFile(t, dir, "main.go", "package main\n")
+
+	info, err := languages.DetectProjectInfo(dir)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if info.TypeName != "Go (Gorilla Mux)" {
+		t.Errorf("expected TypeName='Go (Gorilla Mux)', got '%s'", info.TypeName)
+	}
+}
+
+func TestDetectProjectInfo_GoLegacy_NoFramework(t *testing.T) {
+	dir := makeTempDir(t)
+	// No go.mod — just .go source files
+	writeFile(t, dir, "main.go", "package main\n")
+
+	info, err := languages.DetectProjectInfo(dir)
+	if err != nil {
+		t.Fatalf("unexpected error for legacy Go project: %v", err)
+	}
+	if info.TypeName != "Go" {
+		t.Errorf("expected TypeName='Go' for legacy project without framework, got '%s'", info.TypeName)
 	}
 }
 

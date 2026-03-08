@@ -16,26 +16,69 @@ func goProjectTypeName(dir string) string {
 	return "Go"
 }
 
+// isGoProject returns true when dir is a Go project. It accepts both modern
+// projects (go.mod present) and legacy projects (no go.mod but .go sources or
+// a dep/glide manifest are present).
+func isGoProject(dir string) bool {
+	// Modern: go.mod present
+	if _, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil {
+		return true
+	}
+	// Legacy dep / glide manifests
+	for _, name := range []string{"Gopkg.toml", "Gopkg.lock", "glide.yaml", "glide.lock"} {
+		if _, err := os.Stat(filepath.Join(dir, name)); err == nil {
+			return true
+		}
+	}
+	// Any .go files in the root directory
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return false
+	}
+	for _, e := range entries {
+		if !e.IsDir() && strings.HasSuffix(e.Name(), ".go") {
+			return true
+		}
+	}
+	return false
+}
+
 // goFrameworkName returns the display name of the Go web framework used in
 // the project at dir, or an empty string if no recognised framework is found.
+// It searches go.mod, go.sum, Gopkg.toml/lock, and the vendor/ directory so
+// that both modern (go modules) and legacy (dep/glide) projects are covered.
 func goFrameworkName(dir string) string {
-	data, err := os.ReadFile(filepath.Join(dir, "go.mod"))
-	if err != nil {
-		return ""
+	// Ordered list of (import path substring → display name).
+	frameworks := []struct{ path, name string }{
+		{"github.com/gin-gonic/gin", "Gin"},
+		{"github.com/labstack/echo", "Echo"},
+		{"github.com/gofiber/fiber", "Fiber"},
+		{"github.com/go-chi/chi", "Chi"},
+		{"github.com/gorilla/mux", "Gorilla Mux"},
 	}
-	content := string(data)
-	switch {
-	case strings.Contains(content, "github.com/gin-gonic/gin"):
-		return "Gin"
-	case strings.Contains(content, "github.com/labstack/echo"):
-		return "Echo"
-	case strings.Contains(content, "github.com/gofiber/fiber"):
-		return "Fiber"
-	case strings.Contains(content, "github.com/go-chi/chi"):
-		return "Chi"
-	default:
-		return ""
+
+	// Check text-based manifest files.
+	for _, fname := range []string{"go.mod", "go.sum", "Gopkg.toml", "Gopkg.lock"} {
+		data, err := os.ReadFile(filepath.Join(dir, fname))
+		if err != nil {
+			continue
+		}
+		content := string(data)
+		for _, fw := range frameworks {
+			if strings.Contains(content, fw.path) {
+				return fw.name
+			}
+		}
 	}
+
+	// Fallback: vendor directory layout.
+	for _, fw := range frameworks {
+		if _, err := os.Stat(filepath.Join(dir, filepath.FromSlash("vendor/"+fw.path))); err == nil {
+			return fw.name
+		}
+	}
+
+	return ""
 }
 
 // isNestJSProject returns true when the project at dir has a package.json

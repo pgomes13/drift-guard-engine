@@ -20,7 +20,7 @@ type ProjectInfo struct {
 // DetectProjectInfo is like DetectGenerator but also returns a display name
 // for the detected project type.
 func DetectProjectInfo(dir string) (ProjectInfo, error) {
-	if _, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil {
+	if isGoProject(dir) {
 		return ProjectInfo{goProjectTypeName(dir), GenerateGo}, nil
 	}
 	if isNestJSProject(dir) {
@@ -58,7 +58,7 @@ type GraphQLProjectInfo struct {
 // DetectGraphQLInfo returns GraphQL project info if the project uses GraphQL,
 // or nil if no GraphQL API is detected.
 func DetectGraphQLInfo(dir string) *GraphQLProjectInfo {
-	if _, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil {
+	if isGoProject(dir) {
 		if hasGraphQLSchema(dir) {
 			return &GraphQLProjectInfo{goProjectTypeName(dir), GenerateGoGraphQL}
 		}
@@ -75,7 +75,7 @@ func DetectGraphQLInfo(dir string) *GraphQLProjectInfo {
 
 // DetectGraphQLGenerator returns the GraphQL generator for the project at dir.
 func DetectGraphQLGenerator(dir string) (GeneratorFunc, error) {
-	if _, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil {
+	if isGoProject(dir) {
 		return GenerateGoGraphQL, nil
 	}
 	if isNestJSProject(dir) {
@@ -97,7 +97,7 @@ type GRPCProjectInfo struct {
 // DetectGRPCInfo returns gRPC project info if the project contains .proto files,
 // or nil if no gRPC API is detected.
 func DetectGRPCInfo(dir string) *GRPCProjectInfo {
-	if _, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil {
+	if isGoProject(dir) {
 		if hasProtoFilesInDir(dir) {
 			return &GRPCProjectInfo{goProjectTypeName(dir), GenerateGoGRPC}
 		}
@@ -114,7 +114,7 @@ func DetectGRPCInfo(dir string) *GRPCProjectInfo {
 
 // DetectGRPCGenerator returns the gRPC generator for the project at dir.
 func DetectGRPCGenerator(dir string) (GeneratorFunc, error) {
-	if _, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil {
+	if isGoProject(dir) {
 		return GenerateGoGRPC, nil
 	}
 	if isNestJSProject(dir) {
@@ -131,7 +131,7 @@ func DetectGRPCGenerator(dir string) (GeneratorFunc, error) {
 // not supported.
 func DetectGenerator(dir string) (GeneratorFunc, error) {
 	// Go project
-	if _, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil {
+	if isGoProject(dir) {
 		return GenerateGo, nil
 	}
 
