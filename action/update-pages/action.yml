@@ -15,7 +15,7 @@ runs:
         REPO="${{ github.repository }}"
         PR_NUMBER="${{ github.event.pull_request.number }}"
         PR_URL="${{ github.event.pull_request.html_url }}"
-        TIMESTAMP=$(date -u '+%A, %-d %B %Y %I:%M%p UTC' | sed 's/AM/am/;s/PM/pm/')
+        TIMESTAMP=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
 
         # Detect configured Pages branch; fall back to gh-pages.
         if ! PAGES_BRANCH=$(gh api "repos/${REPO}/pages" --jq '.source.branch' 2>/dev/null); then
@@ -32,12 +32,12 @@ runs:
           BODY='<p class="no-drift">No API changes detected.</p>'
         fi
 
-        ENTRY=$(printf '<div class="entry"><div class="entry-header"><a href="%s">PR #%s</a><span class="entry-time">%s</span></div><div class="entry-body">%s</div></div>' \
+        ENTRY=$(printf '<div class="entry"><div class="entry-header"><a href="%s">PR #%s</a><span class="entry-time" data-utc="%s"></span></div><div class="entry-body">%s</div></div>' \
           "$PR_URL" "$PR_NUMBER" "$TIMESTAMP" "$BODY")
 
         CSS='*{box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;max-width:960px;margin:48px auto;padding:0 24px;color:#24292e}h1{font-size:1.5rem;border-bottom:1px solid #e1e4e8;padding-bottom:12px;margin-bottom:24px}.entry{border:1px solid #e1e4e8;border-radius:6px;margin-bottom:20px;overflow:hidden}.entry-header{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:#f6f8fa;border-bottom:1px solid #e1e4e8}.entry-header a{font-weight:600;color:#0366d6;text-decoration:none}.entry-time{color:#6a737d;font-size:.85rem}.entry-body{padding:16px}table{width:100%;border-collapse:collapse;font-size:.875rem;border:1px solid #d0d7de}th{text-align:left;padding:10px 14px;background:#f6f8fa;border:1px solid #d0d7de;font-weight:600}td{padding:10px 14px;border:1px solid #d0d7de;vertical-align:top}.breaking td:first-child{color:#cb2431;font-weight:600}.nonbreaking td:first-child{color:#22863a}.summary{margin:0 0 12px;color:#586069;font-size:.875rem}.no-drift{color:#6a737d;font-style:italic}'
 
-        PAGE_HEADER=$(printf '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0">\n<title>API Drift Log</title>\n<style>%s</style>\n</head>\n<body>\n<h1>API Drift Log</h1>\n<!-- ENTRIES -->' "$CSS")
+        PAGE_HEADER=$(printf '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0">\n<title>API Drift Log</title>\n<style>%s</style>\n</head>\n<body>\n<h1>API Drift Log</h1>\n<script>document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(".entry-time[data-utc]").forEach(function(el){var d=new Date(el.dataset.utc);el.textContent=d.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long",year:"numeric"})+" "+d.toLocaleTimeString(undefined,{hour:"2-digit",minute:"2-digit"});});});</script>\n<!-- ENTRIES -->' "$CSS")
 
         # Fetch existing index.html or seed with template; always prepend latest entry.
         if gh api "repos/${REPO}/contents/index.html?ref=${PAGES_BRANCH}" > /tmp/pages-file.json 2>/dev/null; then
