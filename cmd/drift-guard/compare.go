@@ -55,12 +55,10 @@ func runCompare(cmd *cobra.Command, args []string) error {
 	}
 
 	// Scaffold generation script if needed.
-	if !(swaggerSpecExists(cwd) || swaggerScriptExists(cwd)) {
-		switch {
-		case strings.HasPrefix(info.TypeName, "Go"):
-			// swag init reads annotations from source — no scaffold needed.
-
-		case info.TypeName == "NestJS":
+	// Go projects use swag annotations directly — no scaffold step required.
+	if openAPIScaffoldNeeded(info.TypeName) && !(swaggerSpecExists(cwd) || swaggerScriptExists(cwd)) {
+		switch info.TypeName {
+		case "NestJS":
 			if _, err := nest.ScaffoldNestSwaggerScript(cwd); err != nil {
 				return err
 			}
@@ -289,6 +287,13 @@ func runGRPCCompare(cmd *cobra.Command, cwd string, info *languages.GRPCProjectI
 		return err
 	}
 	return writeResult(cmd, diffResult)
+}
+
+// openAPIScaffoldNeeded reports whether the project type requires swagger
+// generation tooling to be scaffolded. Go projects use swag annotations
+// directly and never need scaffolding.
+func openAPIScaffoldNeeded(typeName string) bool {
+	return !strings.HasPrefix(typeName, "Go")
 }
 
 // setupWorkspace creates the drift-guard/tmp directory and returns its path
