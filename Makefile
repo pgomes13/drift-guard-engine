@@ -10,5 +10,6 @@ FORMULA          := drift-guard
 include make/build.mk
 include make/test.mk
 include make/run.mk
+include make/deploy.mk
 include make/git.mk
 include make/release.mk
