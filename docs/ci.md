@@ -78,12 +78,6 @@ jobs:
 
 See drift-guard in action on a real pull request: [pgomes13/nest-coffee#8](https://github.com/pgomes13/nest-coffee/pull/8)
 
-## Inputs
-
-| Input | Default | Purpose |
-|---|---|---|
-| `node-version` | `"20"` | Node.js version used when generating OpenAPI specs for Node.js projects |
-
 ## Key flags
 
 | Flag | Purpose |
