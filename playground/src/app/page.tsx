@@ -15,7 +15,7 @@ const SCHEMA_TYPES: { id: SchemaType; label: string }[] = [
 
 type ResultTab = "diff" | "impact";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:9000";
+const API_URL = "";
 
 export default function PlaygroundPage() {
   const [schemaType, setSchemaType] = useState<SchemaType>("openapi");
