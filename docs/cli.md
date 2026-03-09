@@ -14,13 +14,16 @@ From the root of your project, run:
 drift-guard compare
 ```
 
-drift-guard will:
+<details>
+<summary>Show steps</summary>
 
 1. Auto-detect your framework and API types (OpenAPI, GraphQL, gRPC)
 2. Prompt you for which API type to compare
-3. For Express/NestJS projects with no existing swagger script, offer to scaffold `swagger-autogen` or `tsoa` (Go projects use `swag` annotations and skip this step)
+3. For Express/NestJS projects with no existing swagger script, offer to scaffold `swagger-autogen` or `tsoa`. For Go projects, run `swag init` automatically — no prompt, no scaffolding. This requires [`swag`](https://github.com/swaggo/swag) to be installed and your handlers to have `swag` annotations; if either is missing the command will error.
 4. Generate schemas for your current branch (head) and `origin/main` (base) using a git worktree
 5. Print the diff
+
+</details>
 
 This is a good way to verify it works with your project before wiring up the GitHub Action.
 
