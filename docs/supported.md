@@ -23,8 +23,15 @@
 
 ### Go
 
-| Framework              | REST (OpenAPI) |
-| ---------------------- | -------------- |
-| Any (swag annotations) | Yes            |
+Detected by `go.mod`, legacy manifests (`Gopkg.toml`, `glide.yaml`), or `.go` files in the project root. The specific framework (Gin, Echo, Fiber, Chi, Gorilla Mux) is identified from the module graph and shown at startup.
+
+| Framework   | REST (OpenAPI)                                                       | GraphQL | gRPC |
+| ----------- | -------------------------------------------------------------------- | ------- | ---- |
+| Gin         | Yes (requires [`swag`](https://github.com/swaggo/swag) annotations) | Yes     | Yes  |
+| Echo        | Yes                                                                  | Yes     | Yes  |
+| Fiber       | Yes                                                                  | Yes     | Yes  |
+| Chi         | Yes                                                                  | Yes     | Yes  |
+| Gorilla Mux | Yes                                                                  | Yes     | Yes  |
+| plain Go    | Yes                                                                  | Yes     | Yes  |
 
 > More languages and frameworks coming soon.

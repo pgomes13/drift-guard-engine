@@ -8,6 +8,8 @@ Available on the [GitHub Marketplace](https://github.com/marketplace/actions/dri
 
 ```yaml
 - uses: pgomes13/drift-guard-engine@v1
+  with:
+    node-version: "20"   # optional, default: "20"
 ```
 
 The action automatically:
@@ -47,6 +49,12 @@ jobs:
 ## Live example
 
 See drift-guard in action on a real pull request: [pgomes13/nest-coffee#8](https://github.com/pgomes13/nest-coffee/pull/8)
+
+## Inputs
+
+| Input | Default | Purpose |
+|---|---|---|
+| `node-version` | `"20"` | Node.js version used when generating OpenAPI specs for Node.js projects |
 
 ## Key flags
 

@@ -74,6 +74,7 @@ css = (
     ".filter-bar label{font-size:.875rem;color:#586069;display:flex;align-items:center;gap:6px;cursor:pointer}"
     ".entry{background:#fff;border:1px solid #e1e4e8;border-radius:8px;margin-bottom:16px;overflow:hidden}"
     ".entry.hidden{display:none}"
+    "tr.hidden{display:none}"
     ".entry-header{display:flex;justify-content:space-between;align-items:center;"
     "padding:10px 16px;background:#f6f8fa;border-bottom:1px solid #e1e4e8;flex-wrap:wrap;gap:8px}"
     ".entry-header a{font-weight:600;color:#0366d6;text-decoration:none}"
@@ -135,8 +136,8 @@ document.addEventListener("DOMContentLoaded", function() {{
   }});
 
   document.getElementById("filterBreaking").addEventListener("change", function() {{
-    document.querySelectorAll(".entry").forEach(function(e) {{
-      e.classList.toggle("hidden", this.checked && !e.classList.contains("has-breaking"));
+    document.querySelectorAll("tr.nonbreaking").forEach(function(row) {{
+      row.classList.toggle("hidden", this.checked);
     }}.bind(this));
   }});
 
