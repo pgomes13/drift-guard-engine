@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/pgomes13/drift-guard-engine/internal/compare"
+	"github.com/pgomes13/drift-guard-engine/pkg/compare"
 	"github.com/pgomes13/drift-guard-engine/internal/reporter"
 )
 
@@ -32,7 +32,7 @@ var (
 )
 
 func init() {
-	rootCmd.AddCommand(openapiCmd, graphqlCmd, grpcCmd, compareCmd)
+	rootCmd.AddCommand(openapiCmd, graphqlCmd, grpcCmd, compareCmd, impactCmd)
 }
 
 func addOutputFlags(cmd *cobra.Command) {

@@ -12,7 +12,7 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/pgomes13/drift-guard-engine/internal/compare"
+	"github.com/pgomes13/drift-guard-engine/pkg/compare"
 )
 
 //go:embed static

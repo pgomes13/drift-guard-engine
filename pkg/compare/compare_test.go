@@ -3,10 +3,10 @@ package compare_test
 import (
 	"testing"
 
-	"github.com/pgomes13/drift-guard-engine/internal/compare"
+	"github.com/pgomes13/drift-guard-engine/pkg/compare"
 )
 
-const testdataDir = "../testdata/"
+const testdataDir = "../../internal/testdata/"
 
 // --------------------------------------------------------------------------
 // OpenAPI
