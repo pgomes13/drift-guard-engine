@@ -12,7 +12,7 @@ const SCHEMA_TYPES: { id: SchemaType; label: string }[] = [
   { id: "grpc",     label: "gRPC / Protobuf" },
 ];
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:9000";
 
 export default function PlaygroundPage() {
   const [schemaType, setSchemaType] = useState<SchemaType>("openapi");
@@ -58,28 +58,28 @@ export default function PlaygroundPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-white text-gray-900">
       {/* Header */}
-      <header className="border-b border-slate-800 bg-slate-900">
+      <header className="border-b border-gray-200 bg-white shadow-sm">
         <div className="max-w-[1400px] mx-auto px-6 py-4 flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
             <span className="text-xl font-bold">
-              <span className="text-indigo-400">drift-guard</span> playground
+              <span className="text-indigo-600">drift-guard</span> playground
             </span>
-            <span className="text-[11px] font-medium bg-slate-700 text-slate-400 px-2 py-0.5 rounded-full">
+            <span className="text-[11px] font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full border border-gray-200">
               beta
             </span>
           </div>
 
-          <div className="flex gap-1 bg-slate-950 rounded-lg p-1">
+          <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
             {SCHEMA_TYPES.map((t) => (
               <button
                 key={t.id}
                 onClick={() => switchType(t.id)}
                 className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
                   schemaType === t.id
-                    ? "bg-indigo-600 text-white"
-                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+                    ? "bg-indigo-600 text-white shadow-sm"
+                    : "text-gray-500 hover:text-gray-700 hover:bg-white"
                 }`}
               >
                 {t.label}
@@ -111,7 +111,7 @@ export default function PlaygroundPage() {
           <button
             onClick={handleCompare}
             disabled={loading}
-            className="px-10 py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors text-base"
+            className="px-10 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors text-base shadow-sm"
           >
             {loading ? (
               <span className="flex items-center gap-2">
@@ -126,7 +126,7 @@ export default function PlaygroundPage() {
         </div>
 
         {error && (
-          <div className="rounded-lg border border-red-700 bg-red-950 px-4 py-3 text-red-400 text-sm font-mono whitespace-pre-wrap">
+          <div className="rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-red-700 text-sm font-mono whitespace-pre-wrap">
             {error}
           </div>
         )}

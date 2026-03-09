@@ -16,11 +16,9 @@ async function initEditors(type) {
     const [
       { basicSetup, EditorView },
       { EditorState },
-      { oneDark },
     ] = await Promise.all([
       import("https://esm.sh/codemirror@6.0.1"),
       import("https://esm.sh/@codemirror/state@6.4.1"),
-      import("https://esm.sh/@codemirror/theme-one-dark@6.1.2"),
     ]);
 
     let langExt = [];
@@ -35,7 +33,7 @@ async function initEditors(type) {
     } catch (_) { /* language extension unavailable, continue without */ }
 
     const makeState = (doc) =>
-      EditorState.create({ doc, extensions: [basicSetup, oneDark, ...langExt] });
+      EditorState.create({ doc, extensions: [basicSetup, ...langExt] });
 
     if (baseView) baseView.destroy();
     if (headView) headView.destroy();

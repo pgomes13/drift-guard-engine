@@ -18,18 +18,18 @@ export default function SchemaEditor({ label, subtitle, value, onChange, schemaT
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-baseline gap-2">
-        <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+        <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
           {label}
         </span>
-        <span className="text-xs text-slate-500">{subtitle}</span>
+        <span className="text-xs text-gray-400">{subtitle}</span>
       </div>
-      <div className="rounded-lg overflow-hidden border border-slate-700 h-[400px]">
+      <div className="rounded-lg overflow-hidden border border-gray-200 h-[400px] shadow-sm">
         <Editor
           height="100%"
           language={MONACO_LANGUAGE[schemaType]}
           value={value}
           onChange={(v) => onChange(v ?? "")}
-          theme="vs-dark"
+          theme="vs"
           options={{
             minimap: { enabled: false },
             fontSize: 13,

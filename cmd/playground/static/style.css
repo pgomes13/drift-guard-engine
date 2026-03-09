@@ -1,19 +1,19 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #0f172a;
-  --surface: #1e293b;
-  --border: #334155;
-  --text: #e2e8f0;
-  --text-muted: #94a3b8;
-  --accent: #6366f1;
-  --accent-hover: #818cf8;
-  --breaking: #ef4444;
-  --breaking-bg: #450a0a;
-  --nonbreaking: #f59e0b;
-  --nonbreaking-bg: #451a03;
-  --info: #22c55e;
-  --info-bg: #052e16;
+  --bg: #ffffff;
+  --surface: #f9fafb;
+  --border: #e5e7eb;
+  --text: #111827;
+  --text-muted: #6b7280;
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --breaking: #dc2626;
+  --breaking-bg: #fef2f2;
+  --nonbreaking: #d97706;
+  --nonbreaking-bg: #fffbeb;
+  --info: #16a34a;
+  --info-bg: #f0fdf4;
   --radius: 8px;
 }
 
