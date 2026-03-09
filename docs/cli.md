@@ -17,11 +17,45 @@ drift-guard compare
 <details>
 <summary>Show steps</summary>
 
-1. Auto-detect your framework (Express, NestJS, Gin, Echo, Fiber, …) and the API types present (OpenAPI, GraphQL, gRPC)
-2. If GraphQL is detected, prompt to compare GraphQL schemas. If gRPC (`.proto` files) is detected, prompt to compare gRPC schemas. Otherwise, proceed with OpenAPI.
-3. For Express/NestJS projects with no existing OpenAPI script, offer to scaffold `swagger-autogen` or `tsoa`. For Go projects, `swag init` is run automatically — no prompt needed. This requires [`swag`](https://github.com/swaggo/swag) to be installed and your handlers to have `swag` annotations; if either is missing the command will error.
-4. Generate schemas for your current branch (head) and `origin/main` (base) using a git worktree
-5. Print the diff
+```
+drift-guard compare
+       │
+       ▼
+┌────────────────────────────────────────────┐
+│  1. Auto-detect                            │
+│     Framework: Express · NestJS · Gin …    │
+│     API types: OpenAPI · GraphQL · gRPC    │
+└────────────────────────────────────────────┘
+       │
+       ▼
+┌────────────────────────────────────────────┐
+│  2. Select schema type                     │
+│     GraphQL found?  → compare GraphQL      │
+│     gRPC found?     → compare gRPC         │
+│     Otherwise       → compare OpenAPI      │
+└────────────────────────────────────────────┘
+       │
+       ▼
+┌────────────────────────────────────────────┐
+│  3. Scaffold (Node.js only, if needed)     │
+│     NestJS  → @nestjs/swagger              │
+│     Express → swagger-autogen or tsoa      │
+│     Go      → swag init (auto, no prompt)  │
+└────────────────────────────────────────────┘
+       │
+       ▼
+┌────────────────────────────────────────────┐
+│  4. Generate schemas                       │
+│     head  ←  current branch               │
+│     base  ←  origin/main (git worktree)   │
+└────────────────────────────────────────────┘
+       │
+       ▼
+┌────────────────────────────────────────────┐
+│  5. Diff & print results                   │
+│     breaking · non-breaking · info         │
+└────────────────────────────────────────────┘
+```
 
 </details>
 

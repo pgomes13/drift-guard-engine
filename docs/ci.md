@@ -9,10 +9,11 @@ Available on the [GitHub Marketplace](https://github.com/marketplace/actions/dri
 ```yaml
 - uses: pgomes13/drift-guard-engine@v1
   with:
-    node-version: "20"   # optional, default: "20"
+    node-version: "20" # optional, default: "20"
 ```
 
-The action automatically:
+<details>
+<summary>Show steps</summary>
 
 ```
 Pull Request opened
@@ -46,6 +47,8 @@ Pull Request opened
 └─────────────────────┘         └─────────────────────────┘
 ```
 
+</details>
+
 See [Supported](/supported) for all supported languages and frameworks.
 
 Full workflow example:
@@ -57,9 +60,9 @@ on:
   pull_request:
 
 permissions:
-  contents: write     # required for updating the drift log on GitHub Pages
+  contents: write # required for updating the drift log on GitHub Pages
   pull-requests: write
-  issues: write       # required for posting PR comments
+  issues: write # required for posting PR comments
 
 jobs:
   drift:
@@ -80,9 +83,9 @@ See drift-guard in action on a real pull request: [pgomes13/nest-coffee#8](https
 
 ## Key flags
 
-| Flag | Purpose |
-|---|---|
-| `--format markdown` | Renders a Markdown table — used by the action for PR comments |
-| `--format github` | Renders inline PR annotations via workflow commands |
-| `--fail-on-breaking` | Exits with code `1` to block merges on breaking changes |
-| `--format json` | Use if you need to parse output in a subsequent step |
+| Flag                 | Purpose                                                       |
+| -------------------- | ------------------------------------------------------------- |
+| `--format markdown`  | Renders a Markdown table — used by the action for PR comments |
+| `--format github`    | Renders inline PR annotations via workflow commands           |
+| `--fail-on-breaking` | Exits with code `1` to block merges on breaking changes       |
+| `--format json`      | Use if you need to parse output in a subsequent step          |
