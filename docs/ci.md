@@ -14,9 +14,37 @@ Available on the [GitHub Marketplace](https://github.com/marketplace/actions/dri
 
 The action automatically:
 
-- Detects your framework and runs comparisons for all API types found — REST (OpenAPI), GraphQL, and gRPC
-- Posts a PR comment with the full diff report when drift is detected
-- Updates a drift log on your GitHub Pages site, with one entry per PR showing timestamps in your local time
+```
+Pull Request opened
+       │
+       ▼
+┌─────────────────────────────────────┐
+│  Detect framework & API types       │
+│  Express · NestJS · Gin · Echo …    │
+│  OpenAPI · GraphQL · gRPC           │
+└─────────────────────────────────────┘
+       │
+       ▼
+┌─────────────────────────────────────┐
+│  Generate schemas                   │
+│  head  ←  current branch            │
+│  base  ←  origin/main (worktree)    │
+└─────────────────────────────────────┘
+       │
+       ▼
+┌─────────────────────────────────────┐
+│  Diff & classify changes            │
+│  breaking · non-breaking · info     │
+└─────────────────────────────────────┘
+       │
+       ├──────────────────────────────────────┐
+       ▼                                      ▼
+┌─────────────────────┐         ┌─────────────────────────┐
+│  Post PR comment    │         │  Update GitHub Pages    │
+│  Markdown diff      │         │  drift log (per PR)     │
+│  table with badges  │         │  with trend chart       │
+└─────────────────────┘         └─────────────────────────┘
+```
 
 See [Supported](/supported) for all supported languages and frameworks.
 
