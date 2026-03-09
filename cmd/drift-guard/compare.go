@@ -9,7 +9,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/pgomes13/drift-guard-engine/internal/compare"
+	"github.com/pgomes13/drift-guard-engine/pkg/compare"
 	"github.com/pgomes13/drift-guard-engine/internal/generate/node/express"
 	"github.com/pgomes13/drift-guard-engine/internal/generate/node/nest"
 	"github.com/pgomes13/drift-guard-engine/internal/languages"

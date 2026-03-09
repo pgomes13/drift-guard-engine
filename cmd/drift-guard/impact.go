@@ -9,7 +9,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/pgomes13/drift-guard-engine/internal/impact"
+	"github.com/pgomes13/drift-guard-engine/pkg/impact"
 	"github.com/pgomes13/drift-guard-engine/pkg/schema"
 )
 

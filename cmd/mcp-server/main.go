@@ -10,7 +10,7 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 
-	"github.com/pgomes13/drift-guard-engine/internal/compare"
+	"github.com/pgomes13/drift-guard-engine/pkg/compare"
 	"github.com/pgomes13/drift-guard-engine/internal/languages"
 	"github.com/pgomes13/drift-guard-engine/internal/reporter"
 )
