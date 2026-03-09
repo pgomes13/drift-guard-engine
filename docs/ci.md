@@ -48,54 +48,6 @@ jobs:
 
 See drift-guard in action on a real pull request: [pgomes13/nest-coffee#8](https://github.com/pgomes13/nest-coffee/pull/8)
 
-## Claude Code Plugin
-
-drift-guard is available as a [Claude Code](https://claude.ai/claude-code) plugin, letting you run schema diffing directly from your AI coding session.
-
-### Installation
-
-**1. Install Claude Code**
-
-```bash
-npm install -g @anthropic-ai/claude-code
-```
-
-**2. Build and install the MCP server binary**
-
-```bash
-git clone https://github.com/pgomes13/drift-guard-engine
-cd drift-guard-engine
-make build-mcp
-sudo mv drift-guard-mcp /usr/local/bin/
-```
-
-**3. Install the plugin**
-
-```bash
-claude plugin install https://github.com/pgomes13/drift-guard-engine
-```
-
-### Available tools
-
-Once installed, Claude Code gains four tools:
-
-| Tool | Description |
-|------|-------------|
-| `diff_openapi` | Compare two OpenAPI 3.x schema files |
-| `diff_graphql` | Compare two GraphQL SDL files |
-| `diff_grpc` | Compare two Protobuf `.proto` files |
-| `detect_project` | Detect project type, framework, and available schema types |
-
-All diff tools accept an optional `format` parameter: `text` (default), `json`, or `markdown`.
-
-### Example usage
-
-Ask Claude Code:
-
-> "Compare `docs/base.yaml` and `docs/head.yaml` for breaking API changes"
-
-> "What schema types does this project use?"
-
 ## Key flags
 
 | Flag | Purpose |
