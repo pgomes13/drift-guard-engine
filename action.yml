@@ -7,6 +7,18 @@ inputs:
     description: Node.js version to use for generating the OpenAPI spec.
     required: false
     default: "20"
+  upload-diff:
+    description: Upload the JSON diff as an artifact named drift-guard-diff for downstream impact checks.
+    required: false
+    default: "false"
+  notify-consumers:
+    description: Comma-separated list of consumer repos to notify via repository_dispatch (e.g. "org/service-b,org/service-c").
+    required: false
+    default: ""
+  notify-token:
+    description: GitHub token with repo write access to consumer repos. Required when notify-consumers is set.
+    required: false
+    default: ""
 
 runs:
   using: composite
@@ -20,6 +32,10 @@ runs:
     - uses: pgomes13/drift-guard-engine/action/install-binary@v1
 
     - uses: pgomes13/drift-guard-engine/action/compare@v1
+      with:
+        upload-diff: ${{ inputs.upload-diff }}
+        notify-consumers: ${{ inputs.notify-consumers }}
+        notify-token: ${{ inputs.notify-token }}
 
     - uses: pgomes13/drift-guard-engine/action/update-pages@v1
 

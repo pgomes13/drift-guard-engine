@@ -1,6 +1,20 @@
 name: Run drift comparison and comment
 description: Runs drift-guard compare and posts a PR comment when API changes are detected.
 
+inputs:
+  upload-diff:
+    description: Upload the JSON diff as a GitHub Actions artifact (drift-guard-diff) for consumer impact checks.
+    required: false
+    default: "false"
+  notify-consumers:
+    description: Comma-separated list of repos to notify via repository_dispatch (e.g. "org/service-b,org/service-c").
+    required: false
+    default: ""
+  notify-token:
+    description: GitHub token with repo write access to the consumer repos (required when notify-consumers is set).
+    required: false
+    default: ""
+
 runs:
   using: composite
   steps:
@@ -19,6 +33,42 @@ runs:
             echo "::warning::drift-guard failed to generate the API spec. See logs for details."
           fi
         fi
+
+    - name: Generate JSON diff
+      if: inputs.upload-diff == 'true' || inputs.notify-consumers != ''
+      shell: bash
+      run: |
+        set +e
+        printf 'y\ny\ny\n' | drift-guard compare --format json > /tmp/drift-diff.json 2>/dev/null || echo '{}' > /tmp/drift-diff.json
+
+    - name: Upload diff artifact
+      if: inputs.upload-diff == 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: drift-guard-diff
+        path: /tmp/drift-diff.json
+        retention-days: 7
+
+    - name: Notify consumer repos
+      if: inputs.notify-consumers != ''
+      shell: bash
+      env:
+        NOTIFY_TOKEN: ${{ inputs.notify-token }}
+        CONSUMERS: ${{ inputs.notify-consumers }}
+        PROVIDER_REPO: ${{ github.repository }}
+        PROVIDER_RUN_ID: ${{ github.run_id }}
+      run: |
+        DIFF_JSON=$(cat /tmp/drift-diff.json)
+        IFS=',' read -ra REPOS <<< "$CONSUMERS"
+        for repo in "${REPOS[@]}"; do
+          repo=$(echo "$repo" | xargs)
+          echo "Notifying $repo..."
+          curl -s -X POST \
+            -H "Authorization: Bearer $NOTIFY_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$repo/dispatches" \
+            -d "{\"event_type\":\"drift-guard-impact\",\"client_payload\":{\"provider_repo\":\"$PROVIDER_REPO\",\"run_id\":\"$PROVIDER_RUN_ID\",\"diff\":$DIFF_JSON}}"
+        done
 
     - name: Delete previous Drift Guard comment
       if: github.event_name == 'pull_request'

@@ -1,0 +1,91 @@
+name: drift-guard impact check
+description: >
+  Consumer-side action. Downloads a drift-guard diff artifact from a provider repo
+  and scans the current repo for source references to each breaking change.
+
+inputs:
+  provider-repo:
+    description: The provider repo that uploaded the diff artifact (e.g. "org/user-service").
+    required: false
+    default: ""
+  diff-json:
+    description: >
+      Inline JSON diff string. Use this when triggered by repository_dispatch
+      (github.event.client_payload.diff). Takes precedence over provider-repo.
+    required: false
+    default: ""
+  scan-dir:
+    description: Directory to scan for source references to breaking changes.
+    required: false
+    default: "."
+  format:
+    description: Output format — text, json, or markdown.
+    required: false
+    default: "markdown"
+  fail-on-hits:
+    description: Exit with code 1 if any references to breaking changes are found.
+    required: false
+    default: "false"
+  token:
+    description: GitHub token with actions:read on the provider repo (required when provider-repo is set).
+    required: false
+    default: ${{ github.token }}
+
+runs:
+  using: composite
+  steps:
+    - name: Install drift-guard
+      uses: pgomes13/drift-guard-engine/action/install-binary@v1
+
+    - name: Write diff from dispatch payload
+      if: inputs.diff-json != ''
+      shell: bash
+      run: echo '${{ inputs.diff-json }}' > /tmp/drift-diff.json
+
+    - name: Download diff artifact from provider repo
+      if: inputs.diff-json == '' && inputs.provider-repo != ''
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        PROVIDER_REPO: ${{ inputs.provider-repo }}
+      run: |
+        RUN_ID=$(gh api "repos/$PROVIDER_REPO/actions/runs?event=pull_request&status=completed&per_page=1" \
+          --jq '.workflow_runs[0].id')
+        ARTIFACT_ID=$(gh api "repos/$PROVIDER_REPO/actions/runs/$RUN_ID/artifacts" \
+          --jq '.artifacts[] | select(.name=="drift-guard-diff") | .id' | head -1)
+        gh api "repos/$PROVIDER_REPO/actions/artifacts/$ARTIFACT_ID/zip" > /tmp/drift-diff.zip
+        unzip -o /tmp/drift-diff.zip -d /tmp/drift-diff-artifact/
+        cp /tmp/drift-diff-artifact/drift-diff.json /tmp/drift-diff.json
+
+    - name: Run impact scan
+      id: impact
+      shell: bash
+      run: |
+        set +e
+        drift-guard impact --diff /tmp/drift-diff.json --scan '${{ inputs.scan-dir }}' --format '${{ inputs.format }}' > /tmp/impact-output.txt 2>&1
+        IMPACT_EXIT=$?
+        if [ -s /tmp/impact-output.txt ]; then
+          echo "has_hits=true" >> $GITHUB_OUTPUT
+        else
+          echo "has_hits=false" >> $GITHUB_OUTPUT
+        fi
+        cat /tmp/impact-output.txt
+
+    - name: Comment on PR
+      if: github.event_name == 'pull_request' && steps.impact.outputs.has_hits == 'true'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        BODY="$(printf '## Drift Guard — Impact Report\n\nBreaking changes from upstream API affect this service:\n\n'; cat /tmp/impact-output.txt)"
+        gh api \
+          --method POST \
+          "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" \
+          -f body="$BODY"
+
+    - name: Fail if hits found
+      if: inputs.fail-on-hits == 'true' && steps.impact.outputs.has_hits == 'true'
+      shell: bash
+      run: |
+        echo "::error::Breaking API changes affect this service. See impact report above."
+        exit 1
