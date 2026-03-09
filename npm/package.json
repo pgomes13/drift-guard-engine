@@ -1,0 +1,40 @@
+{
+  "name": "@pgomes13/drift-guard",
+  "version": "2.5.4",
+  "description": "API schema diff engine — detect breaking changes in OpenAPI, GraphQL, and gRPC schemas",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "bin": {
+    "drift-guard": "run.js"
+  },
+  "scripts": {
+    "postinstall": "node install.js"
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "run.js",
+    "install.js",
+    "bin/"
+  ],
+  "keywords": [
+    "api",
+    "openapi",
+    "graphql",
+    "grpc",
+    "schema",
+    "diff",
+    "breaking-changes",
+    "drift"
+  ],
+  "author": "pgomes13",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pgomes13/drift-guard-engine"
+  },
+  "homepage": "https://github.com/pgomes13/drift-guard-engine",
+  "engines": {
+    "node": ">=16"
+  }
+}
