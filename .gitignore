@@ -1,7 +1,13 @@
 # Go
 /drift-guard
 /drift-guard-mcp
+/drift-guard-api
 /mcp-server
+
+# Playground (Next.js)
+playground/.next/
+playground/.env.local
+playground/node_modules/
 *.exe
 *.out
 vendor/
