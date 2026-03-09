@@ -29,6 +29,12 @@ export default defineConfig({
         ],
       },
       {
+        text: 'Playground',
+        items: [
+          { text: 'Try it online', link: '/playground' },
+        ],
+      },
+      {
         text: 'Integrations',
         items: [
           { text: 'CI / GitHub Actions', link: '/ci' },
