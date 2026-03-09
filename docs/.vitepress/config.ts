@@ -18,7 +18,7 @@ export default defineConfig({
           { text: 'Installation', link: '/install' },
           { text: 'CLI', link: '/cli' },
           { text: 'Usage', link: '/usage' },
-          { text: 'Playground', link: '/playground' },
+          { text: 'Playground ↗', link: 'https://drift-guard-theta.vercel.app/', target: '_blank' },
           { text: 'Supported', link: '/supported' },
         ],
       },
