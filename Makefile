@@ -7,7 +7,7 @@ API_CMD          := ./cmd/playground
 HOMEBREW_TAP     := pgomes13/homebrew-tap
 FORMULA          := drift-guard
 
-.PHONY: build build-mcp build-api test vet lint clean run-openapi run-graphql run-grpc run-api release major minor patch homebrew commit
+.PHONY: build build-mcp build-api test vet lint clean run-openapi run-graphql run-grpc run-api local playground release major minor patch homebrew commit
 
 build:
 	go build -o $(BIN) $(CMD)
@@ -19,6 +19,29 @@ build-api:
 	go build -o $(API_BIN) $(API_CMD)
 
 run-api: build-api
+	./$(API_BIN)
+
+## local: build Go API + run Next.js playground side-by-side.
+## Go API → http://localhost:8080   Next.js → http://localhost:3000
+##
+## Usage:
+##   make local
+##
+local: build-api
+	@echo "Starting Go API on :8080 and Next.js on :3000 (Ctrl+C to stop both)"
+	@trap 'kill 0' SIGINT SIGTERM; \
+	./$(API_BIN) & \
+	cd playground && npm run dev; \
+	wait
+
+## playground: run Go API with embedded static playground (no Node.js required).
+## Playground → http://localhost:8080
+##
+## Usage:
+##   make playground
+##
+playground: build-api
+	@echo "Starting standalone playground on http://localhost:8080"
 	./$(API_BIN)
 
 test:

@@ -1,7 +1,9 @@
 package main
 
 import (
+	"embed"
 	"encoding/json"
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
@@ -9,6 +11,9 @@ import (
 
 	"github.com/pgomes13/drift-guard-engine/internal/compare"
 )
+
+//go:embed static
+var staticFiles embed.FS
 
 type compareRequest struct {
 	SchemaType  string `json:"schema_type"`  // "openapi" | "graphql" | "grpc"
@@ -26,11 +31,17 @@ func main() {
 		port = "8080"
 	}
 
+	subFS, err := fs.Sub(staticFiles, "static")
+	if err != nil {
+		log.Fatalf("failed to sub static FS: %v", err)
+	}
+
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/compare", corsMiddleware(compareHandler))
 	mux.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})
+	mux.Handle("/", http.FileServer(http.FS(subFS)))
 
 	log.Printf("drift-guard playground API listening on http://localhost:%s", port)
 	if err := http.ListenAndServe(":"+port, mux); err != nil {
