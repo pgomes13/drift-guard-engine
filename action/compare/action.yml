@@ -39,14 +39,13 @@ runs:
   steps:
 
     # ── CONNECTED MODE (paid) ─────────────────────────────────────────────────
-    # Activated automatically when the Drift Guard GitHub App is installed
-    # (detected via github.event.installation.id). Delegates everything to the
-    # service, which creates a Check Run, stores the baseline, and links to the
-    # portal for approve/reject review.
+    # Always attempted on pull_request events. The service auto-detects whether
+    # the Drift Guard GitHub App is installed on the repo (via App JWT lookup).
+    # Returns 404 if not installed → falls back to standalone mode.
 
     - name: Delegate analysis to Drift Guard service
       id: connected
-      if: github.event.installation.id != '' && github.event_name == 'pull_request'
+      if: github.event_name == 'pull_request'
       shell: bash
       env:
         SERVICE_URL: ${{ inputs.service-url != '' && inputs.service-url || 'https://api.driftguard.com.au' }}
@@ -56,20 +55,19 @@ runs:
         PR_NUMBER: ${{ github.event.pull_request.number }}
         HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         BASE_SHA: ${{ github.event.pull_request.base.sha }}
-        INSTALLATION_ID: ${{ github.event.installation.id }}
       run: |
         RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
           -H "Authorization: Bearer $PROJECT_TOKEN" \
           -H "Content-Type: application/json" \
           -H "Accept: application/json" \
           "$SERVICE_URL/drift/$OWNER/$REPO/pulls/$PR_NUMBER/analyze" \
-          -d "{\"installationId\":$INSTALLATION_ID,\"headSha\":\"$HEAD_SHA\",\"baseSha\":\"$BASE_SHA\"}")
+          -d "{\"headSha\":\"$HEAD_SHA\",\"baseSha\":\"$BASE_SHA\"}")
 
         HTTP_CODE=$(echo "$RESPONSE" | tail -1)
         BODY=$(echo "$RESPONSE" | head -n -1)
 
         if [ "$HTTP_CODE" -ne 202 ]; then
-          echo "::warning::Drift Guard service returned HTTP $HTTP_CODE. Falling back to standalone mode."
+          echo "::debug::Drift Guard service returned HTTP $HTTP_CODE. Falling back to standalone mode."
           echo "drift_status=error" >> $GITHUB_OUTPUT
           exit 0
         fi
@@ -86,7 +84,7 @@ runs:
         echo "Review URL: $REPORT_URL"
 
         # Exit 1 if drift requires human review (mirrors Chromatic CLI exit code 1)
-        if [ "$STATUS" = "drift_detected" ]; then
+        if [ "$STATUS" = "pending" ]; then
           echo "::warning::API drift detected and requires review. Visit $REPORT_URL to approve or reject."
           exit 1
         fi
@@ -97,7 +95,7 @@ runs:
 
     - name: Run API drift comparison (standalone)
       id: drift
-      if: github.event.installation.id == '' || steps.connected.outputs.drift_status == 'error'
+      if: steps.connected.outputs.drift_status == 'error' || github.event_name != 'pull_request'
       shell: bash
       run: |
         set +e
@@ -115,7 +113,7 @@ runs:
         fi
 
     - name: Post GitHub Check Run (standalone)
-      if: ( github.event.installation.id == '' || steps.connected.outputs.drift_status == 'error') && github.event_name == 'pull_request'
+      if: steps.connected.outputs.drift_status == 'error' && github.event_name == 'pull_request'
       uses: pgomes13/drift-guard-engine/action/check-run@v1
       with:
         head-sha: ${{ github.event.pull_request.head.sha }}
@@ -124,7 +122,7 @@ runs:
         summary-file: /tmp/drift-output.txt
 
     - name: Generate JSON diff
-      if: ( github.event.installation.id == '' || steps.connected.outputs.drift_status == 'error') && (inputs.upload-diff == 'true' || inputs.notify-consumers != '')
+      if: steps.connected.outputs.drift_status == 'error' && (inputs.upload-diff == 'true' || inputs.notify-consumers != '')
       shell: bash
       run: |
         set +e
@@ -160,7 +158,7 @@ runs:
         done
 
     - name: Delete previous Drift Guard comment
-      if: ( github.event.installation.id == '' || steps.connected.outputs.drift_status == 'error') && github.event_name == 'pull_request'
+      if: steps.connected.outputs.drift_status == 'error' && github.event_name == 'pull_request'
       shell: bash
       env:
         GH_TOKEN: ${{ github.token }}
@@ -170,7 +168,7 @@ runs:
           | xargs -I{} gh api --method DELETE "repos/${{ github.repository }}/issues/comments/{}" || true
 
     - name: Comment on PR (standalone)
-      if: ( github.event.installation.id == '' || steps.connected.outputs.drift_status == 'error') && github.event_name == 'pull_request' && steps.drift.outputs.has_changes == 'true'
+      if: steps.connected.outputs.drift_status == 'error' && github.event_name == 'pull_request' && steps.drift.outputs.has_changes == 'true'
       shell: bash
       env:
         GH_TOKEN: ${{ github.token }}
