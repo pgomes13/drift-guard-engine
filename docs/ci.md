@@ -81,6 +81,42 @@ jobs:
 
 See drift-guard in action on a real pull request: [pgomes13/nest-coffee#8](https://github.com/pgomes13/nest-coffee/pull/8)
 
+## Action inputs
+
+| Input               | Required | Default            | Description                                                                                          |
+| ------------------- | -------- | ------------------ | ---------------------------------------------------------------------------------------------------- |
+| `node-version`      | No       | `"20"`             | Node.js version used to generate schemas                                                             |
+| `upload-diff`       | No       | `"false"`          | Upload the JSON diff as a `drift-guard-diff` artifact — required for [microservice consumer checks](/microservices) |
+| `notify-consumers`  | No       | `""`               | Comma-separated list of repos to notify via `repository_dispatch` (e.g. `org/service-b,org/service-c`) |
+| `notify-token`      | No       | `""`               | GitHub token with `repo` write access to consumer repos — required when `notify-consumers` is set   |
+| `service-url`       | No       | `""`               | Drift Guard service URL (paid tier) — see [Connected mode](#connected-mode-paid-tier) below          |
+| `project-token`     | No       | `github.token`     | Token used to authenticate with the Drift Guard service (paid tier)                                  |
+
+## Action outputs
+
+| Output          | Description                                                             |
+| --------------- | ----------------------------------------------------------------------- |
+| `drift-status`  | `no_drift`, `drift_detected`, `auto_accepted`, or `error`               |
+| `check-run-id`  | GitHub Check Run ID created by the service (connected mode only)        |
+| `report-url`    | URL to the drift report in the portal (connected mode only)             |
+
+## Standalone mode (default)
+
+By default the action runs entirely within your repository using the drift-guard CLI binary. It generates schemas from your source code, diffs them, posts a Markdown PR comment, and optionally updates a drift log on GitHub Pages — no external service required.
+
+## Connected mode (paid tier)
+
+When `service-url` is provided the action delegates analysis to the Drift Guard service. The service manages GitHub Check Runs, baseline storage, and portal-based approve/reject review.
+
+```yaml
+- uses: pgomes13/drift-guard-engine@v1
+  with:
+    service-url: https://your-drift-guard-service.example.com
+    project-token: ${{ secrets.DRIFT_GUARD_TOKEN }}
+```
+
+When `service-url` is set and the GitHub App installation ID is available, the action sends a `POST /drift/{owner}/{repo}/pulls/{pr}/analyze` request to the service and waits for the Check Run result. If the service is unreachable it falls back to standalone mode automatically.
+
 ## Key flags
 
 | Flag                 | Purpose                                                       |

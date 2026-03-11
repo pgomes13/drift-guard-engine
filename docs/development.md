@@ -3,7 +3,8 @@
 ## Make commands
 
 ```sh
-make build       # compile binary
+make build       # compile CLI binary
+make build-mcp   # compile MCP server binary
 make test        # run all tests
 make vet         # run go vet
 make lint        # run go vet + staticcheck
@@ -19,6 +20,7 @@ make run-grpc     # build and diff bundled gRPC fixtures
 ```
 cmd/drift-guard/          # CLI entry point (drift-guard binary)
 cmd/server/               # gRPC server entry point
+cmd/mcp-server/           # MCP server entry point (AI/LLM integration)
 api/drift-guard/v1/       # Protobuf service definition & generated Go code
 internal/
   parser/

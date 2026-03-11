@@ -38,6 +38,7 @@ export default defineConfig({
           { text: 'npm', link: '/npm' },
           { text: 'Go', link: '/sdk' },
           { text: 'gRPC', link: '/grpc-server' },
+          { text: 'MCP (AI)', link: '/mcp' },
         ],
       },
       {
