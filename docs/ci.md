@@ -7,7 +7,7 @@ drift-guard is designed to run in CI as a schema diff gate on pull requests.
 Available on the [GitHub Marketplace](https://github.com/marketplace/actions/drift-guard). Add API drift detection to any pull request in one line:
 
 ```yaml
-- uses: pgomes13/drift-guard-engine@v1
+- uses: pgomes13/drift-guard-engine@v3
 ```
 
 <details>
@@ -70,7 +70,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: pgomes13/drift-guard-engine@v1
+      - uses: pgomes13/drift-guard-engine@v3
 ```
 
 > **Note:** `contents: write` is required to update the drift log on your GitHub Pages branch. `issues: write` is required because GitHub's PR comment API uses the Issues REST endpoint.

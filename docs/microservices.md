@@ -46,7 +46,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: pgomes13/drift-guard-engine@v1
+      - uses: pgomes13/drift-guard-engine@v3
         with:
           upload-diff: "true"
           notify-consumers: "org/service-b,org/service-c"
@@ -77,7 +77,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pgomes13/drift-guard-engine/action/impact-check@v1
+      - uses: pgomes13/drift-guard-engine/action/impact-check@v3
         with:
           diff-json: ${{ toJson(github.event.client_payload.diff) }}
           scan-dir: "./src"
@@ -105,7 +105,7 @@ If you prefer polling over push, consumers can download the diff artifact direct
 
 ```yaml
 # Consumer — polls provider artifact instead of dispatch
-- uses: pgomes13/drift-guard-engine/action/impact-check@v1
+- uses: pgomes13/drift-guard-engine/action/impact-check@v3
   with:
     provider-repo: "org/user-service"
     scan-dir: "./src"
