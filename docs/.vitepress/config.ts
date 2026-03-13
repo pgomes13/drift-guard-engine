@@ -33,12 +33,12 @@ export default defineConfig({
       {
         text: 'Integrations',
         items: [
+          { text: 'API Drift Agent', link: '/api-drift-agent' },
           { text: 'npm', link: '/npm' },
           { text: 'Go', link: '/sdk' },
           { text: 'gRPC', link: '/grpc-server' },
           { text: 'GitHub Actions', link: '/ci' },
-          { text: 'Microservices', link: '/microservices' },
-          { text: 'MCP (AI)', link: '/mcp' },
+{ text: 'MCP (AI)', link: '/mcp' },
         ],
       },
       {

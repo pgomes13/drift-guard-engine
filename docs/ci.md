@@ -84,10 +84,6 @@ See drift-guard in action on a real pull request: [pgomes13/nest-coffee#8](https
 | Input               | Required | Default            | Description                                                                                          |
 | ------------------- | -------- | ------------------ | ---------------------------------------------------------------------------------------------------- |
 | `node-version`      | No       | `"20"`             | Node.js version used to generate schemas                                                             |
-| `upload-diff`       | No       | `"false"`          | Upload the JSON diff as a `drift-guard-diff` artifact — required for [microservice consumer checks](/microservices) |
-| `notify-consumers`  | No       | `""`               | Comma-separated list of repos to notify via `repository_dispatch` (e.g. `org/service-b,org/service-c`) |
-| `notify-token`      | No       | `""`               | GitHub token with `repo` write access to consumer repos — required when `notify-consumers` is set   |
-
 ## Action outputs
 
 | Output          | Description                                                             |
