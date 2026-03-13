@@ -13,6 +13,13 @@ export default defineConfig({
 
     sidebar: [
       {
+        text: 'Agentic',
+        items: [
+          { text: 'API Drift Agent', link: '/api-drift-agent' },
+          { text: 'MCP (AI)', link: '/mcp' },
+        ],
+      },
+      {
         text: 'Getting Started',
         items: [
           { text: 'Installation', link: '/install' },
@@ -31,14 +38,12 @@ export default defineConfig({
         ],
       },
       {
-        text: 'Integrations',
+        text: 'SDKs & Integrations',
         items: [
-          { text: 'API Drift Agent', link: '/api-drift-agent' },
+          { text: 'GitHub Actions', link: '/ci' },
           { text: 'npm', link: '/npm' },
           { text: 'Go', link: '/sdk' },
           { text: 'gRPC', link: '/grpc-server' },
-          { text: 'GitHub Actions', link: '/ci' },
-{ text: 'MCP (AI)', link: '/mcp' },
         ],
       },
       {

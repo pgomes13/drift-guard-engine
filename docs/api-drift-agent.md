@@ -2,9 +2,7 @@
 
 [![View on GitHub Marketplace](https://img.shields.io/badge/GitHub%20Marketplace-api--drift--agent-blue?logo=github)](https://github.com/marketplace/actions/api-drift-agent)
 
-A LangGraph-powered agent that detects breaking API changes in provider PRs and automatically opens GitHub Issues in affected consumer repos — **zero config on the consumer side**.
-
-No changes are required in consumer repos — `api-drift-agent` scans your entire GitHub org automatically.
+**This is the recommended architecture.** `api-drift-agent` is a LangGraph-powered agentic workflow that detects breaking API changes in provider PRs and automatically opens GitHub Issues in affected consumer repos — no changes required in consumer repos, no explicit consumer list to maintain.
 
 ## How it works
 
@@ -68,7 +66,7 @@ jobs:
 
 ## Python CLI
 
-The agent is also available as a standalone CLI:
+The agent can also be invoked directly from the command line:
 
 ```sh
 pip install drift-guard-agent
