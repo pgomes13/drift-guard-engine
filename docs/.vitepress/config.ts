@@ -39,6 +39,7 @@ export default defineConfig({
           { text: 'GitHub Actions', link: '/ci' },
           { text: 'Microservices', link: '/microservices' },
           { text: 'MCP (AI)', link: '/mcp' },
+          { text: 'AI Agent', link: '/ai-agent' },
         ],
       },
       {
