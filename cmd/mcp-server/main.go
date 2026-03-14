@@ -17,7 +17,7 @@ import (
 
 func main() {
 	s := server.NewMCPServer(
-		"drift-agent",
+		"driftabot",
 		"1.0.0",
 		server.WithToolCapabilities(true),
 	)
@@ -76,7 +76,7 @@ func main() {
 	), detectProjectHandler)
 
 	if err := server.ServeStdio(s); err != nil {
-		fmt.Fprintf(os.Stderr, "drift-agent mcp server error: %v\n", err)
+		fmt.Fprintf(os.Stderr, "driftabot mcp server error: %v\n", err)
 		os.Exit(1)
 	}
 }

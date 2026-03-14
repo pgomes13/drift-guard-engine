@@ -12,19 +12,19 @@ Downloads the correct pre-built binary for your platform automatically. See [npm
 
 ```sh
 brew tap DriftaBot/tap
-brew install drift-agent
+brew install driftabot
 ```
 
 ## Go install
 
 ```sh
-go install github.com/DriftaBot/driftabot-engine/cmd/drift-agent@latest
+go install github.com/DriftaBot/driftabot-engine/cmd/driftabot@latest
 ```
 
 ## Build from source
 
 ```sh
-go build -o drift-agent ./cmd/drift-agent
+go build -o driftabot ./cmd/driftabot
 ```
 
 Or via Make:

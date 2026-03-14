@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "drift-agent playground",
+  title: "driftabot playground",
   description: "Interactively compare OpenAPI, GraphQL, and gRPC schemas to detect breaking and non-breaking changes.",
 };
 

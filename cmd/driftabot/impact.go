@@ -16,17 +16,17 @@ import (
 var impactCmd = &cobra.Command{
 	Use:   "impact",
 	Short: "Scan source files for references to breaking API changes",
-	Long: `impact reads a drift-agent JSON diff and scans a source directory for
+	Long: `impact reads a driftabot JSON diff and scans a source directory for
 code references to each breaking change, so you know exactly which files and
 lines need to be updated.
 
-The diff JSON can be supplied via --diff or piped from another drift-agent command:
+The diff JSON can be supplied via --diff or piped from another driftabot command:
 
-  drift-agent openapi --base old.yaml --head new.yaml --format json \
-    | drift-agent impact --scan ./services`,
-	Example: `  drift-agent impact --diff /tmp/diff.json --scan .
-  drift-agent openapi --base base.yaml --head head.yaml --format json | drift-agent impact --scan ./services
-  drift-agent impact --diff /tmp/diff.json --scan . --format markdown`,
+  driftabot openapi --base old.yaml --head new.yaml --format json \
+    | driftabot impact --scan ./services`,
+	Example: `  driftabot impact --diff /tmp/diff.json --scan .
+  driftabot openapi --base base.yaml --head head.yaml --format json | driftabot impact --scan ./services
+  driftabot impact --diff /tmp/diff.json --scan . --format markdown`,
 	RunE: runImpact,
 }
 

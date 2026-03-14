@@ -31,8 +31,8 @@ func Node(projectDir, outputDir string) error {
 
 	// 2. Existing generation script.
 	candidates := []string{
-		"drift-agent/scripts/generate-swagger.ts",
-		"drift-agent/scripts/generate-swagger.js",
+		"driftabot/scripts/generate-swagger.ts",
+		"driftabot/scripts/generate-swagger.js",
 		"scripts/generate-swagger.ts",
 		"scripts/generate-swagger.js",
 		"src/generate-swagger.ts",
@@ -52,7 +52,7 @@ func Node(projectDir, outputDir string) error {
 			"  npm install --save-dev tsoa\n"+
 			"  npx tsoa init          # creates tsoa.json\n\n"+
 			"Or use --cmd to provide your own generator:\n\n"+
-			`  drift-agent compare openapi --cmd "node scripts/gen.js" --output swagger.json`,
+			`  driftabot compare openapi --cmd "node scripts/gen.js" --output swagger.json`,
 		projectDir,
 	)
 }

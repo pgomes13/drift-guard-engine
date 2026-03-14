@@ -80,7 +80,7 @@ func runDiff(schemaType, basePath, headPath string) (schema.DiffResult, error) {
 
 func writeTempFile(content []byte, originalName string) (string, error) {
 	ext := filepath.Ext(originalName)
-	f, err := os.CreateTemp("", "drift-agent-*"+ext)
+	f, err := os.CreateTemp("", "driftabot-*"+ext)
 	if err != nil {
 		return "", err
 	}
@@ -142,7 +142,7 @@ func main() {
 	srv := grpc.NewServer()
 	pb.RegisterDiffEngineServer(srv, &server{})
 
-	log.Printf("drift-agent gRPC server listening on :%s", port)
+	log.Printf("driftabot gRPC server listening on :%s", port)
 	if err := srv.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

@@ -1,6 +1,6 @@
 # npm SDK
 
-<a href="https://www.npmjs.com/package/@driftabot/engine" target="_blank">@driftabot/engine</a> is a thin npm wrapper around the drift-agent binary. On install, the correct pre-built binary for your platform is downloaded automatically — no Go toolchain required.
+<a href="https://www.npmjs.com/package/@driftabot/engine" target="_blank">@driftabot/engine</a> is a thin npm wrapper around the driftabot binary. On install, the correct pre-built binary for your platform is downloaded automatically — no Go toolchain required.
 
 ## Installation
 
@@ -73,12 +73,12 @@ console.log(ghReport);
 
 ## CLI via npx
 
-The `drift-agent` binary is available as an npm bin after install:
+The `driftabot` binary is available as an npm bin after install:
 
 ```sh
-npx drift-agent openapi --base old.yaml --head new.yaml
-npx drift-agent graphql --base old.graphql --head new.graphql --format json
-npx drift-agent impact --diff diff.json --scan ./src
+npx driftabot openapi --base old.yaml --head new.yaml
+npx driftabot graphql --base old.graphql --head new.graphql --format json
+npx driftabot impact --diff diff.json --scan ./src
 ```
 
 ## CommonJS

@@ -16,9 +16,9 @@ func main() {
 }
 
 var rootCmd = &cobra.Command{
-	Use:   "drift-agent",
+	Use:   "driftabot",
 	Short: "API contract diff engine for OpenAPI, GraphQL, and gRPC schemas",
-	Long: `drift-agent detects and classifies breaking vs. non-breaking changes
+	Long: `driftabot detects and classifies breaking vs. non-breaking changes
 between two versions of an API schema.
 
 Supported schema types: openapi, graphql, grpc`,
@@ -47,8 +47,8 @@ func addOutputFlags(cmd *cobra.Command) {
 var openapiCmd = &cobra.Command{
 	Use:   "openapi --base <file> --head <file>",
 	Short: "Diff two OpenAPI 3.x schemas (YAML or JSON)",
-	Example: `  drift-agent openapi --base api/v1.yaml --head api/v2.yaml
-  drift-agent openapi --base old.json --head new.json --format json --fail-on-breaking`,
+	Example: `  driftabot openapi --base api/v1.yaml --head api/v2.yaml
+  driftabot openapi --base old.json --head new.json --format json --fail-on-breaking`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		base, _ := cmd.Flags().GetString("base")
 		head, _ := cmd.Flags().GetString("head")
@@ -74,8 +74,8 @@ var openapiCmd = &cobra.Command{
 var graphqlCmd = &cobra.Command{
 	Use:   "graphql --base <file> --head <file>",
 	Short: "Diff two GraphQL SDL schemas",
-	Example: `  drift-agent graphql --base schema/base.graphql --head schema/head.graphql
-  drift-agent graphql --base old.gql --head new.gql --format json`,
+	Example: `  driftabot graphql --base schema/base.graphql --head schema/head.graphql
+  driftabot graphql --base old.gql --head new.gql --format json`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		base, _ := cmd.Flags().GetString("base")
 		head, _ := cmd.Flags().GetString("head")
@@ -101,8 +101,8 @@ var graphqlCmd = &cobra.Command{
 var grpcCmd = &cobra.Command{
 	Use:   "grpc --base <file> --head <file>",
 	Short: "Diff two Protobuf schemas (.proto)",
-	Example: `  drift-agent grpc --base proto/base.proto --head proto/head.proto
-  drift-agent grpc --base old.proto --head new.proto --format json --fail-on-breaking`,
+	Example: `  driftabot grpc --base proto/base.proto --head proto/head.proto
+  driftabot grpc --base old.proto --head new.proto --format json --fail-on-breaking`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		base, _ := cmd.Flags().GetString("base")
 		head, _ := cmd.Flags().GetString("head")

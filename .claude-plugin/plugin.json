@@ -1,5 +1,5 @@
 {
-  "name": "drift-agent",
+  "name": "driftabot",
   "description": "Detect breaking and non-breaking API schema changes across OpenAPI, GraphQL, and gRPC. Supports Go, Node.js (Express, NestJS), and legacy projects.",
   "version": "1.0.0",
   "author": {

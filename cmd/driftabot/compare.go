@@ -296,10 +296,10 @@ func openAPIScaffoldNeeded(typeName string) bool {
 	return !strings.HasPrefix(typeName, "Go")
 }
 
-// setupWorkspace creates the drift-agent/tmp directory and returns its path
-// along with a cleanup function that removes the entire drift-agent directory.
+// setupWorkspace creates the driftabot/tmp directory and returns its path
+// along with a cleanup function that removes the entire driftabot directory.
 func setupWorkspace(cwd string) (tmpDir string, cleanup func(), err error) {
-	driftGuardDir := filepath.Join(cwd, "drift-agent")
+	driftGuardDir := filepath.Join(cwd, "driftabot")
 	tmpDir = filepath.Join(driftGuardDir, "tmp")
 	if err := os.MkdirAll(tmpDir, 0o755); err != nil {
 		return "", nil, fmt.Errorf("create temp dir: %w", err)

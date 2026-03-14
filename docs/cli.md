@@ -1,6 +1,6 @@
 # CLI
 
-Run drift-agent locally to check for API drift before adding it to CI.
+Run driftabot locally to check for API drift before adding it to CI.
 
 ## Install
 
@@ -11,14 +11,14 @@ See [Installation](/install) for all install options.
 From the root of your project, run:
 
 ```sh
-drift-agent compare
+driftabot compare
 ```
 
 <details>
 <summary>Show steps</summary>
 
 ```
-drift-agent compare
+driftabot compare
        │
        ▼
 ┌────────────────────────────────────────────┐
@@ -61,12 +61,12 @@ drift-agent compare
 
 This is a good way to verify it works with your project before integrating further.
 
-> If `drift-agent compare` fails to auto-detect or generate schemas for your project, you can [generate them manually](/generating-specs) and pass the files directly with `drift-agent openapi --base ... --head ...`.
+> If `driftabot compare` fails to auto-detect or generate schemas for your project, you can [generate them manually](/generating-specs) and pass the files directly with `driftabot openapi --base ... --head ...`.
 
 ### Check for breaking changes only
 
 ```sh
-drift-agent compare --fail-on-breaking
+driftabot compare --fail-on-breaking
 ```
 
 Exits with code `1` if any breaking changes are found — same behavior as in CI.
@@ -74,7 +74,7 @@ Exits with code `1` if any breaking changes are found — same behavior as in CI
 ### Markdown output
 
 ```sh
-drift-agent compare --format markdown
+driftabot compare --format markdown
 ```
 
 Renders the same table that gets posted as a PR comment in CI.

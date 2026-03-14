@@ -9,7 +9,7 @@ API type safety across **OpenAPI**, **GraphQL**, and **gRPC** — catch breaking
 ```sh
 # Homebrew
 brew tap DriftaBot/tap
-brew install drift-agent
+brew install driftabot
 
 # npm
 npm install @driftabot/engine
@@ -19,7 +19,7 @@ npm install @driftabot/engine
 
 ```sh
 # Auto-generate and compare specs between branches
-drift-agent compare
+driftabot compare
 
 # GitHub Action — one line
 - uses: DriftaBot/driftabot-engine@v1

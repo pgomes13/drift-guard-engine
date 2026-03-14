@@ -2,7 +2,7 @@
 
 ## Schema formats
 
-`drift-agent` can diff any two schema files of these types:
+`driftabot` can diff any two schema files of these types:
 
 | Format      | Command   | File types         |
 | ----------- | --------- | ------------------ |
@@ -12,7 +12,7 @@
 
 ## Auto-detection (`compare`)
 
-`drift-agent compare` auto-detects your project type and generates schemas automatically.
+`driftabot compare` auto-detects your project type and generates schemas automatically.
 
 ### Node.js
 

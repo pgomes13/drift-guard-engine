@@ -1,6 +1,6 @@
 # MCP Server
 
-drift-agent ships an [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that exposes schema diffing as tools for AI assistants such as Claude Desktop.
+driftabot ships an [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that exposes schema diffing as tools for AI assistants such as Claude Desktop.
 
 ## Running the server
 
@@ -16,13 +16,13 @@ The server communicates over stdio and is registered in your MCP host's configur
 
 ### Claude Desktop configuration
 
-Add drift-agent to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS):
+Add driftabot to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS):
 
 ```json
 {
   "mcpServers": {
-    "drift-agent": {
-      "command": "/path/to/drift-agent-mcp"
+    "driftabot": {
+      "command": "/path/to/driftabot-mcp"
     }
   }
 }

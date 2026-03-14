@@ -35,10 +35,10 @@ func HasTsoaControllers(projectDir string) bool {
 	return found
 }
 
-// ScaffoldSwaggerAutogenScript writes drift-agent/scripts/generate-swagger.js
+// ScaffoldSwaggerAutogenScript writes driftabot/scripts/generate-swagger.js
 // configured for swagger-autogen and returns the path of the file written.
 func ScaffoldSwaggerAutogenScript(projectDir string) (string, error) {
-	outPath := filepath.Join(projectDir, "drift-agent", "scripts", "generate-swagger.js")
+	outPath := filepath.Join(projectDir, "driftabot", "scripts", "generate-swagger.js")
 	if err := os.MkdirAll(filepath.Dir(outPath), 0o755); err != nil {
 		return "", fmt.Errorf("create scripts directory: %w", err)
 	}

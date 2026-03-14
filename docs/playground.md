@@ -1,8 +1,8 @@
 # Playground
 
-Try drift-agent interactively — no install required.
+Try driftabot interactively — no install required.
 
-**[Open Playground →](https://drift-agent-theta.vercel.app/)**
+**[Open Playground →](https://driftabot-theta.vercel.app/)**
 
 ## Schema diff
 
@@ -34,4 +34,4 @@ The playground scans the pasted code and shows every line that references each b
   service.go : 34   r.DELETE("/users/:id", handler)
 ```
 
-This is the same scanner used by `drift-agent impact` — the playground lets you try it without a local install.
+This is the same scanner used by `driftabot impact` — the playground lets you try it without a local install.

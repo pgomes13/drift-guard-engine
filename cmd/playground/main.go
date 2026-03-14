@@ -91,7 +91,7 @@ func main() {
 	})
 	mux.Handle("/", http.FileServer(http.FS(subFS)))
 
-	log.Printf("drift-agent playground API listening on http://localhost:%s", port)
+	log.Printf("driftabot playground API listening on http://localhost:%s", port)
 	if err := http.ListenAndServe(":"+port, mux); err != nil {
 		log.Fatalf("server error: %v", err)
 	}
@@ -200,7 +200,7 @@ func impactHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Write the code snippet to a temp directory so impact.Scan can walk it.
-	dir, err := os.MkdirTemp("", "drift-agent-impact-*")
+	dir, err := os.MkdirTemp("", "driftabot-impact-*")
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to create temp dir: "+err.Error())
 		return
@@ -280,7 +280,7 @@ func extForType(schemaType string) string {
 
 func writeTempFile(content []byte, name string) (string, error) {
 	ext := filepath.Ext(name)
-	f, err := os.CreateTemp("", "drift-agent-*"+ext)
+	f, err := os.CreateTemp("", "driftabot-*"+ext)
 	if err != nil {
 		return "", err
 	}

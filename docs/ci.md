@@ -1,6 +1,6 @@
 # CI Integration
 
-Use drift-agent directly in CI to fail a PR when breaking API changes are detected.
+Use driftabot directly in CI to fail a PR when breaking API changes are detected.
 
 ## GitHub Actions
 
@@ -18,13 +18,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install drift-agent
+      - name: Install driftabot
         run: |
-          curl -sSL https://github.com/DriftaBot/driftabot-engine/releases/latest/download/drift-agent_linux_amd64.tar.gz | tar -xz
-          sudo mv drift-agent /usr/local/bin/
+          curl -sSL https://github.com/DriftaBot/driftabot-engine/releases/latest/download/driftabot_linux_amd64.tar.gz | tar -xz
+          sudo mv driftabot /usr/local/bin/
 
       - name: Check for breaking changes
-        run: drift-agent compare --fail-on-breaking
+        run: driftabot compare --fail-on-breaking
 ```
 
 `--fail-on-breaking` exits with code `1` if any breaking changes are found, which fails the CI step.
@@ -36,7 +36,7 @@ If auto-detection doesn't work for your project, generate schemas manually and p
 ```yaml
 - name: Check for breaking changes
   run: |
-    drift-agent openapi \
+    driftabot openapi \
       --base /tmp/base.yaml \
       --head /tmp/head.yaml \
       --fail-on-breaking
@@ -50,7 +50,7 @@ See [Generating Specs](/generating-specs) for how to produce the schema files.
 - name: Diff schemas
   id: diff
   run: |
-    drift-agent compare --format json > drift-diff.json
+    driftabot compare --format json > drift-diff.json
     BREAKING=$(python3 -c "import json; d=json.load(open('drift-diff.json')); print(d.get('summary',{}).get('breaking',0))")
     echo "breaking=$BREAKING" >> $GITHUB_OUTPUT
 
@@ -61,12 +61,12 @@ See [Generating Specs](/generating-specs) for how to produce the schema files.
 
 ## Other CI systems
 
-drift-agent is a single static binary — install it the same way on any CI runner.
+driftabot is a single static binary — install it the same way on any CI runner.
 
 ```sh
 # GitLab CI / CircleCI / Bitbucket Pipelines
-curl -sSL https://github.com/DriftaBot/driftabot-engine/releases/latest/download/drift-agent_linux_amd64.tar.gz | tar -xz
-./drift-agent compare --fail-on-breaking
+curl -sSL https://github.com/DriftaBot/driftabot-engine/releases/latest/download/driftabot_linux_amd64.tar.gz | tar -xz
+./driftabot compare --fail-on-breaking
 ```
 
 > For automated consumer notification and issue tracking, use the [API DriftaBot](https://github.com/marketplace/actions/driftabot-engine) — a GitHub Action that builds on the engine.

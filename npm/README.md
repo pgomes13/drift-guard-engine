@@ -2,7 +2,7 @@
 
 API schema diff engine — detect breaking changes in **OpenAPI**, **GraphQL**, and **gRPC** schemas.
 
-Thin npm wrapper around the [`drift-agent`](https://github.com/DriftaBot/driftabot-engine) Go binary. On install, the correct pre-built binary for your platform is downloaded automatically.
+Thin npm wrapper around the [`driftabot`](https://github.com/DriftaBot/driftabot-engine) Go binary. On install, the correct pre-built binary for your platform is downloaded automatically.
 
 ## Installation
 
@@ -14,32 +14,32 @@ Requires Node.js ≥ 16. The binary is downloaded for your platform (macOS arm64
 
 ## CLI
 
-After installing, the `drift-agent` binary is available as an npm bin:
+After installing, the `driftabot` binary is available as an npm bin:
 
 ```sh
-npx drift-agent --help
+npx driftabot --help
 ```
 
 ### OpenAPI
 
 ```sh
-drift-agent openapi --base old.yaml --head new.yaml
-drift-agent openapi --base old.yaml --head new.yaml --format json
-drift-agent openapi --base old.yaml --head new.yaml --fail-on-breaking
+driftabot openapi --base old.yaml --head new.yaml
+driftabot openapi --base old.yaml --head new.yaml --format json
+driftabot openapi --base old.yaml --head new.yaml --fail-on-breaking
 ```
 
 ### GraphQL
 
 ```sh
-drift-agent graphql --base old.graphql --head new.graphql
-drift-agent graphql --base old.graphql --head new.graphql --format markdown
+driftabot graphql --base old.graphql --head new.graphql
+driftabot graphql --base old.graphql --head new.graphql --format markdown
 ```
 
 ### gRPC / Protobuf
 
 ```sh
-drift-agent grpc --base old.proto --head new.proto
-drift-agent grpc --base old.proto --head new.proto --format json
+driftabot grpc --base old.proto --head new.proto
+driftabot grpc --base old.proto --head new.proto --format json
 ```
 
 ### Impact analysis
@@ -48,18 +48,18 @@ Scan source code for references to each breaking change:
 
 ```sh
 # From a saved diff JSON
-drift-agent openapi --base old.yaml --head new.yaml --format json > diff.json
-drift-agent impact --diff diff.json --scan ./src
+driftabot openapi --base old.yaml --head new.yaml --format json > diff.json
+driftabot impact --diff diff.json --scan ./src
 
 # Pipe mode
-drift-agent openapi --base old.yaml --head new.yaml --format json \
-  | drift-agent impact --scan ./src
+driftabot openapi --base old.yaml --head new.yaml --format json \
+  | driftabot impact --scan ./src
 
 # Output as markdown
-drift-agent impact --diff diff.json --scan ./src --format markdown
+driftabot impact --diff diff.json --scan ./src --format markdown
 
 # GitHub Actions annotations (::error / ::warning workflow commands)
-drift-agent impact --diff diff.json --scan ./src --format github
+driftabot impact --diff diff.json --scan ./src --format github
 ```
 
 ## Node.js / TypeScript API

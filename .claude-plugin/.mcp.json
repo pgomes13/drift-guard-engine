@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "drift-agent": {
+    "driftabot": {
       "command": "drift-agent-mcp",
       "args": [],
       "description": "Detect API schema drift across OpenAPI, GraphQL, and gRPC"

@@ -18,10 +18,10 @@ make run-grpc     # build and diff bundled gRPC fixtures
 ## Architecture
 
 ```
-cmd/drift-agent/          # CLI entry point (drift-agent binary)
+cmd/driftabot/          # CLI entry point (driftabot binary)
 cmd/server/               # gRPC server entry point
 cmd/mcp-server/           # MCP server entry point (AI/LLM integration)
-api/drift-agent/v1/       # Protobuf service definition & generated Go code
+api/driftabot/v1/       # Protobuf service definition & generated Go code
 internal/
   parser/
     openapi/             # OpenAPI YAML/JSON → schema.Schema

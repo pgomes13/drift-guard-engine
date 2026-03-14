@@ -3,7 +3,7 @@
 ## Diff two schema files
 
 ```sh
-drift-agent <command> --base <file> --head <file> [--format <format>] [--fail-on-breaking]
+driftabot <command> --base <file> --head <file> [--format <format>] [--fail-on-breaking]
 ```
 
 | Command   | Description                                 |
@@ -25,29 +25,29 @@ drift-agent <command> --base <file> --head <file> [--format <format>] [--fail-on
 
 ```sh
 # OpenAPI — text output
-drift-agent openapi --base api/base.yaml --head api/head.yaml
+driftabot openapi --base api/base.yaml --head api/head.yaml
 
 # GraphQL — JSON output
-drift-agent graphql --base schema/base.graphql --head schema/head.graphql --format json
+driftabot graphql --base schema/base.graphql --head schema/head.graphql --format json
 
 # gRPC — fail CI on breaking changes
-drift-agent grpc --base proto/base.proto --head proto/head.proto --fail-on-breaking
+driftabot grpc --base proto/base.proto --head proto/head.proto --fail-on-breaking
 ```
 
 ## Impact analysis
 
-After detecting breaking changes, use `drift-agent impact` to scan source code and find every file and line that references each breaking change.
+After detecting breaking changes, use `driftabot impact` to scan source code and find every file and line that references each breaking change.
 
 ```sh
-drift-agent <schema-command> --base <file> --head <file> --format json \
-  | drift-agent impact --scan <dir>
+driftabot <schema-command> --base <file> --head <file> --format json \
+  | driftabot impact --scan <dir>
 ```
 
 Or from a saved diff file:
 
 ```sh
-drift-agent openapi --base base.yaml --head head.yaml --format json > diff.json
-drift-agent impact --diff diff.json --scan ./src
+driftabot openapi --base base.yaml --head head.yaml --format json > diff.json
+driftabot impact --diff diff.json --scan ./src
 ```
 
 ### Flags
@@ -62,14 +62,14 @@ drift-agent impact --diff diff.json --scan ./src
 
 ```sh
 # Pipe OpenAPI diff directly into impact scan
-drift-agent openapi --base old.yaml --head new.yaml --format json \
-  | drift-agent impact --scan ./services
+driftabot openapi --base old.yaml --head new.yaml --format json \
+  | driftabot impact --scan ./services
 
 # Markdown report — collapsible sections per breaking change
-drift-agent impact --diff diff.json --scan ./src --format markdown
+driftabot impact --diff diff.json --scan ./src --format markdown
 
 # JSON output (machine-readable)
-drift-agent impact --diff diff.json --scan ./src --format json
+driftabot impact --diff diff.json --scan ./src --format json
 ```
 
 See [Output Formats](/output-formats) for format details and examples.

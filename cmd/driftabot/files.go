@@ -36,8 +36,8 @@ func swaggerScriptExists(dir string) bool {
 // script found in dir, or empty string if none is found.
 func findSwaggerScript(dir string) string {
 	candidates := []string{
-		"drift-agent/scripts/generate-swagger.ts",
-		"drift-agent/scripts/generate-swagger.js",
+		"driftabot/scripts/generate-swagger.ts",
+		"driftabot/scripts/generate-swagger.js",
 		"scripts/generate-swagger.ts",
 		"scripts/generate-swagger.js",
 		"src/generate-swagger.ts",

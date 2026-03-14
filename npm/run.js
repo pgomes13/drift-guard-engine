@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Thin shim: passes all arguments to the drift-agent binary.
+// Thin shim: passes all arguments to the driftabot binary.
 "use strict";
 
 const path = require("path");
@@ -8,14 +8,14 @@ const { spawnSync } = require("child_process");
 const bin = path.join(
   __dirname,
   "bin",
-  process.platform === "win32" ? "drift-agent.exe" : "drift-agent"
+  process.platform === "win32" ? "driftabot.exe" : "driftabot"
 );
 
 const result = spawnSync(bin, process.argv.slice(2), { stdio: "inherit" });
 
 if (result.error) {
   process.stderr.write(
-    `drift-agent: could not run binary: ${result.error.message}\n` +
+    `driftabot: could not run binary: ${result.error.message}\n` +
     `Make sure the package installed correctly or download manually:\n` +
     `https://github.com/DriftaBot/driftabot-engine/releases\n`
   );

@@ -72,7 +72,7 @@ export default function PlaygroundPage() {
         <div className="max-w-[1400px] mx-auto px-6 py-4 flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
             <span className="text-xl font-bold">
-              <span className="text-indigo-600">drift-agent</span> playground
+              <span className="text-indigo-600">driftabot</span> playground
             </span>
             <span className="text-[11px] font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full border border-gray-200">
               beta

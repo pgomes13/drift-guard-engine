@@ -5,7 +5,7 @@
   "main": "index.js",
   "types": "index.d.ts",
   "bin": {
-    "drift-agent": "run.js"
+    "driftabot": "run.js"
   },
   "scripts": {
     "postinstall": "node install.js"

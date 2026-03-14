@@ -16,7 +16,7 @@ import (
 // The caller is responsible for cleanup via t.Cleanup or defer.
 func makeTempDir(t *testing.T) string {
 	t.Helper()
-	dir, err := os.MkdirTemp("", "drift-agent-detect-*")
+	dir, err := os.MkdirTemp("", "driftabot-detect-*")
 	if err != nil {
 		t.Fatalf("create temp dir: %v", err)
 	}

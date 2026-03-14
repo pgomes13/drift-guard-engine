@@ -37,13 +37,13 @@ func DetectProjectInfo(dir string) (ProjectInfo, error) {
 			"detected Python project\n\n" +
 				"Auto-generation is not supported for Python. Use --cmd with your OpenAPI generation script:\n\n" +
 				"  FastAPI example:\n" +
-				`    drift-agent compare openapi --cmd "python scripts/generate_schema.py" --output openapi.json`,
+				`    driftabot compare openapi --cmd "python scripts/generate_schema.py" --output openapi.json`,
 		)
 	}
 	return ProjectInfo{}, fmt.Errorf(
 		"could not detect project type in %s\n\n"+
 			"Use --cmd to provide a generation command:\n"+
-			`  drift-agent compare openapi --cmd "<your-generator>" --output <schema-file>`,
+			`  driftabot compare openapi --cmd "<your-generator>" --output <schema-file>`,
 		dir,
 	)
 }
@@ -156,14 +156,14 @@ func DetectGenerator(dir string) (GeneratorFunc, error) {
 			"detected Python project\n\n" +
 				"Auto-generation is not supported for Python. Use --cmd with your OpenAPI generation script:\n\n" +
 				"  FastAPI example:\n" +
-				`    drift-agent compare openapi --cmd "python scripts/generate_schema.py" --output openapi.json`,
+				`    driftabot compare openapi --cmd "python scripts/generate_schema.py" --output openapi.json`,
 		)
 	}
 
 	return nil, fmt.Errorf(
 		"could not detect project type in %s\n\n"+
 			"Use --cmd to provide a generation command:\n"+
-			`  drift-agent compare openapi --cmd "<your-generator>" --output <schema-file>`,
+			`  driftabot compare openapi --cmd "<your-generator>" --output <schema-file>`,
 		dir,
 	)
 }

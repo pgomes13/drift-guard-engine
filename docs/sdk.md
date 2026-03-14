@@ -1,6 +1,6 @@
 # Go SDK
 
-drift-agent can be used as a Go library. The `pkg/compare` and `pkg/impact` packages are publicly importable by external modules.
+driftabot can be used as a Go library. The `pkg/compare` and `pkg/impact` packages are publicly importable by external modules.
 
 ## Installation
 
