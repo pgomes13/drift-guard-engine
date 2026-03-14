@@ -2,7 +2,9 @@
 
 [![View on GitHub Marketplace](https://img.shields.io/badge/GitHub%20Marketplace-api--drift--agent-blue?logo=github)](https://github.com/marketplace/actions/api-drift-agent)
 
-**This is the recommended architecture.** `api-drift-agent` is a LangGraph-powered agentic workflow that detects breaking API changes in provider PRs and automatically opens GitHub Issues in affected consumer repos — no changes required in consumer repos, no explicit consumer list to maintain.
+> **Recommended integration.** The API Drift Agent is the recommended way to solve API drift at scale. Rather than wiring up the engine manually, the agent handles discovery, analysis, and consumer notification automatically.
+
+`api-drift-agent` is a LangGraph-powered agentic workflow that detects breaking API changes in provider PRs and automatically opens GitHub Issues in affected consumer repos — no changes required in consumer repos, no explicit consumer list to maintain.
 
 ## How it works
 

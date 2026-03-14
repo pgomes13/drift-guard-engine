@@ -13,13 +13,6 @@ export default defineConfig({
 
     sidebar: [
       {
-        text: 'Agentic',
-        items: [
-          { text: 'API Drift Agent', link: '/api-drift-agent' },
-          { text: 'MCP (AI)', link: '/mcp' },
-        ],
-      },
-      {
         text: 'Getting Started',
         items: [
           { text: 'Installation', link: '/install' },
@@ -28,6 +21,13 @@ export default defineConfig({
           { text: 'Playground ↗', link: 'https://drift-guard-theta.vercel.app/', target: '_blank' },
           { text: 'Supported', link: '/supported' },
           { text: 'Generating Specs', link: '/generating-specs' },
+        ],
+      },
+      {
+        text: 'Agentic',
+        items: [
+          { text: 'API Drift Agent', link: '/api-drift-agent' },
+          { text: 'MCP (AI)', link: '/mcp' },
         ],
       },
       {
