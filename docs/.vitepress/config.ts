@@ -27,7 +27,6 @@ export default defineConfig({
         text: 'Agentic',
         items: [
           { text: 'API Drift Agent', link: '/api-drift-agent' },
-          { text: 'GitHub Actions', link: '/api-drift-agent#usage' },
           { text: 'MCP (AI)', link: '/mcp' },
         ],
       },
