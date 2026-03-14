@@ -10,13 +10,10 @@ hero:
       text: Get Started
       link: /install
     - theme: brand
-      text: GitHub Marketplace ↗
+      text: DriftaBot Agent ↗
       link: https://github.com/marketplace/actions/api-drift-agent
       target: _blank
-    - theme: alt
-      text: View on GitHub
-      link: https://github.com/DriftaBot/engine
-    - theme: alt
+    - theme: brand
       text: npm ↗
       link: https://www.npmjs.com/package/@driftabot/engine
       target: _blank
