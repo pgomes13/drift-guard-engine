@@ -77,6 +77,7 @@ jobs:
 
 | Symptom | Cause | Fix |
 |---|---|---|
+| `curl: (22) 404` when downloading drift-guard binary | Release assets are missing or named differently than expected | Check that the latest release on `pgomes13/drift-guard-engine` has GoReleaser artifacts attached — re-run the release if assets are missing |
 | Action fails: "No OpenAPI schema found" | Schema file not at a standard path | Set the `base-schema` input explicitly |
 | Action fails: "drift-guard-engine failed to diff schemas" | Schema file is invalid or malformed OpenAPI | Validate the schema with `drift-guard openapi --base ... --head ...` locally |
 | No issues created, no errors | Missing `issues: write` permission | Add `issues: write` under `permissions:` in your workflow — the action will now emit a warning if this is missing |

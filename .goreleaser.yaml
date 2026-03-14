@@ -23,7 +23,7 @@ builds:
 
 archives:
   - id: drift-guard
-    name_template: "drift-guard_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    name_template: "drift-guard_{{ .Os }}_{{ .Arch }}"
     format_overrides:
       - goos: windows
         formats: [zip]
