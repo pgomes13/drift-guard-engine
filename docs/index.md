@@ -7,11 +7,8 @@ hero:
   tagline: Catch breaking API changes before they reach production — across OpenAPI, GraphQL, and gRPC.
   actions:
     - theme: brand
-      text: Take a Tour
-      link: /tour
-    - theme: alt
-      text: API Drift Agent ★ Recommended
-      link: /api-drift-agent
+      text: GitHub Marketplace ↗
+      link: https://github.com/marketplace/actions/api-drift-agent
     - theme: alt
       text: View on GitHub
       link: https://github.com/pgomes13/drift-guard-engine

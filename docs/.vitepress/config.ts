@@ -15,19 +15,11 @@ export default defineConfig({
       {
         text: 'Getting Started',
         items: [
-          { text: 'Take a Tour', link: '/tour' },
           { text: 'Installation', link: '/install' },
           { text: 'CLI', link: '/cli' },
           { text: 'Usage', link: '/usage' },
           { text: 'Playground ↗', link: 'https://drift-guard-theta.vercel.app/', target: '_blank' },
           { text: 'Supported', link: '/supported' },
-        ],
-      },
-      {
-        text: 'Agentic',
-        items: [
-          { text: 'API Drift Agent', link: '/api-drift-agent' },
-          { text: 'MCP (AI)', link: '/mcp' },
         ],
       },
       {
@@ -42,13 +34,14 @@ export default defineConfig({
         items: [
           { text: 'npm', link: '/npm' },
           { text: 'Go', link: '/sdk' },
+          { text: 'CI', link: '/ci' },
           { text: 'gRPC', link: '/grpc-server' },
+          { text: 'MCP (AI)', link: '/mcp' },
         ],
       },
       {
         text: 'Troubleshooting',
         items: [
-          { text: 'Agent Troubleshooting', link: '/api-drift-agent#troubleshooting' },
           { text: 'Generating Specs', link: '/generating-specs' },
         ],
       },
