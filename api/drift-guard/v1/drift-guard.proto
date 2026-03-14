@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package drift_guard.v1;
 
-option go_package = "github.com/pgomes13/drift-guard-engine/api/drift-guard/v1;driftguardv1";
+option go_package = "github.com/pgomes13/api-drift-engine/api/drift-guard/v1;driftguardv1";
 
 // DiffEngine compares two API schema files and returns a classified diff.
 service DiffEngine {

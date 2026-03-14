@@ -9,12 +9,12 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/pgomes13/drift-guard-engine/pkg/compare"
-	"github.com/pgomes13/drift-guard-engine/internal/generate/node/express"
-	"github.com/pgomes13/drift-guard-engine/internal/generate/node/nest"
-	"github.com/pgomes13/drift-guard-engine/internal/languages"
-	"github.com/pgomes13/drift-guard-engine/internal/reporter"
-	"github.com/pgomes13/drift-guard-engine/pkg/schema"
+	"github.com/pgomes13/api-drift-engine/pkg/compare"
+	"github.com/pgomes13/api-drift-engine/internal/generate/node/express"
+	"github.com/pgomes13/api-drift-engine/internal/generate/node/nest"
+	"github.com/pgomes13/api-drift-engine/internal/languages"
+	"github.com/pgomes13/api-drift-engine/internal/reporter"
+	"github.com/pgomes13/api-drift-engine/pkg/schema"
 )
 
 var compareCmd = &cobra.Command{

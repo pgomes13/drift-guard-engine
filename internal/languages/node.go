@@ -1,6 +1,6 @@
 package languages
 
-import "github.com/pgomes13/drift-guard-engine/internal/generate/node/express"
+import "github.com/pgomes13/api-drift-engine/internal/generate/node/express"
 
 // GenerateNode delegates to the express generate package.
 var GenerateNode = express.Node

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pgomes13/drift-guard-engine/internal/languages"
+	"github.com/pgomes13/api-drift-engine/internal/languages"
 )
 
 // --------------------------------------------------------------------------

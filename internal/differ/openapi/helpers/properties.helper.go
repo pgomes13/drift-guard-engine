@@ -3,7 +3,7 @@ package helpers
 import (
 	"fmt"
 
-	"github.com/pgomes13/drift-guard-engine/pkg/schema"
+	"github.com/pgomes13/api-drift-engine/pkg/schema"
 )
 
 func IndexProperties(props []schema.Property) map[string]schema.Property {

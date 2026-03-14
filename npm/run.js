@@ -17,7 +17,7 @@ if (result.error) {
   process.stderr.write(
     `drift-guard: could not run binary: ${result.error.message}\n` +
     `Make sure the package installed correctly or download manually:\n` +
-    `https://github.com/pgomes13/drift-guard-engine/releases\n`
+    `https://github.com/pgomes13/api-drift-engine/releases\n`
   );
   process.exit(1);
 }

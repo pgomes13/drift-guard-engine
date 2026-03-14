@@ -18,7 +18,7 @@ brew install drift-guard
 ## Go install
 
 ```sh
-go install github.com/pgomes13/drift-guard-engine/cmd/drift-guard@latest
+go install github.com/pgomes13/api-drift-engine/cmd/drift-guard@latest
 ```
 
 ## Build from source

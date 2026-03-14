@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/pgomes13/drift-guard-engine/internal/generate/node/express"
+	"github.com/pgomes13/api-drift-engine/internal/generate/node/express"
 )
 
 // NestGRPC finds the primary .proto file for the NestJS project and

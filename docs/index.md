@@ -11,7 +11,7 @@ hero:
       link: https://github.com/marketplace/actions/api-drift-agent
     - theme: alt
       text: View on GitHub
-      link: https://github.com/pgomes13/drift-guard-engine
+      link: https://github.com/pgomes13/api-drift-engine
 
 features:
   - title: Multi-schema support

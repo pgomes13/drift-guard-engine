@@ -12,9 +12,9 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/pgomes13/drift-guard-engine/pkg/compare"
-	"github.com/pgomes13/drift-guard-engine/pkg/impact"
-	"github.com/pgomes13/drift-guard-engine/pkg/schema"
+	"github.com/pgomes13/api-drift-engine/pkg/compare"
+	"github.com/pgomes13/api-drift-engine/pkg/impact"
+	"github.com/pgomes13/api-drift-engine/pkg/schema"
 )
 
 //go:embed static

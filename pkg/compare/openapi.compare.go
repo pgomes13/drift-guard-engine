@@ -3,10 +3,10 @@ package compare
 import (
 	"fmt"
 
-	"github.com/pgomes13/drift-guard-engine/internal/classifier"
-	differopenapi "github.com/pgomes13/drift-guard-engine/internal/differ/openapi"
-	parseropenapi "github.com/pgomes13/drift-guard-engine/internal/parser/openapi"
-	"github.com/pgomes13/drift-guard-engine/pkg/schema"
+	"github.com/pgomes13/api-drift-engine/internal/classifier"
+	differopenapi "github.com/pgomes13/api-drift-engine/internal/differ/openapi"
+	parseropenapi "github.com/pgomes13/api-drift-engine/internal/parser/openapi"
+	"github.com/pgomes13/api-drift-engine/pkg/schema"
 )
 
 // OpenAPI parses basePath and headPath as OpenAPI 3.x documents, diffs them,

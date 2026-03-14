@@ -2,7 +2,7 @@
 package helpers
 
 import (
-	"github.com/pgomes13/drift-guard-engine/pkg/schema"
+	"github.com/pgomes13/api-drift-engine/pkg/schema"
 
 	"github.com/vektah/gqlparser/v2/ast"
 )

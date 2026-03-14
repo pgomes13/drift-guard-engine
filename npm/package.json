@@ -32,9 +32,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pgomes13/drift-guard-engine"
+    "url": "https://github.com/pgomes13/api-drift-engine"
   },
-  "homepage": "https://github.com/pgomes13/drift-guard-engine",
+  "homepage": "https://github.com/pgomes13/api-drift-engine",
   "engines": {
     "node": ">=16"
   }

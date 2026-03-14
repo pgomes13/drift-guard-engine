@@ -3,7 +3,7 @@ package graphql
 import (
 	"strings"
 
-	"github.com/pgomes13/drift-guard-engine/pkg/schema"
+	"github.com/pgomes13/api-drift-engine/pkg/schema"
 )
 
 // Severity returns the severity for GraphQL change types.

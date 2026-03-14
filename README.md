@@ -2,7 +2,7 @@
 
 API type safety across **OpenAPI**, **GraphQL**, and **gRPC** — catch breaking changes before they reach production.
 
-**[Full documentation →](https://pgomes13.github.io/drift-guard-engine)**
+**[Full documentation →](https://pgomes13.github.io/api-drift-engine)**
 
 ## Quick install
 
@@ -22,7 +22,7 @@ npm install @pgomes13/drift-guard
 drift-guard compare
 
 # GitHub Action — one line
-- uses: pgomes13/drift-guard-engine@v1
+- uses: pgomes13/api-drift-engine@v1
 ```
 
 ## npm / Node.js API

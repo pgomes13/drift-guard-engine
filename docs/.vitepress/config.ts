@@ -3,12 +3,12 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: 'DriftGuard',
   description: 'API type safety across OpenAPI, GraphQL, and gRPC. Catch breaking changes before they reach production.',
-  base: '/drift-guard-engine/',
+  base: '/api-drift-engine/',
 
   themeConfig: {
     nav: [
       { text: 'Guide', link: '/install' },
-      { text: 'GitHub', link: 'https://github.com/pgomes13/drift-guard-engine' },
+      { text: 'GitHub', link: 'https://github.com/pgomes13/api-drift-engine' },
     ],
 
     sidebar: [
@@ -54,7 +54,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/pgomes13/drift-guard-engine' },
+      { icon: 'github', link: 'https://github.com/pgomes13/api-drift-engine' },
     ],
 
     footer: {

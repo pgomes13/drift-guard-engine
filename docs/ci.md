@@ -20,7 +20,7 @@ jobs:
 
       - name: Install drift-guard
         run: |
-          curl -sSL https://github.com/pgomes13/drift-guard-engine/releases/latest/download/drift-guard_linux_amd64.tar.gz | tar -xz
+          curl -sSL https://github.com/pgomes13/api-drift-engine/releases/latest/download/drift-guard_linux_amd64.tar.gz | tar -xz
           sudo mv drift-guard /usr/local/bin/
 
       - name: Check for breaking changes
@@ -65,7 +65,7 @@ drift-guard is a single static binary — install it the same way on any CI runn
 
 ```sh
 # GitLab CI / CircleCI / Bitbucket Pipelines
-curl -sSL https://github.com/pgomes13/drift-guard-engine/releases/latest/download/drift-guard_linux_amd64.tar.gz | tar -xz
+curl -sSL https://github.com/pgomes13/api-drift-engine/releases/latest/download/drift-guard_linux_amd64.tar.gz | tar -xz
 ./drift-guard compare --fail-on-breaking
 ```
 

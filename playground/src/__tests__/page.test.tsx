@@ -58,7 +58,7 @@ describe("PlaygroundPage", () => {
     render(<PlaygroundPage />);
     const link = screen.getByRole("link", { name: /generate spec/i });
     expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute("href", "https://pgomes13.github.io/drift-guard-engine/generating-specs");
+    expect(link).toHaveAttribute("href", "https://pgomes13.github.io/api-drift-engine/generating-specs");
     expect(link).toHaveAttribute("target", "_blank");
   });
 

@@ -5,8 +5,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/pgomes13/drift-guard-engine/pkg/compare"
-	"github.com/pgomes13/drift-guard-engine/internal/reporter"
+	"github.com/pgomes13/api-drift-engine/pkg/compare"
+	"github.com/pgomes13/api-drift-engine/internal/reporter"
 )
 
 func main() {

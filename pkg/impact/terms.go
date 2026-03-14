@@ -3,7 +3,7 @@ package impact
 import (
 	"strings"
 
-	"github.com/pgomes13/drift-guard-engine/pkg/schema"
+	"github.com/pgomes13/api-drift-engine/pkg/schema"
 )
 
 // ExtractTerms returns search terms to grep for when scanning source files for

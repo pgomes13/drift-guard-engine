@@ -6,7 +6,7 @@ This page walks you through the full DriftGuard setup — from zero to your firs
 
 ## How it works
 
-**drift-guard-engine** is the core diff engine. It detects breaking API changes between two schema versions.
+**api-drift-engine** is the core diff engine. It detects breaking API changes between two schema versions.
 
 **API Drift Agent** sits on top of the engine. When a provider PR introduces breaking changes, the agent automatically finds every consumer repo in your org that references those endpoints and opens a GitHub Issue in each one.
 
@@ -14,7 +14,7 @@ This page walks you through the full DriftGuard setup — from zero to your firs
 Provider repo PR opened
        │
        ▼
-drift-guard-engine  ←  auto-detects & diffs API schema
+api-drift-engine  ←  auto-detects & diffs API schema
        │  breaking changes found
        ▼
 API Drift Agent     ←  searches org for affected consumers
