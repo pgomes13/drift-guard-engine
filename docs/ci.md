@@ -69,4 +69,4 @@ curl -sSL https://github.com/DriftAgent/api-drift-engine/releases/latest/downloa
 ./drift-agent compare --fail-on-breaking
 ```
 
-> For automated consumer notification and issue tracking, use the [API Drift Agent](https://github.com/marketplace/actions/api-drift-engine) — a GitHub Action that builds on the engine.
+> For automated consumer notification and issue tracking, use the [API DriftAgent](https://github.com/marketplace/actions/api-drift-engine) — a GitHub Action that builds on the engine.

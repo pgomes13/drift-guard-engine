@@ -2,7 +2,7 @@
 layout: home
 
 hero:
-  name: Drift Agent
+  name: DriftAgent
   text: API Type Safety
   tagline: Catch breaking API changes before they reach production — across OpenAPI, GraphQL, and gRPC.
   actions:

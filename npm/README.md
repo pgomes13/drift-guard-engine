@@ -57,6 +57,9 @@ drift-agent openapi --base old.yaml --head new.yaml --format json \
 
 # Output as markdown
 drift-agent impact --diff diff.json --scan ./src --format markdown
+
+# GitHub Actions annotations (::error / ::warning workflow commands)
+drift-agent impact --diff diff.json --scan ./src --format github
 ```
 
 ## Node.js / TypeScript API
@@ -79,8 +82,9 @@ const grpcResult = compareGRPC("old.proto", "new.proto");
 const hits = impact(result, "./src");
 // Returns Hit[] — file paths and line numbers that reference each breaking change
 
-// Text or markdown report
+// Text, markdown, or GitHub Actions annotations
 const report = impact(result, "./src", { format: "markdown" });
+const ghAnnotations = impact(result, "./src", { format: "github" });
 ```
 
 ### CommonJS
@@ -125,6 +129,10 @@ interface Hit {
   line: string;
   change_type: string;  // e.g. "endpoint_removed"
   change_path: string;  // e.g. "DELETE /users/{id}"
+}
+
+interface ImpactOptions {
+  format?: "text" | "json" | "markdown" | "github";
 }
 ```
 

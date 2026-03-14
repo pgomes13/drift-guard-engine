@@ -1,6 +1,6 @@
 # Take a Tour
 
-This page walks you through the full Drift Agent setup — from zero to your first automated drift alert.
+This page walks you through the full DriftAgent setup — from zero to your first automated drift alert.
 
 ---
 
@@ -8,7 +8,7 @@ This page walks you through the full Drift Agent setup — from zero to your fir
 
 **api-drift-engine** is the core diff engine. It detects breaking API changes between two schema versions.
 
-**API Drift Agent** sits on top of the engine. When a provider PR introduces breaking changes, the agent automatically finds every consumer repo in your org that references those endpoints and opens a GitHub Issue in each one.
+**API DriftAgent** sits on top of the engine. When a provider PR introduces breaking changes, the agent automatically finds every consumer repo in your org that references those endpoints and opens a GitHub Issue in each one.
 
 ```
 Provider repo PR opened
@@ -17,7 +17,7 @@ Provider repo PR opened
 api-drift-engine  ←  auto-detects & diffs API schema
        │  breaking changes found
        ▼
-API Drift Agent     ←  searches org for affected consumers
+API DriftAgent     ←  searches org for affected consumers
        │
        ▼
 GitHub Issues       ←  opened in each consumer repo
@@ -94,6 +94,6 @@ The agent will:
 
 ## What's next
 
-- [API Drift Agent](/api-drift-engine) — full reference for inputs and the Python CLI
+- [API DriftAgent](/api-drift-engine) — full reference for inputs and the Python CLI
 - [MCP (AI)](/mcp) — use the engine as tools inside Claude Desktop
 - [Supported frameworks](/supported) — what languages and frameworks the engine supports

@@ -1,5 +1,5 @@
-# API Drift Agent
+# API DriftAgent
 
-The API Drift Agent documentation has moved to its own site:
+The API DriftAgent documentation has moved to its own site:
 
 **[driftagent.github.io/api-drift-engine →](https://driftagent.github.io/api-drift-engine/)**

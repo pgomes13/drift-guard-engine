@@ -1,6 +1,6 @@
 # Generating Specs
 
-The API Drift Agent auto-detects schema files in your repo. If it can't find one (you'll see "No OpenAPI schema found" in the action logs), you need to generate and commit a schema file first.
+The API DriftAgent auto-detects schema files in your repo. If it can't find one (you'll see "No OpenAPI schema found" in the action logs), you need to generate and commit a schema file first.
 
 Below are the most common tools for each language and schema type.
 

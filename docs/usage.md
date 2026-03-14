@@ -72,21 +72,6 @@ drift-agent impact --diff diff.json --scan ./src --format markdown
 drift-agent impact --diff diff.json --scan ./src --format json
 ```
 
-### Output formats
-
-| Format | Best for |
-|--------|----------|
-| `text` | Local terminal |
-| `markdown` | PR comment — collapsible sections, summary count |
-| `json` | Scripting / custom tooling |
-| `github` | GitHub Actions — emits `::error` / `::warning` workflow commands for inline PR annotations |
-
-### Sample output (text)
-
-```
-Breaking change: DELETE /users/{id} (endpoint_removed)
-  services/user-service/client.go:42     client.Delete("/users/" + id)
-  apps/mobile-api/routes.go:17           r.DELETE("/users/:id", handler)
-```
+See [Output Formats](/output-formats) for format details and examples.
 
 
