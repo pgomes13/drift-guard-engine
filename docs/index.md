@@ -18,7 +18,7 @@ hero:
       link: https://github.com/DriftaBot/driftabot-engine
     - theme: alt
       text: npm ↗
-      link: https://www.npmjs.com/package/@driftabot/driftabot-engine
+      link: https://www.npmjs.com/package/@driftabot/engine
       target: _blank
 
 features:

@@ -12,7 +12,7 @@ brew tap DriftaBot/tap
 brew install drift-agent
 
 # npm
-npm install @driftabot/driftabot-engine
+npm install @driftabot/engine
 ```
 
 ## Quick start
@@ -28,7 +28,7 @@ drift-agent compare
 ## npm / Node.js API
 
 ```ts
-import { compareOpenAPI, impact } from "@driftabot/driftabot-engine";
+import { compareOpenAPI, impact } from "@driftabot/engine";
 
 const result = compareOpenAPI("old.yaml", "new.yaml");
 const hits = impact(result, "./src");

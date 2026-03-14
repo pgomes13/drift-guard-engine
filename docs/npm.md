@@ -1,11 +1,11 @@
 # npm SDK
 
-<a href="https://www.npmjs.com/package/@driftabot/driftabot-engine" target="_blank">@driftabot/driftabot-engine</a> is a thin npm wrapper around the drift-agent binary. On install, the correct pre-built binary for your platform is downloaded automatically — no Go toolchain required.
+<a href="https://www.npmjs.com/package/@driftabot/engine" target="_blank">@driftabot/engine</a> is a thin npm wrapper around the drift-agent binary. On install, the correct pre-built binary for your platform is downloaded automatically — no Go toolchain required.
 
 ## Installation
 
 ```sh
-npm install @driftabot/driftabot-engine
+npm install @driftabot/engine
 ```
 
 Requires Node.js ≥ 16. Supported platforms: macOS arm64/amd64, Linux arm64/amd64, Windows amd64.
@@ -15,7 +15,7 @@ Requires Node.js ≥ 16. Supported platforms: macOS arm64/amd64, Linux arm64/amd
 ### OpenAPI
 
 ```ts
-import { compareOpenAPI } from "@driftabot/driftabot-engine";
+import { compareOpenAPI } from "@driftabot/engine";
 
 const result = compareOpenAPI("old.yaml", "new.yaml");
 
@@ -30,7 +30,7 @@ for (const change of result.changes) {
 ### GraphQL
 
 ```ts
-import { compareGraphQL } from "@driftabot/driftabot-engine";
+import { compareGraphQL } from "@driftabot/engine";
 
 const result = compareGraphQL("old.graphql", "new.graphql");
 ```
@@ -38,7 +38,7 @@ const result = compareGraphQL("old.graphql", "new.graphql");
 ### gRPC / Protobuf
 
 ```ts
-import { compareGRPC } from "@driftabot/driftabot-engine";
+import { compareGRPC } from "@driftabot/engine";
 
 const result = compareGRPC("old.proto", "new.proto");
 ```
@@ -48,7 +48,7 @@ const result = compareGRPC("old.proto", "new.proto");
 Scan source code for references to each breaking change:
 
 ```ts
-import { compareOpenAPI, impact } from "@driftabot/driftabot-engine";
+import { compareOpenAPI, impact } from "@driftabot/engine";
 
 const result = compareOpenAPI("old.yaml", "new.yaml");
 
@@ -84,7 +84,7 @@ npx drift-agent impact --diff diff.json --scan ./src
 ## CommonJS
 
 ```js
-const { compareOpenAPI, impact } = require("@driftabot/driftabot-engine");
+const { compareOpenAPI, impact } = require("@driftabot/engine");
 ```
 
 ## TypeScript types

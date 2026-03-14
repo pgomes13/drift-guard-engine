@@ -1,4 +1,4 @@
-# @driftabot/driftabot-engine
+# @driftabot/engine
 
 API schema diff engine — detect breaking changes in **OpenAPI**, **GraphQL**, and **gRPC** schemas.
 
@@ -7,7 +7,7 @@ Thin npm wrapper around the [`drift-agent`](https://github.com/DriftaBot/driftab
 ## Installation
 
 ```sh
-npm install @driftabot/driftabot-engine
+npm install @driftabot/engine
 ```
 
 Requires Node.js ≥ 16. The binary is downloaded for your platform (macOS arm64/amd64, Linux arm64/amd64, Windows amd64) during `npm install`.
@@ -65,7 +65,7 @@ drift-agent impact --diff diff.json --scan ./src --format github
 ## Node.js / TypeScript API
 
 ```ts
-import { compareOpenAPI, compareGraphQL, compareGRPC, impact } from "@driftabot/driftabot-engine";
+import { compareOpenAPI, compareGraphQL, compareGRPC, impact } from "@driftabot/engine";
 
 // Diff two OpenAPI schemas
 const result = compareOpenAPI("old.yaml", "new.yaml");
@@ -90,7 +90,7 @@ const ghAnnotations = impact(result, "./src", { format: "github" });
 ### CommonJS
 
 ```js
-const { compareOpenAPI, impact } = require("@driftabot/driftabot-engine");
+const { compareOpenAPI, impact } = require("@driftabot/engine");
 ```
 
 ## TypeScript types

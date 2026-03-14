@@ -3,7 +3,7 @@
 ## npm (Node.js)
 
 ```sh
-npm install @driftabot/driftabot-engine
+npm install @driftabot/engine
 ```
 
 Downloads the correct pre-built binary for your platform automatically. See [npm SDK](/npm) for the full programmatic API.

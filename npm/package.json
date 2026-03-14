@@ -1,5 +1,5 @@
 {
-  "name": "@driftabot/driftabot-engine",
+  "name": "@driftabot/engine",
   "version": "5.3.0",
   "description": "API schema diff engine — detect breaking changes in OpenAPI, GraphQL, and gRPC schemas",
   "main": "index.js",
@@ -32,9 +32,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/DriftaBot/driftabot-engine"
+    "url": "git+https://github.com/DriftaBot/engine.git"
   },
-  "homepage": "https://github.com/DriftaBot/driftabot-engine",
+  "homepage": "https://github.com/DriftaBot/engine",
   "engines": {
     "node": ">=16"
   }
