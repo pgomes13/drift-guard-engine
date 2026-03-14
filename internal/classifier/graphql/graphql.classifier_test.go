@@ -3,10 +3,10 @@ package graphql_test
 import (
 	"testing"
 
-	"github.com/DriftBot/api-drift-engine/internal/classifier"
-	differgraphql "github.com/DriftBot/api-drift-engine/internal/differ/graphql"
-	parsergraphql "github.com/DriftBot/api-drift-engine/internal/parser/graphql"
-	"github.com/DriftBot/api-drift-engine/pkg/schema"
+	"github.com/DriftAgent/api-drift-engine/internal/classifier"
+	differgraphql "github.com/DriftAgent/api-drift-engine/internal/differ/graphql"
+	parsergraphql "github.com/DriftAgent/api-drift-engine/internal/parser/graphql"
+	"github.com/DriftAgent/api-drift-engine/pkg/schema"
 )
 
 const testdataDir = "../../testdata/"

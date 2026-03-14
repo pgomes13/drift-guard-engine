@@ -3,7 +3,7 @@
 ## npm (Node.js)
 
 ```sh
-npm install @drift-bot/api-drift-engine
+npm install @drift-agent/api-drift-engine
 ```
 
 Downloads the correct pre-built binary for your platform automatically. See [npm SDK](/npm) for the full programmatic API.
@@ -11,20 +11,20 @@ Downloads the correct pre-built binary for your platform automatically. See [npm
 ## Homebrew (macOS / Linux)
 
 ```sh
-brew tap DriftBot/tap
-brew install drift-bot
+brew tap DriftAgent/tap
+brew install drift-agent
 ```
 
 ## Go install
 
 ```sh
-go install github.com/DriftBot/api-drift-engine/cmd/drift-bot@latest
+go install github.com/DriftAgent/api-drift-engine/cmd/drift-agent@latest
 ```
 
 ## Build from source
 
 ```sh
-go build -o drift-bot ./cmd/drift-bot
+go build -o drift-agent ./cmd/drift-agent
 ```
 
 Or via Make:

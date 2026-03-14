@@ -7,7 +7,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/DriftBot/api-drift-engine/pkg/schema"
+	"github.com/DriftAgent/api-drift-engine/pkg/schema"
 )
 
 // Format controls the output format of the report.

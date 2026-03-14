@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package drift_bot.v1;
+package drift_agent.v1;
 
-option go_package = "github.com/DriftBot/api-drift-engine/api/drift-bot/v1;driftbotv1";
+option go_package = "github.com/DriftAgent/api-drift-engine/api/drift-agent/v1;driftagentv1";
 
 // DiffEngine compares two API schema files and returns a classified diff.
 service DiffEngine {

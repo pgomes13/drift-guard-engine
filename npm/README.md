@@ -1,45 +1,45 @@
-# @drift-bot/api-drift-engine
+# @drift-agent/api-drift-engine
 
 API schema diff engine — detect breaking changes in **OpenAPI**, **GraphQL**, and **gRPC** schemas.
 
-Thin npm wrapper around the [`drift-bot`](https://github.com/DriftBot/api-drift-engine) Go binary. On install, the correct pre-built binary for your platform is downloaded automatically.
+Thin npm wrapper around the [`drift-agent`](https://github.com/DriftAgent/api-drift-engine) Go binary. On install, the correct pre-built binary for your platform is downloaded automatically.
 
 ## Installation
 
 ```sh
-npm install @drift-bot/api-drift-engine
+npm install @drift-agent/api-drift-engine
 ```
 
 Requires Node.js ≥ 16. The binary is downloaded for your platform (macOS arm64/amd64, Linux arm64/amd64, Windows amd64) during `npm install`.
 
 ## CLI
 
-After installing, the `drift-bot` binary is available as an npm bin:
+After installing, the `drift-agent` binary is available as an npm bin:
 
 ```sh
-npx drift-bot --help
+npx drift-agent --help
 ```
 
 ### OpenAPI
 
 ```sh
-drift-bot openapi --base old.yaml --head new.yaml
-drift-bot openapi --base old.yaml --head new.yaml --format json
-drift-bot openapi --base old.yaml --head new.yaml --fail-on-breaking
+drift-agent openapi --base old.yaml --head new.yaml
+drift-agent openapi --base old.yaml --head new.yaml --format json
+drift-agent openapi --base old.yaml --head new.yaml --fail-on-breaking
 ```
 
 ### GraphQL
 
 ```sh
-drift-bot graphql --base old.graphql --head new.graphql
-drift-bot graphql --base old.graphql --head new.graphql --format markdown
+drift-agent graphql --base old.graphql --head new.graphql
+drift-agent graphql --base old.graphql --head new.graphql --format markdown
 ```
 
 ### gRPC / Protobuf
 
 ```sh
-drift-bot grpc --base old.proto --head new.proto
-drift-bot grpc --base old.proto --head new.proto --format json
+drift-agent grpc --base old.proto --head new.proto
+drift-agent grpc --base old.proto --head new.proto --format json
 ```
 
 ### Impact analysis
@@ -48,21 +48,21 @@ Scan source code for references to each breaking change:
 
 ```sh
 # From a saved diff JSON
-drift-bot openapi --base old.yaml --head new.yaml --format json > diff.json
-drift-bot impact --diff diff.json --scan ./src
+drift-agent openapi --base old.yaml --head new.yaml --format json > diff.json
+drift-agent impact --diff diff.json --scan ./src
 
 # Pipe mode
-drift-bot openapi --base old.yaml --head new.yaml --format json \
-  | drift-bot impact --scan ./src
+drift-agent openapi --base old.yaml --head new.yaml --format json \
+  | drift-agent impact --scan ./src
 
 # Output as markdown
-drift-bot impact --diff diff.json --scan ./src --format markdown
+drift-agent impact --diff diff.json --scan ./src --format markdown
 ```
 
 ## Node.js / TypeScript API
 
 ```ts
-import { compareOpenAPI, compareGraphQL, compareGRPC, impact } from "@drift-bot/api-drift-engine";
+import { compareOpenAPI, compareGraphQL, compareGRPC, impact } from "@drift-agent/api-drift-engine";
 
 // Diff two OpenAPI schemas
 const result = compareOpenAPI("old.yaml", "new.yaml");
@@ -86,7 +86,7 @@ const report = impact(result, "./src", { format: "markdown" });
 ### CommonJS
 
 ```js
-const { compareOpenAPI, impact } = require("@drift-bot/api-drift-engine");
+const { compareOpenAPI, impact } = require("@drift-agent/api-drift-engine");
 ```
 
 ## TypeScript types

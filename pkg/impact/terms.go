@@ -3,7 +3,7 @@ package impact
 import (
 	"strings"
 
-	"github.com/DriftBot/api-drift-engine/pkg/schema"
+	"github.com/DriftAgent/api-drift-engine/pkg/schema"
 )
 
 // ExtractTerms returns search terms to grep for when scanning source files for

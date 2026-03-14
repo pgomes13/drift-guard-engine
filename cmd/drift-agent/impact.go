@@ -9,24 +9,24 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/DriftBot/api-drift-engine/pkg/impact"
-	"github.com/DriftBot/api-drift-engine/pkg/schema"
+	"github.com/DriftAgent/api-drift-engine/pkg/impact"
+	"github.com/DriftAgent/api-drift-engine/pkg/schema"
 )
 
 var impactCmd = &cobra.Command{
 	Use:   "impact",
 	Short: "Scan source files for references to breaking API changes",
-	Long: `impact reads a drift-bot JSON diff and scans a source directory for
+	Long: `impact reads a drift-agent JSON diff and scans a source directory for
 code references to each breaking change, so you know exactly which files and
 lines need to be updated.
 
-The diff JSON can be supplied via --diff or piped from another drift-bot command:
+The diff JSON can be supplied via --diff or piped from another drift-agent command:
 
-  drift-bot openapi --base old.yaml --head new.yaml --format json \
-    | drift-bot impact --scan ./services`,
-	Example: `  drift-bot impact --diff /tmp/diff.json --scan .
-  drift-bot openapi --base base.yaml --head head.yaml --format json | drift-bot impact --scan ./services
-  drift-bot impact --diff /tmp/diff.json --scan . --format markdown`,
+  drift-agent openapi --base old.yaml --head new.yaml --format json \
+    | drift-agent impact --scan ./services`,
+	Example: `  drift-agent impact --diff /tmp/diff.json --scan .
+  drift-agent openapi --base base.yaml --head head.yaml --format json | drift-agent impact --scan ./services
+  drift-agent impact --diff /tmp/diff.json --scan . --format markdown`,
 	RunE: runImpact,
 }
 

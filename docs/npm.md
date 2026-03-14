@@ -1,11 +1,11 @@
 # npm SDK
 
-<a href="https://www.npmjs.com/package/@drift-bot/api-drift-engine" target="_blank">@drift-bot/api-drift-engine</a> is a thin npm wrapper around the drift-bot binary. On install, the correct pre-built binary for your platform is downloaded automatically — no Go toolchain required.
+<a href="https://www.npmjs.com/package/@drift-agent/api-drift-engine" target="_blank">@drift-agent/api-drift-engine</a> is a thin npm wrapper around the drift-agent binary. On install, the correct pre-built binary for your platform is downloaded automatically — no Go toolchain required.
 
 ## Installation
 
 ```sh
-npm install @drift-bot/api-drift-engine
+npm install @drift-agent/api-drift-engine
 ```
 
 Requires Node.js ≥ 16. Supported platforms: macOS arm64/amd64, Linux arm64/amd64, Windows amd64.
@@ -15,7 +15,7 @@ Requires Node.js ≥ 16. Supported platforms: macOS arm64/amd64, Linux arm64/amd
 ### OpenAPI
 
 ```ts
-import { compareOpenAPI } from "@drift-bot/api-drift-engine";
+import { compareOpenAPI } from "@drift-agent/api-drift-engine";
 
 const result = compareOpenAPI("old.yaml", "new.yaml");
 
@@ -30,7 +30,7 @@ for (const change of result.changes) {
 ### GraphQL
 
 ```ts
-import { compareGraphQL } from "@drift-bot/api-drift-engine";
+import { compareGraphQL } from "@drift-agent/api-drift-engine";
 
 const result = compareGraphQL("old.graphql", "new.graphql");
 ```
@@ -38,7 +38,7 @@ const result = compareGraphQL("old.graphql", "new.graphql");
 ### gRPC / Protobuf
 
 ```ts
-import { compareGRPC } from "@drift-bot/api-drift-engine";
+import { compareGRPC } from "@drift-agent/api-drift-engine";
 
 const result = compareGRPC("old.proto", "new.proto");
 ```
@@ -48,7 +48,7 @@ const result = compareGRPC("old.proto", "new.proto");
 Scan source code for references to each breaking change:
 
 ```ts
-import { compareOpenAPI, impact } from "@drift-bot/api-drift-engine";
+import { compareOpenAPI, impact } from "@drift-agent/api-drift-engine";
 
 const result = compareOpenAPI("old.yaml", "new.yaml");
 
@@ -73,18 +73,18 @@ console.log(ghReport);
 
 ## CLI via npx
 
-The `drift-bot` binary is available as an npm bin after install:
+The `drift-agent` binary is available as an npm bin after install:
 
 ```sh
-npx drift-bot openapi --base old.yaml --head new.yaml
-npx drift-bot graphql --base old.graphql --head new.graphql --format json
-npx drift-bot impact --diff diff.json --scan ./src
+npx drift-agent openapi --base old.yaml --head new.yaml
+npx drift-agent graphql --base old.graphql --head new.graphql --format json
+npx drift-agent impact --diff diff.json --scan ./src
 ```
 
 ## CommonJS
 
 ```js
-const { compareOpenAPI, impact } = require("@drift-bot/api-drift-engine");
+const { compareOpenAPI, impact } = require("@drift-agent/api-drift-engine");
 ```
 
 ## TypeScript types

@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/DriftBot/api-drift-engine/internal/generate/node/express"
+	"github.com/DriftAgent/api-drift-engine/internal/generate/node/express"
 )
 
 // Nest generates a swagger.json in outputDir for the NestJS project rooted at
@@ -30,8 +30,8 @@ func Nest(projectDir, outputDir string) error {
 
 	// 2. Existing generation script.
 	candidates := []string{
-		"drift-bot/scripts/generate-swagger.ts",
-		"drift-bot/scripts/generate-swagger.js",
+		"drift-agent/scripts/generate-swagger.ts",
+		"drift-agent/scripts/generate-swagger.js",
 		"scripts/generate-swagger.ts",
 		"scripts/generate-swagger.js",
 		"src/generate-swagger.ts",
@@ -63,7 +63,7 @@ func Nest(projectDir, outputDir string) error {
 			"Option B — use tsoa (no running app required):\n"+
 			"  npm install --save-dev tsoa && npx tsoa init\n\n"+
 			"Option C — use --cmd with a command that starts your app and generates the spec:\n"+
-			`  drift-bot compare openapi --cmd "npm run generate-swagger" --output swagger.json`,
+			`  drift-agent compare openapi --cmd "npm run generate-swagger" --output swagger.json`,
 		projectDir,
 	)
 }
@@ -162,7 +162,7 @@ func detectAppModulePath(projectDir string) (string, error) {
 // no-ops. It is loaded via ts-node -r before the main script so patches run
 // before any app module (and therefore any DB driver) is imported.
 func nestPreloadScript() string {
-	return `// drift-bot preload: patch DB drivers before any module is imported.
+	return `// drift-agent preload: patch DB drivers before any module is imported.
 try { require('dotenv').config({ quiet: true }); } catch (_) {}
 
 try {

@@ -2,4 +2,4 @@
 
 The API Drift Agent documentation has moved to its own site:
 
-**[driftbot.github.io/api-drift-engine →](https://driftbot.github.io/api-drift-engine/)**
+**[driftagent.github.io/api-drift-engine →](https://driftagent.github.io/api-drift-engine/)**

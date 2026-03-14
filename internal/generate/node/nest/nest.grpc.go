@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/DriftBot/api-drift-engine/internal/generate/node/express"
+	"github.com/DriftAgent/api-drift-engine/internal/generate/node/express"
 )
 
 // NestGRPC finds the primary .proto file for the NestJS project and

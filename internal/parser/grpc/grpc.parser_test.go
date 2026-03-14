@@ -3,8 +3,8 @@ package grpc_test
 import (
 	"testing"
 
-	"github.com/DriftBot/api-drift-engine/internal/parser/grpc"
-	"github.com/DriftBot/api-drift-engine/pkg/schema"
+	"github.com/DriftAgent/api-drift-engine/internal/parser/grpc"
+	"github.com/DriftAgent/api-drift-engine/pkg/schema"
 )
 
 const testdataDir = "../../testdata/"

@@ -68,7 +68,7 @@ Below are the most common tools for each language and schema type.
 
 ## Quick reference
 
-| Schema type | Minimum drift-bot input |
+| Schema type | Minimum drift-agent input |
 |-------------|--------------------------|
 | OpenAPI | Any `.yaml` or `.json` file valid against OpenAPI 3.x |
 | GraphQL | SDL file (`.graphql` / `.gql`) or introspection JSON |

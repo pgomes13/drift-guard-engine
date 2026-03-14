@@ -1,12 +1,12 @@
 {
-  "name": "drift-bot",
+  "name": "drift-agent",
   "description": "Detect breaking and non-breaking API schema changes across OpenAPI, GraphQL, and gRPC. Supports Go, Node.js (Express, NestJS), and legacy projects.",
   "version": "1.0.0",
   "author": {
-    "name": "DriftBot",
-    "url": "https://github.com/DriftBot"
+    "name": "DriftAgent",
+    "url": "https://github.com/DriftAgent"
   },
-  "homepage": "https://github.com/DriftBot/api-drift-engine",
-  "repository": "https://github.com/DriftBot/api-drift-engine",
+  "homepage": "https://github.com/DriftAgent/api-drift-engine",
+  "repository": "https://github.com/DriftAgent/api-drift-engine",
   "license": "MIT"
 }

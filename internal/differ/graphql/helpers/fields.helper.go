@@ -3,7 +3,7 @@ package helpers
 import (
 	"fmt"
 
-	"github.com/DriftBot/api-drift-engine/pkg/schema"
+	"github.com/DriftAgent/api-drift-engine/pkg/schema"
 )
 
 func IndexGQLFields(fields []schema.GQLField) map[string]schema.GQLField {

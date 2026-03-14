@@ -1,5 +1,5 @@
 "use strict";
-// Programmatic API — wraps the drift-bot binary and returns parsed results.
+// Programmatic API — wraps the drift-agent binary and returns parsed results.
 
 const path = require("path");
 const { spawnSync } = require("child_process");
@@ -7,22 +7,22 @@ const { spawnSync } = require("child_process");
 const BIN = path.join(
   __dirname,
   "bin",
-  process.platform === "win32" ? "drift-bot.exe" : "drift-bot"
+  process.platform === "win32" ? "drift-agent.exe" : "drift-agent"
 );
 
 /**
- * Run the drift-bot binary and return its stdout.
+ * Run the drift-agent binary and return its stdout.
  * @param {string[]} args
  * @returns {string}
  */
 function run(args) {
   const result = spawnSync(BIN, args, { encoding: "utf8" });
   if (result.error) {
-    throw new Error(`drift-bot binary error: ${result.error.message}`);
+    throw new Error(`drift-agent binary error: ${result.error.message}`);
   }
   if (result.status !== 0 && result.status !== 1) {
     // exit 1 means breaking changes found (--fail-on-breaking), not a crash
-    throw new Error(`drift-bot exited with code ${result.status}: ${result.stderr}`);
+    throw new Error(`drift-agent exited with code ${result.status}: ${result.stderr}`);
   }
   return result.stdout;
 }
@@ -70,7 +70,7 @@ function impact(diffResult, scanDir = ".", options = {}) {
   const os = require("os");
 
   // Write the diff result to a temp file so we can pass --diff
-  const tmp = require("path").join(os.tmpdir(), `drift-bot-diff-${Date.now()}.json`);
+  const tmp = require("path").join(os.tmpdir(), `drift-agent-diff-${Date.now()}.json`);
   try {
     fs.writeFileSync(tmp, JSON.stringify(diffResult));
     const out = run(["impact", "--diff", tmp, "--scan", scanDir, "--format", format]);

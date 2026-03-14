@@ -8,7 +8,7 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'Guide', link: '/install' },
-      { text: 'GitHub', link: 'https://github.com/DriftBot/api-drift-engine' },
+      { text: 'GitHub', link: 'https://github.com/DriftAgent/api-drift-engine' },
     ],
 
     sidebar: [
@@ -18,7 +18,7 @@ export default defineConfig({
           { text: 'Installation', link: '/install' },
           { text: 'CLI', link: '/cli' },
           { text: 'Usage', link: '/usage' },
-          { text: 'Playground ↗', link: 'https://drift-bot-theta.vercel.app/', target: '_blank' },
+          { text: 'Playground ↗', link: 'https://drift-agent-theta.vercel.app/', target: '_blank' },
           { text: 'Supported', link: '/supported' },
         ],
       },
@@ -54,7 +54,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/DriftBot/api-drift-engine' },
+      { icon: 'github', link: 'https://github.com/DriftAgent/api-drift-engine' },
     ],
 
     footer: {

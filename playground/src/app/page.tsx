@@ -72,7 +72,7 @@ export default function PlaygroundPage() {
         <div className="max-w-[1400px] mx-auto px-6 py-4 flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
             <span className="text-xl font-bold">
-              <span className="text-indigo-600">drift-bot</span> playground
+              <span className="text-indigo-600">drift-agent</span> playground
             </span>
             <span className="text-[11px] font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full border border-gray-200">
               beta
@@ -80,7 +80,7 @@ export default function PlaygroundPage() {
           </div>
 
           <a
-            href="https://driftbot.github.io/api-drift-engine/generating-specs"
+            href="https://driftagent.github.io/api-drift-engine/generating-specs"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm font-medium text-indigo-600 hover:text-indigo-800 border border-indigo-200 hover:border-indigo-400 px-3 py-1.5 rounded-lg transition-colors"

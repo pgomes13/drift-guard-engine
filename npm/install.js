@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// postinstall: downloads the drift-bot binary from GitHub Releases.
+// postinstall: downloads the drift-agent binary from GitHub Releases.
 "use strict";
 
 const https = require("https");
@@ -9,9 +9,9 @@ const path = require("path");
 const { execSync } = require("child_process");
 
 const VERSION = require("./package.json").version;
-const REPO = "DriftBot/api-drift-engine";
+const REPO = "DriftAgent/api-drift-engine";
 const BIN_DIR = path.join(__dirname, "bin");
-const BIN_PATH = path.join(BIN_DIR, process.platform === "win32" ? "drift-bot.exe" : "drift-bot");
+const BIN_PATH = path.join(BIN_DIR, process.platform === "win32" ? "drift-agent.exe" : "drift-agent");
 
 // Map Node.js platform/arch → goreleaser archive naming
 function getPlatformInfo() {
@@ -32,7 +32,7 @@ function getPlatformInfo() {
   }
 
   const ext = goos === "windows" ? "zip" : "tar.gz";
-  const archive = `drift-bot_${VERSION}_${goos}_${goarch}.${ext}`;
+  const archive = `drift-agent_${VERSION}_${goos}_${goarch}.${ext}`;
   const url = `https://github.com/${REPO}/releases/download/v${VERSION}/${archive}`;
 
   return { url, archive, ext };
@@ -64,10 +64,10 @@ async function install() {
   }
 
   const { url, archive, ext } = getPlatformInfo();
-  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "drift-bot-"));
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "drift-agent-"));
   const archivePath = path.join(tmpDir, archive);
 
-  process.stdout.write(`Downloading drift-bot v${VERSION}...\n`);
+  process.stdout.write(`Downloading drift-agent v${VERSION}...\n`);
 
   try {
     await download(url, archivePath);
@@ -80,18 +80,18 @@ async function install() {
       execSync(`unzip -o "${archivePath}" -d "${tmpDir}"`);
     }
 
-    const extracted = path.join(tmpDir, process.platform === "win32" ? "drift-bot.exe" : "drift-bot");
+    const extracted = path.join(tmpDir, process.platform === "win32" ? "drift-agent.exe" : "drift-agent");
     fs.copyFileSync(extracted, BIN_PATH);
     fs.chmodSync(BIN_PATH, 0o755);
 
-    process.stdout.write(`drift-bot installed to ${BIN_PATH}\n`);
+    process.stdout.write(`drift-agent installed to ${BIN_PATH}\n`);
   } finally {
     fs.rmSync(tmpDir, { recursive: true, force: true });
   }
 }
 
 install().catch((err) => {
-  process.stderr.write(`drift-bot install failed: ${err.message}\n`);
-  process.stderr.write("You can install it manually: https://github.com/DriftBot/api-drift-engine/releases\n");
+  process.stderr.write(`drift-agent install failed: ${err.message}\n`);
+  process.stderr.write("You can install it manually: https://github.com/DriftAgent/api-drift-engine/releases\n");
   // Do not exit(1) — allow npm install to succeed even if binary download fails.
 });

@@ -11,7 +11,7 @@ import (
 // --------------------------------------------------------------------------
 
 func TestHasProtoFiles_False_EmptyDir(t *testing.T) {
-	dir, err := os.MkdirTemp("", "drift-bot-ui-*")
+	dir, err := os.MkdirTemp("", "drift-agent-ui-*")
 	if err != nil {
 		t.Fatalf("MkdirTemp: %v", err)
 	}
@@ -23,7 +23,7 @@ func TestHasProtoFiles_False_EmptyDir(t *testing.T) {
 }
 
 func TestHasProtoFiles_True_RootProto(t *testing.T) {
-	dir, err := os.MkdirTemp("", "drift-bot-ui-*")
+	dir, err := os.MkdirTemp("", "drift-agent-ui-*")
 	if err != nil {
 		t.Fatalf("MkdirTemp: %v", err)
 	}
@@ -39,7 +39,7 @@ func TestHasProtoFiles_True_RootProto(t *testing.T) {
 }
 
 func TestHasProtoFiles_True_NestedProto(t *testing.T) {
-	dir, err := os.MkdirTemp("", "drift-bot-ui-*")
+	dir, err := os.MkdirTemp("", "drift-agent-ui-*")
 	if err != nil {
 		t.Fatalf("MkdirTemp: %v", err)
 	}
@@ -59,7 +59,7 @@ func TestHasProtoFiles_True_NestedProto(t *testing.T) {
 }
 
 func TestHasProtoFiles_False_OnlyNonProtoFiles(t *testing.T) {
-	dir, err := os.MkdirTemp("", "drift-bot-ui-*")
+	dir, err := os.MkdirTemp("", "drift-agent-ui-*")
 	if err != nil {
 		t.Fatalf("MkdirTemp: %v", err)
 	}
@@ -79,7 +79,7 @@ func TestHasProtoFiles_False_OnlyNonProtoFiles(t *testing.T) {
 // --------------------------------------------------------------------------
 
 func TestDetectAPITypes_AlwaysIncludesREST(t *testing.T) {
-	dir, err := os.MkdirTemp("", "drift-bot-ui-*")
+	dir, err := os.MkdirTemp("", "drift-agent-ui-*")
 	if err != nil {
 		t.Fatalf("MkdirTemp: %v", err)
 	}
@@ -92,7 +92,7 @@ func TestDetectAPITypes_AlwaysIncludesREST(t *testing.T) {
 }
 
 func TestDetectAPITypes_OnlyREST_EmptyDir(t *testing.T) {
-	dir, err := os.MkdirTemp("", "drift-bot-ui-*")
+	dir, err := os.MkdirTemp("", "drift-agent-ui-*")
 	if err != nil {
 		t.Fatalf("MkdirTemp: %v", err)
 	}
@@ -105,7 +105,7 @@ func TestDetectAPITypes_OnlyREST_EmptyDir(t *testing.T) {
 }
 
 func TestDetectAPITypes_IncludesGRPC_WhenProtoPresent(t *testing.T) {
-	dir, err := os.MkdirTemp("", "drift-bot-ui-*")
+	dir, err := os.MkdirTemp("", "drift-agent-ui-*")
 	if err != nil {
 		t.Fatalf("MkdirTemp: %v", err)
 	}
@@ -122,7 +122,7 @@ func TestDetectAPITypes_IncludesGRPC_WhenProtoPresent(t *testing.T) {
 }
 
 func TestDetectAPITypes_IncludesGraphQL_WhenSchemaPresent(t *testing.T) {
-	dir, err := os.MkdirTemp("", "drift-bot-ui-*")
+	dir, err := os.MkdirTemp("", "drift-agent-ui-*")
 	if err != nil {
 		t.Fatalf("MkdirTemp: %v", err)
 	}

@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/DriftBot/api-drift-engine/internal/languages"
+	"github.com/DriftAgent/api-drift-engine/internal/languages"
 )
 
 // --------------------------------------------------------------------------
@@ -16,7 +16,7 @@ import (
 // The caller is responsible for cleanup via t.Cleanup or defer.
 func makeTempDir(t *testing.T) string {
 	t.Helper()
-	dir, err := os.MkdirTemp("", "drift-bot-detect-*")
+	dir, err := os.MkdirTemp("", "drift-agent-detect-*")
 	if err != nil {
 		t.Fatalf("create temp dir: %v", err)
 	}

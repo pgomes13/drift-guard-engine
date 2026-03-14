@@ -13,7 +13,7 @@ import (
 
 func tempDir(t *testing.T) string {
 	t.Helper()
-	dir, err := os.MkdirTemp("", "drift-bot-files-*")
+	dir, err := os.MkdirTemp("", "drift-agent-files-*")
 	if err != nil {
 		t.Fatalf("MkdirTemp: %v", err)
 	}
@@ -107,12 +107,12 @@ func TestFindSwaggerScript_Empty_NoMatch(t *testing.T) {
 	}
 }
 
-func TestFindSwaggerScript_DriftBotScriptsTS(t *testing.T) {
+func TestFindSwaggerScript_DriftAgentScriptsTS(t *testing.T) {
 	dir := tempDir(t)
-	touch(t, dir, "drift-bot/scripts/generate-swagger.ts")
+	touch(t, dir, "drift-agent/scripts/generate-swagger.ts")
 	got := findSwaggerScript(dir)
-	if got != "drift-bot/scripts/generate-swagger.ts" {
-		t.Errorf("expected drift-bot/scripts/generate-swagger.ts, got %q", got)
+	if got != "drift-agent/scripts/generate-swagger.ts" {
+		t.Errorf("expected drift-agent/scripts/generate-swagger.ts, got %q", got)
 	}
 }
 
@@ -127,11 +127,11 @@ func TestFindSwaggerScript_RootGenerateSwaggerTS(t *testing.T) {
 
 func TestFindSwaggerScript_PrefersFirstMatch(t *testing.T) {
 	dir := tempDir(t)
-	// Both present — drift-bot/scripts/ should win (it's listed first).
-	touch(t, dir, "drift-bot/scripts/generate-swagger.ts")
+	// Both present — drift-agent/scripts/ should win (it's listed first).
+	touch(t, dir, "drift-agent/scripts/generate-swagger.ts")
 	touch(t, dir, "generate-swagger.ts")
 	got := findSwaggerScript(dir)
-	if got != "drift-bot/scripts/generate-swagger.ts" {
+	if got != "drift-agent/scripts/generate-swagger.ts" {
 		t.Errorf("expected first candidate to win, got %q", got)
 	}
 }
@@ -273,7 +273,7 @@ func TestPathExists_Directory(t *testing.T) {
 func TestCopyFile_CopiesContent(t *testing.T) {
 	dir := tempDir(t)
 	src := touch(t, dir, "src.txt")
-	if err := os.WriteFile(src, []byte("hello drift-bot"), 0o644); err != nil {
+	if err := os.WriteFile(src, []byte("hello drift-agent"), 0o644); err != nil {
 		t.Fatalf("write src: %v", err)
 	}
 	dst := filepath.Join(dir, "dst.txt")
@@ -286,8 +286,8 @@ func TestCopyFile_CopiesContent(t *testing.T) {
 	if err != nil {
 		t.Fatalf("read dst: %v", err)
 	}
-	if string(got) != "hello drift-bot" {
-		t.Errorf("expected 'hello drift-bot', got %q", string(got))
+	if string(got) != "hello drift-agent" {
+		t.Errorf("expected 'hello drift-agent', got %q", string(got))
 	}
 }
 

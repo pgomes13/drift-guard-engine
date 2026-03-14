@@ -1,6 +1,6 @@
 package openapi
 
-import "github.com/DriftBot/api-drift-engine/pkg/schema"
+import "github.com/DriftAgent/api-drift-engine/pkg/schema"
 
 // Severity returns the severity for OpenAPI change types.
 // The second return value is false if the change type is not an OpenAPI type.

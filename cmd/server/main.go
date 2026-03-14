@@ -9,13 +9,13 @@ import (
 	"path/filepath"
 	"strings"
 
-	pb "github.com/DriftBot/api-drift-engine/api/drift-bot/v1"
-	"github.com/DriftBot/api-drift-engine/internal/classifier"
-	differgraphql "github.com/DriftBot/api-drift-engine/internal/differ/graphql"
-	differopenapi "github.com/DriftBot/api-drift-engine/internal/differ/openapi"
-	parsergraphql "github.com/DriftBot/api-drift-engine/internal/parser/graphql"
-	parseropenapi "github.com/DriftBot/api-drift-engine/internal/parser/openapi"
-	"github.com/DriftBot/api-drift-engine/pkg/schema"
+	pb "github.com/DriftAgent/api-drift-engine/api/drift-agent/v1"
+	"github.com/DriftAgent/api-drift-engine/internal/classifier"
+	differgraphql "github.com/DriftAgent/api-drift-engine/internal/differ/graphql"
+	differopenapi "github.com/DriftAgent/api-drift-engine/internal/differ/openapi"
+	parsergraphql "github.com/DriftAgent/api-drift-engine/internal/parser/graphql"
+	parseropenapi "github.com/DriftAgent/api-drift-engine/internal/parser/openapi"
+	"github.com/DriftAgent/api-drift-engine/pkg/schema"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -80,7 +80,7 @@ func runDiff(schemaType, basePath, headPath string) (schema.DiffResult, error) {
 
 func writeTempFile(content []byte, originalName string) (string, error) {
 	ext := filepath.Ext(originalName)
-	f, err := os.CreateTemp("", "drift-bot-*"+ext)
+	f, err := os.CreateTemp("", "drift-agent-*"+ext)
 	if err != nil {
 		return "", err
 	}
@@ -142,7 +142,7 @@ func main() {
 	srv := grpc.NewServer()
 	pb.RegisterDiffEngineServer(srv, &server{})
 
-	log.Printf("drift-bot gRPC server listening on :%s", port)
+	log.Printf("drift-agent gRPC server listening on :%s", port)
 	if err := srv.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

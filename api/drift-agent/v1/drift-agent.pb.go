@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v7.34.0
-// source: api/drift-bot/v1/drift-bot.proto
+// source: api/drift-agent/v1/drift-agent.proto
 
-package driftbotv1
+package driftagentv1
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -40,7 +40,7 @@ type DiffRequest struct {
 
 func (x *DiffRequest) Reset() {
 	*x = DiffRequest{}
-	mi := &file_api_drift_bot_v1_drift_bot_proto_msgTypes[0]
+	mi := &file_api_drift_agent_v1_drift_agent_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -52,7 +52,7 @@ func (x *DiffRequest) String() string {
 func (*DiffRequest) ProtoMessage() {}
 
 func (x *DiffRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_drift_bot_v1_drift_bot_proto_msgTypes[0]
+	mi := &file_api_drift_agent_v1_drift_agent_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -65,7 +65,7 @@ func (x *DiffRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DiffRequest.ProtoReflect.Descriptor instead.
 func (*DiffRequest) Descriptor() ([]byte, []int) {
-	return file_api_drift_bot_v1_drift_bot_proto_rawDescGZIP(), []int{0}
+	return file_api_drift_agent_v1_drift_agent_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *DiffRequest) GetBaseContent() []byte {
@@ -113,7 +113,7 @@ type DiffResponse struct {
 
 func (x *DiffResponse) Reset() {
 	*x = DiffResponse{}
-	mi := &file_api_drift_bot_v1_drift_bot_proto_msgTypes[1]
+	mi := &file_api_drift_agent_v1_drift_agent_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -125,7 +125,7 @@ func (x *DiffResponse) String() string {
 func (*DiffResponse) ProtoMessage() {}
 
 func (x *DiffResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_drift_bot_v1_drift_bot_proto_msgTypes[1]
+	mi := &file_api_drift_agent_v1_drift_agent_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -138,7 +138,7 @@ func (x *DiffResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DiffResponse.ProtoReflect.Descriptor instead.
 func (*DiffResponse) Descriptor() ([]byte, []int) {
-	return file_api_drift_bot_v1_drift_bot_proto_rawDescGZIP(), []int{1}
+	return file_api_drift_agent_v1_drift_agent_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *DiffResponse) GetChanges() []*Change {
@@ -171,7 +171,7 @@ type Change struct {
 
 func (x *Change) Reset() {
 	*x = Change{}
-	mi := &file_api_drift_bot_v1_drift_bot_proto_msgTypes[2]
+	mi := &file_api_drift_agent_v1_drift_agent_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -183,7 +183,7 @@ func (x *Change) String() string {
 func (*Change) ProtoMessage() {}
 
 func (x *Change) ProtoReflect() protoreflect.Message {
-	mi := &file_api_drift_bot_v1_drift_bot_proto_msgTypes[2]
+	mi := &file_api_drift_agent_v1_drift_agent_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -196,7 +196,7 @@ func (x *Change) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Change.ProtoReflect.Descriptor instead.
 func (*Change) Descriptor() ([]byte, []int) {
-	return file_api_drift_bot_v1_drift_bot_proto_rawDescGZIP(), []int{2}
+	return file_api_drift_agent_v1_drift_agent_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *Change) GetType() string {
@@ -267,7 +267,7 @@ type Summary struct {
 
 func (x *Summary) Reset() {
 	*x = Summary{}
-	mi := &file_api_drift_bot_v1_drift_bot_proto_msgTypes[3]
+	mi := &file_api_drift_agent_v1_drift_agent_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -279,7 +279,7 @@ func (x *Summary) String() string {
 func (*Summary) ProtoMessage() {}
 
 func (x *Summary) ProtoReflect() protoreflect.Message {
-	mi := &file_api_drift_bot_v1_drift_bot_proto_msgTypes[3]
+	mi := &file_api_drift_agent_v1_drift_agent_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -292,7 +292,7 @@ func (x *Summary) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Summary.ProtoReflect.Descriptor instead.
 func (*Summary) Descriptor() ([]byte, []int) {
-	return file_api_drift_bot_v1_drift_bot_proto_rawDescGZIP(), []int{3}
+	return file_api_drift_agent_v1_drift_agent_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *Summary) GetTotal() int32 {
@@ -323,11 +323,11 @@ func (x *Summary) GetInfo() int32 {
 	return 0
 }
 
-var File_api_drift_bot_v1_drift_bot_proto protoreflect.FileDescriptor
+var File_api_drift_agent_v1_drift_agent_proto protoreflect.FileDescriptor
 
-const file_api_drift_bot_v1_drift_bot_proto_rawDesc = "" +
+const file_api_drift_agent_v1_drift_agent_proto_rawDesc = "" +
 	"\n" +
-	"$api/drift-bot/v1/drift-bot.proto\x12\x0edrift_bot.v1\"\xa1\x01\n" +
+	"$api/drift-agent/v1/drift-agent.proto\x12\x0edrift_agent.v1\"\xa1\x01\n" +
 	"\vDiffRequest\x12!\n" +
 	"\fbase_content\x18\x01 \x01(\fR\vbaseContent\x12!\n" +
 	"\fhead_content\x18\x02 \x01(\fR\vheadContent\x12\x1b\n" +
@@ -335,8 +335,8 @@ const file_api_drift_bot_v1_drift_bot_proto_rawDesc = "" +
 	"\thead_name\x18\x04 \x01(\tR\bheadName\x12\x12\n" +
 	"\x04type\x18\x05 \x01(\tR\x04type\"s\n" +
 	"\fDiffResponse\x120\n" +
-	"\achanges\x18\x01 \x03(\v2\x16.drift_bot.v1.ChangeR\achanges\x121\n" +
-	"\asummary\x18\x02 \x01(\v2\x17.drift_bot.v1.SummaryR\asummary\"\xd0\x01\n" +
+	"\achanges\x18\x01 \x03(\v2\x16.drift_agent.v1.ChangeR\achanges\x121\n" +
+	"\asummary\x18\x02 \x01(\v2\x17.drift_agent.v1.SummaryR\asummary\"\xd0\x01\n" +
 	"\x06Change\x12\x12\n" +
 	"\x04type\x18\x01 \x01(\tR\x04type\x12\x1a\n" +
 	"\bseverity\x18\x02 \x01(\tR\bseverity\x12\x12\n" +
@@ -353,32 +353,32 @@ const file_api_drift_bot_v1_drift_bot_proto_rawDesc = "" +
 	"\x04info\x18\x04 \x01(\x05R\x04info2O\n" +
 	"\n" +
 	"DiffEngine\x12A\n" +
-	"\x04Diff\x12\x1b.drift_bot.v1.DiffRequest\x1a\x1c.drift_bot.v1.DiffResponseBHZFgithub.com/DriftBot/api-drift-engine/api/drift-bot/v1;driftbotv1b\x06proto3"
+	"\x04Diff\x12\x1b.drift_agent.v1.DiffRequest\x1a\x1c.drift_agent.v1.DiffResponseBHZFgithub.com/DriftAgent/api-drift-engine/api/drift-agent/v1;driftagentv1b\x06proto3"
 
 var (
-	file_api_drift_bot_v1_drift_bot_proto_rawDescOnce sync.Once
-	file_api_drift_bot_v1_drift_bot_proto_rawDescData []byte
+	file_api_drift_agent_v1_drift_agent_proto_rawDescOnce sync.Once
+	file_api_drift_agent_v1_drift_agent_proto_rawDescData []byte
 )
 
-func file_api_drift_bot_v1_drift_bot_proto_rawDescGZIP() []byte {
-	file_api_drift_bot_v1_drift_bot_proto_rawDescOnce.Do(func() {
-		file_api_drift_bot_v1_drift_bot_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_drift_bot_v1_drift_bot_proto_rawDesc), len(file_api_drift_bot_v1_drift_bot_proto_rawDesc)))
+func file_api_drift_agent_v1_drift_agent_proto_rawDescGZIP() []byte {
+	file_api_drift_agent_v1_drift_agent_proto_rawDescOnce.Do(func() {
+		file_api_drift_agent_v1_drift_agent_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_drift_agent_v1_drift_agent_proto_rawDesc), len(file_api_drift_agent_v1_drift_agent_proto_rawDesc)))
 	})
-	return file_api_drift_bot_v1_drift_bot_proto_rawDescData
+	return file_api_drift_agent_v1_drift_agent_proto_rawDescData
 }
 
-var file_api_drift_bot_v1_drift_bot_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
-var file_api_drift_bot_v1_drift_bot_proto_goTypes = []any{
-	(*DiffRequest)(nil),  // 0: drift_bot.v1.DiffRequest
-	(*DiffResponse)(nil), // 1: drift_bot.v1.DiffResponse
-	(*Change)(nil),       // 2: drift_bot.v1.Change
-	(*Summary)(nil),      // 3: drift_bot.v1.Summary
+var file_api_drift_agent_v1_drift_agent_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_api_drift_agent_v1_drift_agent_proto_goTypes = []any{
+	(*DiffRequest)(nil),  // 0: drift_agent.v1.DiffRequest
+	(*DiffResponse)(nil), // 1: drift_agent.v1.DiffResponse
+	(*Change)(nil),       // 2: drift_agent.v1.Change
+	(*Summary)(nil),      // 3: drift_agent.v1.Summary
 }
-var file_api_drift_bot_v1_drift_bot_proto_depIdxs = []int32{
-	2, // 0: drift_bot.v1.DiffResponse.changes:type_name -> drift_bot.v1.Change
-	3, // 1: drift_bot.v1.DiffResponse.summary:type_name -> drift_bot.v1.Summary
-	0, // 2: drift_bot.v1.DiffEngine.Diff:input_type -> drift_bot.v1.DiffRequest
-	1, // 3: drift_bot.v1.DiffEngine.Diff:output_type -> drift_bot.v1.DiffResponse
+var file_api_drift_agent_v1_drift_agent_proto_depIdxs = []int32{
+	2, // 0: drift_agent.v1.DiffResponse.changes:type_name -> drift_agent.v1.Change
+	3, // 1: drift_agent.v1.DiffResponse.summary:type_name -> drift_agent.v1.Summary
+	0, // 2: drift_agent.v1.DiffEngine.Diff:input_type -> drift_agent.v1.DiffRequest
+	1, // 3: drift_agent.v1.DiffEngine.Diff:output_type -> drift_agent.v1.DiffResponse
 	3, // [3:4] is the sub-list for method output_type
 	2, // [2:3] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
@@ -386,26 +386,26 @@ var file_api_drift_bot_v1_drift_bot_proto_depIdxs = []int32{
 	0, // [0:2] is the sub-list for field type_name
 }
 
-func init() { file_api_drift_bot_v1_drift_bot_proto_init() }
-func file_api_drift_bot_v1_drift_bot_proto_init() {
-	if File_api_drift_bot_v1_drift_bot_proto != nil {
+func init() { file_api_drift_agent_v1_drift_agent_proto_init() }
+func file_api_drift_agent_v1_drift_agent_proto_init() {
+	if File_api_drift_agent_v1_drift_agent_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_drift_bot_v1_drift_bot_proto_rawDesc), len(file_api_drift_bot_v1_drift_bot_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_drift_agent_v1_drift_agent_proto_rawDesc), len(file_api_drift_agent_v1_drift_agent_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_api_drift_bot_v1_drift_bot_proto_goTypes,
-		DependencyIndexes: file_api_drift_bot_v1_drift_bot_proto_depIdxs,
-		MessageInfos:      file_api_drift_bot_v1_drift_bot_proto_msgTypes,
+		GoTypes:           file_api_drift_agent_v1_drift_agent_proto_goTypes,
+		DependencyIndexes: file_api_drift_agent_v1_drift_agent_proto_depIdxs,
+		MessageInfos:      file_api_drift_agent_v1_drift_agent_proto_msgTypes,
 	}.Build()
-	File_api_drift_bot_v1_drift_bot_proto = out.File
-	file_api_drift_bot_v1_drift_bot_proto_goTypes = nil
-	file_api_drift_bot_v1_drift_bot_proto_depIdxs = nil
+	File_api_drift_agent_v1_drift_agent_proto = out.File
+	file_api_drift_agent_v1_drift_agent_proto_goTypes = nil
+	file_api_drift_agent_v1_drift_agent_proto_depIdxs = nil
 }

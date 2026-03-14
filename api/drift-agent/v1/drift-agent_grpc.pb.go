@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.1
 // - protoc             v7.34.0
-// source: api/drift-bot/v1/drift-bot.proto
+// source: api/drift-agent/v1/drift-agent.proto
 
-package driftbotv1
+package driftagentv1
 
 import (
 	context "context"
@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	DiffEngine_Diff_FullMethodName = "/drift_bot.v1.DiffEngine/Diff"
+	DiffEngine_Diff_FullMethodName = "/drift_agent.v1.DiffEngine/Diff"
 )
 
 // DiffEngineClient is the client API for DiffEngine service.
@@ -112,7 +112,7 @@ func _DiffEngine_Diff_Handler(srv interface{}, ctx context.Context, dec func(int
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var DiffEngine_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "drift_bot.v1.DiffEngine",
+	ServiceName: "drift_agent.v1.DiffEngine",
 	HandlerType: (*DiffEngineServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -121,5 +121,5 @@ var DiffEngine_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/drift-bot/v1/drift-bot.proto",
+	Metadata: "api/drift-agent/v1/drift-agent.proto",
 }

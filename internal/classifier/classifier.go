@@ -1,10 +1,10 @@
 package classifier
 
 import (
-	"github.com/DriftBot/api-drift-engine/internal/classifier/graphql"
-	"github.com/DriftBot/api-drift-engine/internal/classifier/grpc"
-	"github.com/DriftBot/api-drift-engine/internal/classifier/openapi"
-	"github.com/DriftBot/api-drift-engine/pkg/schema"
+	"github.com/DriftAgent/api-drift-engine/internal/classifier/graphql"
+	"github.com/DriftAgent/api-drift-engine/internal/classifier/grpc"
+	"github.com/DriftAgent/api-drift-engine/internal/classifier/openapi"
+	"github.com/DriftAgent/api-drift-engine/pkg/schema"
 )
 
 // Classify assigns a Severity to each Change and builds a DiffResult.

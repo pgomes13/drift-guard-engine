@@ -6,11 +6,11 @@ import (
 	"path/filepath"
 )
 
-// ScaffoldNestSwaggerScript writes a starter drift-bot/scripts/generate-swagger.ts
+// ScaffoldNestSwaggerScript writes a starter drift-agent/scripts/generate-swagger.ts
 // to projectDir (creating the directory if needed). It returns the path of the
 // file that was written.
 func ScaffoldNestSwaggerScript(projectDir string) (string, error) {
-	outPath := filepath.Join(projectDir, "drift-bot", "scripts", "generate-swagger.ts")
+	outPath := filepath.Join(projectDir, "drift-agent", "scripts", "generate-swagger.ts")
 
 	if err := os.MkdirAll(filepath.Dir(outPath), 0o755); err != nil {
 		return "", fmt.Errorf("create scripts directory: %w", err)
@@ -28,7 +28,7 @@ func ScaffoldNestSwaggerScript(projectDir string) (string, error) {
 // detectAppModuleRelPath returns a relative import path for the AppModule,
 // suitable for use inside scripts/generate-swagger.ts.
 func detectAppModuleRelPath(projectDir string) string {
-	// Script lives at drift-bot/scripts/generate-swagger.ts, so imports
+	// Script lives at drift-agent/scripts/generate-swagger.ts, so imports
 	// need two levels up (../../) to reach the project root.
 	candidates := []struct {
 		rel     string
@@ -55,8 +55,8 @@ func buildNestSwaggerScaffold(appModuleRelPath string) string {
  * Generates an OpenAPI (swagger) document for your NestJS application and
  * writes it to the path specified by the SWAGGER_OUTPUT environment variable.
  *
- * Run via drift-bot:
- *   drift-bot generate
+ * Run via drift-agent:
+ *   drift-agent generate
  *
  * Or directly:
  *   SWAGGER_OUTPUT=swagger.json npx ts-node --transpile-only scripts/generate-swagger.ts

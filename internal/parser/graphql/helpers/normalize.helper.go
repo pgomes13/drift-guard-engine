@@ -2,7 +2,7 @@
 package helpers
 
 import (
-	"github.com/DriftBot/api-drift-engine/pkg/schema"
+	"github.com/DriftAgent/api-drift-engine/pkg/schema"
 
 	"github.com/vektah/gqlparser/v2/ast"
 )

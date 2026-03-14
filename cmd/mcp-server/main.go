@@ -10,14 +10,14 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 
-	"github.com/DriftBot/api-drift-engine/pkg/compare"
-	"github.com/DriftBot/api-drift-engine/internal/languages"
-	"github.com/DriftBot/api-drift-engine/internal/reporter"
+	"github.com/DriftAgent/api-drift-engine/pkg/compare"
+	"github.com/DriftAgent/api-drift-engine/internal/languages"
+	"github.com/DriftAgent/api-drift-engine/internal/reporter"
 )
 
 func main() {
 	s := server.NewMCPServer(
-		"drift-bot",
+		"drift-agent",
 		"1.0.0",
 		server.WithToolCapabilities(true),
 	)
@@ -76,7 +76,7 @@ func main() {
 	), detectProjectHandler)
 
 	if err := server.ServeStdio(s); err != nil {
-		fmt.Fprintf(os.Stderr, "drift-bot mcp server error: %v\n", err)
+		fmt.Fprintf(os.Stderr, "drift-agent mcp server error: %v\n", err)
 		os.Exit(1)
 	}
 }

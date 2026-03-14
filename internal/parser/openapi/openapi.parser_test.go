@@ -4,8 +4,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/DriftBot/api-drift-engine/internal/parser/openapi"
-	"github.com/DriftBot/api-drift-engine/pkg/schema"
+	"github.com/DriftAgent/api-drift-engine/internal/parser/openapi"
+	"github.com/DriftAgent/api-drift-engine/pkg/schema"
 )
 
 const testdataDir = "../../testdata/"

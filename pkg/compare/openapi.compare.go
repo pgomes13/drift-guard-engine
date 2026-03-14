@@ -3,10 +3,10 @@ package compare
 import (
 	"fmt"
 
-	"github.com/DriftBot/api-drift-engine/internal/classifier"
-	differopenapi "github.com/DriftBot/api-drift-engine/internal/differ/openapi"
-	parseropenapi "github.com/DriftBot/api-drift-engine/internal/parser/openapi"
-	"github.com/DriftBot/api-drift-engine/pkg/schema"
+	"github.com/DriftAgent/api-drift-engine/internal/classifier"
+	differopenapi "github.com/DriftAgent/api-drift-engine/internal/differ/openapi"
+	parseropenapi "github.com/DriftAgent/api-drift-engine/internal/parser/openapi"
+	"github.com/DriftAgent/api-drift-engine/pkg/schema"
 )
 
 // OpenAPI parses basePath and headPath as OpenAPI 3.x documents, diffs them,

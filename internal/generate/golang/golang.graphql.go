@@ -16,7 +16,7 @@ func GoGraphQL(projectDir, outputDir string) error {
 				"Ensure your schema is committed at one of:\n"+
 				"  schema.graphql, schema.gql, src/schema.graphql, graphql/schema.graphql\n\n"+
 				"Or use --cmd to provide a generation command:\n"+
-				`  drift-bot compare graphql --cmd "go run ./tools/gqlgen" --output schema.graphql`,
+				`  drift-agent compare graphql --cmd "go run ./tools/gqlgen" --output schema.graphql`,
 			projectDir,
 		)
 	}

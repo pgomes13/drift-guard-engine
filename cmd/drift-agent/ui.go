@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/DriftBot/api-drift-engine/internal/languages"
+	"github.com/DriftAgent/api-drift-engine/internal/languages"
 )
 
 // --------------------------------------------------------------------------

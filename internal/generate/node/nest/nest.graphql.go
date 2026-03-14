@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/DriftBot/api-drift-engine/internal/generate/node/express"
+	"github.com/DriftAgent/api-drift-engine/internal/generate/node/express"
 )
 
 // NestGraphQL finds or generates the GraphQL SDL schema for the NestJS project
@@ -37,7 +37,7 @@ func NestGraphQL(projectDir, outputDir string) error {
 		"no GraphQL schema found in %s\n\n"+
 			"Schema-first: commit your schema file at schema.gql or src/schema.graphql.\n\n"+
 			"Code-first: configure autoSchemaFile in GraphQLModule and run your app once\n"+
-			"to generate schema.gql, then commit it so drift-bot can compare across branches.",
+			"to generate schema.gql, then commit it so drift-agent can compare across branches.",
 		projectDir,
 	)
 }
@@ -88,7 +88,7 @@ import * as fs from 'fs';
 
 const deadline = setTimeout(() => {
   process.stderr.write(
-    '\ndrift-bot: NestJS app did not finish initialising within 15 s.\n' +
+    '\ndrift-agent: NestJS app did not finish initialising within 15 s.\n' +
     'Ensure your services are running or use schema-first GraphQL.\n',
   );
   process.exit(1);
@@ -111,7 +111,7 @@ async function generate(): Promise<void> {
     }
   }
 
-  process.stderr.write('drift-bot: schema.gql was not generated after app boot.\n');
+  process.stderr.write('drift-agent: schema.gql was not generated after app boot.\n');
   process.exit(1);
 }
 

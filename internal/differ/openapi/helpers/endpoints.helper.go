@@ -4,7 +4,7 @@ package helpers
 import (
 	"fmt"
 
-	"github.com/DriftBot/api-drift-engine/pkg/schema"
+	"github.com/DriftAgent/api-drift-engine/pkg/schema"
 )
 
 func IndexEndpoints(s *schema.Schema) map[string]schema.Endpoint {

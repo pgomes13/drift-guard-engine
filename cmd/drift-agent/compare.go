@@ -9,12 +9,12 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/DriftBot/api-drift-engine/pkg/compare"
-	"github.com/DriftBot/api-drift-engine/internal/generate/node/express"
-	"github.com/DriftBot/api-drift-engine/internal/generate/node/nest"
-	"github.com/DriftBot/api-drift-engine/internal/languages"
-	"github.com/DriftBot/api-drift-engine/internal/reporter"
-	"github.com/DriftBot/api-drift-engine/pkg/schema"
+	"github.com/DriftAgent/api-drift-engine/pkg/compare"
+	"github.com/DriftAgent/api-drift-engine/internal/generate/node/express"
+	"github.com/DriftAgent/api-drift-engine/internal/generate/node/nest"
+	"github.com/DriftAgent/api-drift-engine/internal/languages"
+	"github.com/DriftAgent/api-drift-engine/internal/reporter"
+	"github.com/DriftAgent/api-drift-engine/pkg/schema"
 )
 
 var compareCmd = &cobra.Command{
@@ -296,10 +296,10 @@ func openAPIScaffoldNeeded(typeName string) bool {
 	return !strings.HasPrefix(typeName, "Go")
 }
 
-// setupWorkspace creates the drift-bot/tmp directory and returns its path
-// along with a cleanup function that removes the entire drift-bot directory.
+// setupWorkspace creates the drift-agent/tmp directory and returns its path
+// along with a cleanup function that removes the entire drift-agent directory.
 func setupWorkspace(cwd string) (tmpDir string, cleanup func(), err error) {
-	driftGuardDir := filepath.Join(cwd, "drift-bot")
+	driftGuardDir := filepath.Join(cwd, "drift-agent")
 	tmpDir = filepath.Join(driftGuardDir, "tmp")
 	if err := os.MkdirAll(tmpDir, 0o755); err != nil {
 		return "", nil, fmt.Errorf("create temp dir: %w", err)

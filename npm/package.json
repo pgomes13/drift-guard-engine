@@ -1,11 +1,11 @@
 {
-  "name": "@drift-bot/api-drift-engine",
+  "name": "@drift-agent/api-drift-engine",
   "version": "5.1.0",
   "description": "API schema diff engine — detect breaking changes in OpenAPI, GraphQL, and gRPC schemas",
   "main": "index.js",
   "types": "index.d.ts",
   "bin": {
-    "drift-bot": "run.js"
+    "drift-agent": "run.js"
   },
   "scripts": {
     "postinstall": "node install.js"
@@ -28,13 +28,13 @@
     "breaking-changes",
     "drift"
   ],
-  "author": "DriftBot",
+  "author": "DriftAgent",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/DriftBot/api-drift-engine"
+    "url": "https://github.com/DriftAgent/api-drift-engine"
   },
-  "homepage": "https://github.com/DriftBot/api-drift-engine",
+  "homepage": "https://github.com/DriftAgent/api-drift-engine",
   "engines": {
     "node": ">=16"
   }

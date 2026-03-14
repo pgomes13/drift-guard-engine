@@ -13,7 +13,7 @@ import (
 
 func tempDir(t *testing.T) string {
 	t.Helper()
-	dir, err := os.MkdirTemp("", "drift-bot-golang-*")
+	dir, err := os.MkdirTemp("", "drift-agent-golang-*")
 	if err != nil {
 		t.Fatalf("MkdirTemp: %v", err)
 	}
