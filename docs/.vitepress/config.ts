@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: 'DriftaBot',
   description: 'API type safety across OpenAPI, GraphQL, and gRPC. Catch breaking changes before they reach production.',
-  base: '/driftabot-engine/',
+  base: '/engine/',
 
   themeConfig: {
     nav: [
