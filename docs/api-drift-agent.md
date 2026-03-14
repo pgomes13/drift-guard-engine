@@ -14,7 +14,8 @@ Provider PR opened
        ▼
 ┌─────────────────────────────────────┐
 │  Download drift-guard-engine binary │
-│  Compare base ↔ head OpenAPI schema │
+│  Auto-detect schema type & compare  │
+│  (OpenAPI, GraphQL, or gRPC/proto)  │
 └─────────────────────────────────────┘
        │ breaking changes found
        ▼
@@ -68,8 +69,9 @@ jobs:
 
 | Input | Required | Description |
 |---|---|---|
-| `base-schema` | No | Path to OpenAPI schema (auto-detected if omitted) |
+| `base-schema` | No | Path to schema file (auto-detected if omitted). Supports OpenAPI (`.yaml`/`.yml`/`.json`), GraphQL (`.graphql`/`.gql`), and Protobuf (`.proto`). |
 | `head-schema` | No | Path on PR branch (defaults to `base-schema`) |
+| `generate-schema-cmd` | No | Shell command to generate the schema before diffing (e.g. `npm run build && node scripts/gen-swagger.js`). Useful for code-first frameworks that don't commit a schema file. |
 | `org-read-token` | No | PAT with `repo:read` + `read:org` for private repos |
 | `anthropic-api-key` | No | Enables Claude risk analysis in opened issues |
 
@@ -78,8 +80,8 @@ jobs:
 | Symptom | Cause | Fix |
 |---|---|---|
 | `curl: (22) 404` when downloading drift-guard binary | Release assets are missing or named differently than expected | Check that the latest release on `pgomes13/drift-guard-engine` has GoReleaser artifacts attached — re-run the release if assets are missing |
-| Action fails: "No OpenAPI schema found" | Schema file not at a standard path | Set the `base-schema` input explicitly |
-| Action fails: "drift-guard-engine failed to diff schemas" | Schema file is invalid or malformed OpenAPI | Validate the schema with `drift-guard openapi --base ... --head ...` locally |
+| Action fails: "No API schema found" | Schema file not at a standard path, or generated at runtime and not committed | Set the `base-schema` input explicitly, or use `generate-schema-cmd` to generate it before diffing |
+| Action fails: "drift-guard-engine failed to diff schemas" | Schema file is invalid or malformed | Validate locally: `drift-guard openapi --base ... --head ...` (or `graphql`/`grpc`) |
 | No issues created, no errors | Missing `issues: write` permission | Add `issues: write` under `permissions:` in your workflow — the action will now emit a warning if this is missing |
 | No consumers found (private org) | `GITHUB_TOKEN` can't search private repos | Set `org-read-token` to a PAT with `repo:read` + `read:org` |
 | No consumers found (public org) | Breaking change path is too generic (e.g. `/v1`) | The agent searches for the first stable path segment — very short or version-only segments may not yield useful results |
