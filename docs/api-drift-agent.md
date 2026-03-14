@@ -33,7 +33,6 @@ Provider PR opened
 
 ## Prerequisites
 
-- Your provider repo must have an OpenAPI schema file committed (e.g. `openapi.yaml`). If you don't have one yet, see [Generating Specs](/generating-specs).
 - For private orgs, create a GitHub Personal Access Token (PAT) with `repo` and `read:org` scopes, then add it as a repository secret named `ORG_READ_TOKEN` (**Settings → Secrets and variables → Actions → New repository secret**).
 - Optionally, add an `ANTHROPIC_API_KEY` secret to enable Claude-powered risk analysis in the issues the agent opens.
 

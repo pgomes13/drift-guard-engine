@@ -1,23 +1,23 @@
 # Take a Tour
 
-This page walks you through the full DriftGuard setup — from zero to your first automated drift alert in about 5 minutes.
+This page walks you through the full DriftGuard setup — from zero to your first automated drift alert.
 
 ---
 
-## How it all fits together
+## How it works
 
-**drift-guard-engine** is the core diff engine. It compares two schema files and classifies every change as breaking, non-breaking, or info.
+**drift-guard-engine** is the core diff engine. It detects breaking API changes between two schema versions.
 
-**API Drift Agent** sits on top of the engine. When a provider PR changes an API, it uses the engine to find breaking changes, then searches your GitHub org for consumer repos that reference those endpoints, and opens GitHub Issues in each one — automatically.
+**API Drift Agent** sits on top of the engine. When a provider PR introduces breaking changes, the agent automatically finds every consumer repo in your org that references those endpoints and opens a GitHub Issue in each one.
 
 ```
-Your provider repo
-       │  PR opened
-       ▼
-drift-guard-engine  ←  detects breaking changes
+Provider repo PR opened
        │
        ▼
-API Drift Agent     ←  finds affected consumers in your org
+drift-guard-engine  ←  auto-detects & diffs API schema
+       │  breaking changes found
+       ▼
+API Drift Agent     ←  searches org for affected consumers
        │
        ▼
 GitHub Issues       ←  opened in each consumer repo
@@ -25,19 +25,9 @@ GitHub Issues       ←  opened in each consumer repo
 
 ---
 
-## Step 1 — Make sure your schema exists
+## Step 1 — Add the agent to your provider repo
 
-The agent needs an OpenAPI schema file committed in your provider repo (e.g. `openapi.yaml` or `docs/openapi.json`).
-
-**Don't have one?** See [Generating Specs](/generating-specs) for tools that export a schema from your framework (NestJS, Express, Gin, etc.).
-
-If you already have a schema file checked in, move to Step 2.
-
----
-
-## Step 2 — Create the workflow file
-
-In your **provider** repo, create `.github/workflows/drift.yml`:
+Commit this workflow to your **provider** repo's **main branch** at `.github/workflows/drift.yml`:
 
 ```yaml
 name: API Drift Check
@@ -63,36 +53,47 @@ jobs:
           # anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}  # optional: AI risk analysis
 ```
 
----
+Also add the following secrets under **Settings → Secrets and variables → Actions**:
 
-## Step 3 — Add the secrets
-
-Go to your provider repo's **Settings → Secrets and variables → Actions** and add:
-
-| Secret | Required | What it does |
+| Secret | When needed | What it does |
 |---|---|---|
-| `ORG_READ_TOKEN` | For private orgs | PAT with `repo` + `read:org` scopes — lets the agent search your org for consumer repos |
-| `ANTHROPIC_API_KEY` | Optional | Enables Claude-powered risk summaries in the GitHub Issues the agent opens |
+| `ORG_READ_TOKEN` | Private orgs | PAT with `repo` + `read:org` scopes — lets the agent search your org for consumer repos |
+| `ANTHROPIC_API_KEY` | Optional | Enables Claude-powered risk summaries in opened issues |
 
-For public orgs the default `GITHUB_TOKEN` is enough — you can omit `org-read-token` entirely.
+> For public orgs the default `GITHUB_TOKEN` is sufficient — you can omit `org-read-token`.
 
 ---
 
-## Step 4 — Open a pull request
+## Step 2 — Make API changes on a branch
 
-Push a branch that changes your OpenAPI schema and open a PR. The agent will:
+Create a branch and make a breaking change to your API — for example, remove an endpoint, rename a field, or change a parameter type. Commit and push the branch.
 
-1. Download the drift-guard-engine binary
-2. Diff the schema between `base` (main) and `head` (your branch)
+---
+
+## Step 3 — Open a pull request
+
+Open a PR from your branch into main. This triggers the agent workflow.
+
+The agent will:
+1. Auto-detect your API schema and diff it against main
+2. Classify every change as breaking, non-breaking, or info
 3. If breaking changes are found — search your org for repos that reference the affected endpoints
-4. Clone each consumer repo, scan for affected files, and open (or update) a GitHub Issue
+4. Open (or update) a GitHub Issue in each affected consumer repo
 
-If no issues are created and no errors appear, see [Troubleshooting](/api-drift-agent#troubleshooting).
+---
+
+## Step 4 — Check the results
+
+**If issues were created in consumer repos** — everything is working. The agent found consumers impacted by your breaking change.
+
+**If no issues were created and no errors** — the agent ran but found no consumers referencing the changed endpoints. This is expected if no consumer repos use those paths yet.
+
+**If the action failed or behaved unexpectedly** — see [Troubleshooting](/api-drift-agent#troubleshooting) for common causes and fixes.
 
 ---
 
 ## What's next
 
-- [API Drift Agent](/api-drift-agent) — full reference for inputs, troubleshooting, and the Python CLI
+- [API Drift Agent](/api-drift-agent) — full reference for inputs and the Python CLI
 - [MCP (AI)](/mcp) — use the engine as tools inside Claude Desktop
-- [Supported frameworks](/supported) — what languages and frameworks the engine can parse schemas from
+- [Supported frameworks](/supported) — what languages and frameworks the engine supports
