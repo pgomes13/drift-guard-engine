@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/DriftAgent/api-drift-engine/internal/parser/graphql/helpers"
-	"github.com/DriftAgent/api-drift-engine/pkg/schema"
+	"github.com/DriftaBot/driftabot-engine/internal/parser/graphql/helpers"
+	"github.com/DriftaBot/driftabot-engine/pkg/schema"
 
 	"github.com/vektah/gqlparser/v2/ast"
 	gqlparser "github.com/vektah/gqlparser/v2/parser"

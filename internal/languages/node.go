@@ -1,6 +1,6 @@
 package languages
 
-import "github.com/DriftAgent/api-drift-engine/internal/generate/node/express"
+import "github.com/DriftaBot/driftabot-engine/internal/generate/node/express"
 
 // GenerateNode delegates to the express generate package.
 var GenerateNode = express.Node

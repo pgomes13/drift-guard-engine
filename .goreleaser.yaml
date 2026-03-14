@@ -37,10 +37,10 @@ release:
 brews:
   - name: drift-agent
     repository:
-      owner: DriftAgent
+      owner: DriftaBot
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
-    homepage: "https://github.com/DriftAgent/api-drift-engine"
+    homepage: "https://github.com/DriftaBot/driftabot-engine"
     description: "Schema diff engine that detects breaking vs. non-breaking API contract changes across OpenAPI, GraphQL, and gRPC schemas."
     license: "MIT"
     install: |

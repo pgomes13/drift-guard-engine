@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/DriftAgent/api-drift-engine/internal/parser/openapi/helpers"
-	"github.com/DriftAgent/api-drift-engine/pkg/schema"
+	"github.com/DriftaBot/driftabot-engine/internal/parser/openapi/helpers"
+	"github.com/DriftaBot/driftabot-engine/pkg/schema"
 
 	"gopkg.in/yaml.v3"
 )

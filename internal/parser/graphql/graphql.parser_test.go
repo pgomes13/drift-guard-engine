@@ -3,8 +3,8 @@ package graphql_test
 import (
 	"testing"
 
-	"github.com/DriftAgent/api-drift-engine/internal/parser/graphql"
-	"github.com/DriftAgent/api-drift-engine/pkg/schema"
+	"github.com/DriftaBot/driftabot-engine/internal/parser/graphql"
+	"github.com/DriftaBot/driftabot-engine/pkg/schema"
 )
 
 const testdataDir = "../../testdata/"

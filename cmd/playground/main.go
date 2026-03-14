@@ -12,9 +12,9 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/DriftAgent/api-drift-engine/pkg/compare"
-	"github.com/DriftAgent/api-drift-engine/pkg/impact"
-	"github.com/DriftAgent/api-drift-engine/pkg/schema"
+	"github.com/DriftaBot/driftabot-engine/pkg/compare"
+	"github.com/DriftaBot/driftabot-engine/pkg/impact"
+	"github.com/DriftaBot/driftabot-engine/pkg/schema"
 )
 
 //go:embed static

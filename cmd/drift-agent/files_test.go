@@ -107,7 +107,7 @@ func TestFindSwaggerScript_Empty_NoMatch(t *testing.T) {
 	}
 }
 
-func TestFindSwaggerScript_DriftAgentScriptsTS(t *testing.T) {
+func TestFindSwaggerScript_DriftaBotScriptsTS(t *testing.T) {
 	dir := tempDir(t)
 	touch(t, dir, "drift-agent/scripts/generate-swagger.ts")
 	got := findSwaggerScript(dir)

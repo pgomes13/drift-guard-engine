@@ -17,7 +17,7 @@ if (result.error) {
   process.stderr.write(
     `drift-agent: could not run binary: ${result.error.message}\n` +
     `Make sure the package installed correctly or download manually:\n` +
-    `https://github.com/DriftAgent/api-drift-engine/releases\n`
+    `https://github.com/DriftaBot/driftabot-engine/releases\n`
   );
   process.exit(1);
 }

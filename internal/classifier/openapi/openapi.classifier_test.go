@@ -3,10 +3,10 @@ package openapi_test
 import (
 	"testing"
 
-	"github.com/DriftAgent/api-drift-engine/internal/classifier"
-	differopenapi "github.com/DriftAgent/api-drift-engine/internal/differ/openapi"
-	parseropenapi "github.com/DriftAgent/api-drift-engine/internal/parser/openapi"
-	"github.com/DriftAgent/api-drift-engine/pkg/schema"
+	"github.com/DriftaBot/driftabot-engine/internal/classifier"
+	differopenapi "github.com/DriftaBot/driftabot-engine/internal/differ/openapi"
+	parseropenapi "github.com/DriftaBot/driftabot-engine/internal/parser/openapi"
+	"github.com/DriftaBot/driftabot-engine/pkg/schema"
 )
 
 const testdataDir = "../../testdata/"

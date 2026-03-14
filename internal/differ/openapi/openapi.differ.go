@@ -5,8 +5,8 @@ package openapi
 import (
 	"fmt"
 
-	"github.com/DriftAgent/api-drift-engine/internal/differ/openapi/helpers"
-	"github.com/DriftAgent/api-drift-engine/pkg/schema"
+	"github.com/DriftaBot/driftabot-engine/internal/differ/openapi/helpers"
+	"github.com/DriftaBot/driftabot-engine/pkg/schema"
 )
 
 // Diff computes all changes between base and head schemas.

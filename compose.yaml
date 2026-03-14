@@ -1,5 +1,5 @@
 services:
-  api-drift-engine:
+  driftabot-engine:
     build: .
     ports:
       - "${PORT:-50051}:50051"

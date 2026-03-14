@@ -5,7 +5,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"github.com/DriftAgent/api-drift-engine/internal/languages"
+	"github.com/DriftaBot/driftabot-engine/internal/languages"
 )
 
 // runGenerate auto-detects the project type and generates an OpenAPI schema

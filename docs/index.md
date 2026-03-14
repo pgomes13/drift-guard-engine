@@ -2,7 +2,7 @@
 layout: home
 
 hero:
-  name: DriftAgent
+  name: DriftaBot
   text: API Type Safety
   tagline: Catch breaking API changes before they reach production — across OpenAPI, GraphQL, and gRPC.
   actions:
@@ -15,10 +15,10 @@ hero:
       target: _blank
     - theme: alt
       text: View on GitHub
-      link: https://github.com/DriftAgent/api-drift-engine
+      link: https://github.com/DriftaBot/driftabot-engine
     - theme: alt
       text: npm ↗
-      link: https://www.npmjs.com/package/@drift-agent/api-drift-engine
+      link: https://www.npmjs.com/package/@driftabot/driftabot-engine
       target: _blank
 
 features:

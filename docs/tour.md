@@ -1,23 +1,23 @@
 # Take a Tour
 
-This page walks you through the full DriftAgent setup — from zero to your first automated drift alert.
+This page walks you through the full DriftaBot setup — from zero to your first automated drift alert.
 
 ---
 
 ## How it works
 
-**api-drift-engine** is the core diff engine. It detects breaking API changes between two schema versions.
+**driftabot-engine** is the core diff engine. It detects breaking API changes between two schema versions.
 
-**API DriftAgent** sits on top of the engine. When a provider PR introduces breaking changes, the agent automatically finds every consumer repo in your org that references those endpoints and opens a GitHub Issue in each one.
+**API DriftaBot** sits on top of the engine. When a provider PR introduces breaking changes, the agent automatically finds every consumer repo in your org that references those endpoints and opens a GitHub Issue in each one.
 
 ```
 Provider repo PR opened
        │
        ▼
-api-drift-engine  ←  auto-detects & diffs API schema
+driftabot-engine  ←  auto-detects & diffs API schema
        │  breaking changes found
        ▼
-API DriftAgent     ←  searches org for affected consumers
+API DriftaBot     ←  searches org for affected consumers
        │
        ▼
 GitHub Issues       ←  opened in each consumer repo
@@ -47,7 +47,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: DriftAgent/api-drift-engine@v1
+      - uses: DriftaBot/driftabot-engine@v1
         with:
           org-read-token: ${{ secrets.ORG_READ_TOKEN }}
           # anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}  # optional: AI risk analysis
@@ -88,12 +88,12 @@ The agent will:
 
 **If no issues were created and no errors** — the agent ran but found no consumers referencing the changed endpoints. This is expected if no consumer repos use those paths yet.
 
-**If the action failed or behaved unexpectedly** — see [Troubleshooting](/api-drift-engine#troubleshooting) for common causes and fixes.
+**If the action failed or behaved unexpectedly** — see [Troubleshooting](/driftabot-engine#troubleshooting) for common causes and fixes.
 
 ---
 
 ## What's next
 
-- [API DriftAgent](/api-drift-engine) — full reference for inputs and the Python CLI
+- [API DriftaBot](/driftabot-engine) — full reference for inputs and the Python CLI
 - [MCP (AI)](/mcp) — use the engine as tools inside Claude Desktop
 - [Supported frameworks](/supported) — what languages and frameworks the engine supports

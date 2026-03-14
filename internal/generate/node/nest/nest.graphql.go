@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/DriftAgent/api-drift-engine/internal/generate/node/express"
+	"github.com/DriftaBot/driftabot-engine/internal/generate/node/express"
 )
 
 // NestGraphQL finds or generates the GraphQL SDL schema for the NestJS project

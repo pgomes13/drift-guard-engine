@@ -3,9 +3,9 @@ package grpc_test
 import (
 	"testing"
 
-	differgrpc "github.com/DriftAgent/api-drift-engine/internal/differ/grpc"
-	parsergrpc "github.com/DriftAgent/api-drift-engine/internal/parser/grpc"
-	"github.com/DriftAgent/api-drift-engine/pkg/schema"
+	differgrpc "github.com/DriftaBot/driftabot-engine/internal/differ/grpc"
+	parsergrpc "github.com/DriftaBot/driftabot-engine/internal/parser/grpc"
+	"github.com/DriftaBot/driftabot-engine/pkg/schema"
 )
 
 const testdataDir = "../../testdata/"

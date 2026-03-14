@@ -20,7 +20,7 @@ jobs:
 
       - name: Install drift-agent
         run: |
-          curl -sSL https://github.com/DriftAgent/api-drift-engine/releases/latest/download/drift-agent_linux_amd64.tar.gz | tar -xz
+          curl -sSL https://github.com/DriftaBot/driftabot-engine/releases/latest/download/drift-agent_linux_amd64.tar.gz | tar -xz
           sudo mv drift-agent /usr/local/bin/
 
       - name: Check for breaking changes
@@ -65,8 +65,8 @@ drift-agent is a single static binary — install it the same way on any CI runn
 
 ```sh
 # GitLab CI / CircleCI / Bitbucket Pipelines
-curl -sSL https://github.com/DriftAgent/api-drift-engine/releases/latest/download/drift-agent_linux_amd64.tar.gz | tar -xz
+curl -sSL https://github.com/DriftaBot/driftabot-engine/releases/latest/download/drift-agent_linux_amd64.tar.gz | tar -xz
 ./drift-agent compare --fail-on-breaking
 ```
 
-> For automated consumer notification and issue tracking, use the [API DriftAgent](https://github.com/marketplace/actions/api-drift-engine) — a GitHub Action that builds on the engine.
+> For automated consumer notification and issue tracking, use the [API DriftaBot](https://github.com/marketplace/actions/driftabot-engine) — a GitHub Action that builds on the engine.

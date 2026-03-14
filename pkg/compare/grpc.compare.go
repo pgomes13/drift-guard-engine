@@ -3,10 +3,10 @@ package compare
 import (
 	"fmt"
 
-	"github.com/DriftAgent/api-drift-engine/internal/classifier"
-	differgrpc "github.com/DriftAgent/api-drift-engine/internal/differ/grpc"
-	parsergrpc "github.com/DriftAgent/api-drift-engine/internal/parser/grpc"
-	"github.com/DriftAgent/api-drift-engine/pkg/schema"
+	"github.com/DriftaBot/driftabot-engine/internal/classifier"
+	differgrpc "github.com/DriftaBot/driftabot-engine/internal/differ/grpc"
+	parsergrpc "github.com/DriftaBot/driftabot-engine/internal/parser/grpc"
+	"github.com/DriftaBot/driftabot-engine/pkg/schema"
 )
 
 // GRPC parses basePath and headPath as Protobuf schemas, diffs them,

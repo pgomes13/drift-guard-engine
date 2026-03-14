@@ -1,14 +1,14 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: 'DriftAgent',
+  title: 'DriftaBot',
   description: 'API type safety across OpenAPI, GraphQL, and gRPC. Catch breaking changes before they reach production.',
-  base: '/api-drift-engine/',
+  base: '/driftabot-engine/',
 
   themeConfig: {
     nav: [
       { text: 'Guide', link: '/install' },
-      { text: 'GitHub', link: 'https://github.com/DriftAgent/api-drift-engine' },
+      { text: 'GitHub', link: 'https://github.com/DriftaBot/driftabot-engine' },
     ],
 
     sidebar: [
@@ -54,7 +54,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/DriftAgent/api-drift-engine' },
+      { icon: 'github', link: 'https://github.com/DriftaBot/driftabot-engine' },
     ],
 
     footer: {

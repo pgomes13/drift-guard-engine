@@ -1,18 +1,18 @@
-# api-drift-engine
+# driftabot-engine
 
 API type safety across **OpenAPI**, **GraphQL**, and **gRPC** — catch breaking changes before they reach production.
 
-**[Full documentation →](https://driftagent.github.io/api-drift-engine)**
+**[Full documentation →](https://driftabot.github.io/driftabot-engine)**
 
 ## Quick install
 
 ```sh
 # Homebrew
-brew tap DriftAgent/tap
+brew tap DriftaBot/tap
 brew install drift-agent
 
 # npm
-npm install @drift-agent/api-drift-engine
+npm install @driftabot/driftabot-engine
 ```
 
 ## Quick start
@@ -22,13 +22,13 @@ npm install @drift-agent/api-drift-engine
 drift-agent compare
 
 # GitHub Action — one line
-- uses: DriftAgent/api-drift-engine@v1
+- uses: DriftaBot/driftabot-engine@v1
 ```
 
 ## npm / Node.js API
 
 ```ts
-import { compareOpenAPI, impact } from "@drift-agent/api-drift-engine";
+import { compareOpenAPI, impact } from "@driftabot/driftabot-engine";
 
 const result = compareOpenAPI("old.yaml", "new.yaml");
 const hits = impact(result, "./src");

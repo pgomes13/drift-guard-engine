@@ -5,8 +5,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/DriftAgent/api-drift-engine/pkg/compare"
-	"github.com/DriftAgent/api-drift-engine/internal/reporter"
+	"github.com/DriftaBot/driftabot-engine/pkg/compare"
+	"github.com/DriftaBot/driftabot-engine/internal/reporter"
 )
 
 func main() {

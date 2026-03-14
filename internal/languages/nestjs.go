@@ -1,6 +1,6 @@
 package languages
 
-import "github.com/DriftAgent/api-drift-engine/internal/generate/node/nest"
+import "github.com/DriftaBot/driftabot-engine/internal/generate/node/nest"
 
 // GenerateNest delegates to the nest generate package.
 var GenerateNest = nest.Nest

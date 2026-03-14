@@ -4,7 +4,7 @@
 // - protoc             v7.34.0
 // source: api/drift-agent/v1/drift-agent.proto
 
-package driftagentv1
+package driftabotv1
 
 import (
 	context "context"

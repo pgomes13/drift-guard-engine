@@ -1,4 +1,4 @@
-module github.com/DriftAgent/api-drift-engine
+module github.com/DriftaBot/driftabot-engine
 
 go 1.25.0
 
