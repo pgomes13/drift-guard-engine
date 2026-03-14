@@ -88,12 +88,12 @@ The agent will:
 
 **If no issues were created and no errors** — the agent ran but found no consumers referencing the changed endpoints. This is expected if no consumer repos use those paths yet.
 
-**If the action failed or behaved unexpectedly** — see [Troubleshooting](/driftabot-engine#troubleshooting) for common causes and fixes.
+**If the action failed or behaved unexpectedly** — see [Troubleshooting](/api-drift-agent#troubleshooting) for common causes and fixes.
 
 ---
 
 ## What's next
 
-- [API DriftaBot](/driftabot-engine) — full reference for inputs and the Python CLI
+- [API DriftaBot](/api-drift-agent) — full reference for inputs and the Python CLI
 - [MCP (AI)](/mcp) — use the engine as tools inside Claude Desktop
 - [Supported frameworks](/supported) — what languages and frameworks the engine supports
