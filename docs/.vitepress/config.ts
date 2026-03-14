@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: 'DriftGuard',
+  title: 'Drift Agent',
   description: 'API type safety across OpenAPI, GraphQL, and gRPC. Catch breaking changes before they reach production.',
   base: '/api-drift-engine/',
 

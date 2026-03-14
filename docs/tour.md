@@ -1,6 +1,6 @@
 # Take a Tour
 
-This page walks you through the full DriftGuard setup — from zero to your first automated drift alert.
+This page walks you through the full Drift Agent setup — from zero to your first automated drift alert.
 
 ---
 
