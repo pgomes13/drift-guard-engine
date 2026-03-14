@@ -1,4 +1,4 @@
-# DriftaBot Engine
+# DriftaBot
 
 API type safety across **OpenAPI**, **GraphQL**, and **gRPC** — catch breaking changes before they reach production.
 
