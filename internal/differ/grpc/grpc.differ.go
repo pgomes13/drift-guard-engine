@@ -5,8 +5,8 @@ package grpc
 import (
 	"fmt"
 
-	"github.com/pgomes13/api-drift-engine/internal/differ/grpc/helpers"
-	"github.com/pgomes13/api-drift-engine/pkg/schema"
+	"github.com/DriftAgent/api-drift-engine/internal/differ/grpc/helpers"
+	"github.com/DriftAgent/api-drift-engine/pkg/schema"
 )
 
 // Diff computes all changes between two normalized gRPC schemas.

@@ -3,7 +3,7 @@ package helpers
 import (
 	"fmt"
 
-	"github.com/pgomes13/api-drift-engine/pkg/schema"
+	"github.com/DriftAgent/api-drift-engine/pkg/schema"
 )
 
 // Normalize converts a raw OpenAPI document into a normalized Schema.

@@ -3,9 +3,9 @@ package openapi_test
 import (
 	"testing"
 
-	differopenapi "github.com/pgomes13/api-drift-engine/internal/differ/openapi"
-	parseropenapi "github.com/pgomes13/api-drift-engine/internal/parser/openapi"
-	"github.com/pgomes13/api-drift-engine/pkg/schema"
+	differopenapi "github.com/DriftAgent/api-drift-engine/internal/differ/openapi"
+	parseropenapi "github.com/DriftAgent/api-drift-engine/internal/parser/openapi"
+	"github.com/DriftAgent/api-drift-engine/pkg/schema"
 )
 
 const testdataDir = "../../testdata/"

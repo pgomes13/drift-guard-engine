@@ -18,7 +18,7 @@ drift-guard <command> --base <file> --head <file> [--format <format>] [--fail-on
 | -------------------- | --------------------------------------------------- | -------- |
 | `--base`             | Path to the base (before) schema file               | required |
 | `--head`             | Path to the head (after) schema file                | required |
-| `-f, --format`       | Output format: `text`, `json`, `markdown` | `text`   |
+| `-f, --format`       | Output format: `text`, `json`, `markdown`, `github` | `text`   |
 | `--fail-on-breaking` | Exit with code `1` if breaking changes are detected | `false`  |
 
 ### Examples
@@ -56,7 +56,7 @@ drift-guard impact --diff diff.json --scan ./src
 | ------------ | ------------------------------------------------------ | ------- |
 | `--diff`     | Path to a JSON diff file; omit or use `-` to read stdin | stdin  |
 | `--scan`     | Directory to scan for source references                | `.`     |
-| `-f, --format` | Output format: `text`, `json`, `markdown` | `text`  |
+| `-f, --format` | Output format: `text`, `json`, `markdown`, `github` | `text`  |
 
 ### Examples
 
@@ -79,6 +79,7 @@ drift-guard impact --diff diff.json --scan ./src --format json
 | `text` | Local terminal |
 | `markdown` | PR comment — collapsible sections, summary count |
 | `json` | Scripting / custom tooling |
+| `github` | GitHub Actions — emits `::error` / `::warning` workflow commands for inline PR annotations |
 
 ### Sample output (text)
 

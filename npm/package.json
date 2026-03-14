@@ -1,5 +1,5 @@
 {
-  "name": "@pgomes13/drift-guard",
+  "name": "@drift-agent/api-drift-engine",
   "version": "2.5.4",
   "description": "API schema diff engine — detect breaking changes in OpenAPI, GraphQL, and gRPC schemas",
   "main": "index.js",
@@ -28,13 +28,13 @@
     "breaking-changes",
     "drift"
   ],
-  "author": "pgomes13",
+  "author": "DriftAgent",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pgomes13/api-drift-engine"
+    "url": "https://github.com/DriftAgent/api-drift-engine"
   },
-  "homepage": "https://github.com/pgomes13/api-drift-engine",
+  "homepage": "https://github.com/DriftAgent/api-drift-engine",
   "engines": {
     "node": ">=16"
   }

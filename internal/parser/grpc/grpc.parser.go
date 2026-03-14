@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/pgomes13/api-drift-engine/internal/parser/grpc/helpers"
-	"github.com/pgomes13/api-drift-engine/pkg/schema"
+	"github.com/DriftAgent/api-drift-engine/internal/parser/grpc/helpers"
+	"github.com/DriftAgent/api-drift-engine/pkg/schema"
 
 	"github.com/emicklei/proto"
 )

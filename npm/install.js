@@ -9,7 +9,7 @@ const path = require("path");
 const { execSync } = require("child_process");
 
 const VERSION = require("./package.json").version;
-const REPO = "pgomes13/api-drift-engine";
+const REPO = "DriftAgent/api-drift-engine";
 const BIN_DIR = path.join(__dirname, "bin");
 const BIN_PATH = path.join(BIN_DIR, process.platform === "win32" ? "drift-guard.exe" : "drift-guard");
 
@@ -92,6 +92,6 @@ async function install() {
 
 install().catch((err) => {
   process.stderr.write(`drift-guard install failed: ${err.message}\n`);
-  process.stderr.write("You can install it manually: https://github.com/pgomes13/api-drift-engine/releases\n");
+  process.stderr.write("You can install it manually: https://github.com/DriftAgent/api-drift-engine/releases\n");
   // Do not exit(1) — allow npm install to succeed even if binary download fails.
 });

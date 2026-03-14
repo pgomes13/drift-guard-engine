@@ -1,6 +1,6 @@
 package languages
 
-import "github.com/pgomes13/api-drift-engine/internal/generate/golang"
+import "github.com/DriftAgent/api-drift-engine/internal/generate/golang"
 
 // GenerateGo delegates to the golang generate package.
 var GenerateGo = golang.Go

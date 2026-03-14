@@ -33,4 +33,4 @@ service DiffEngine {
 | `head_name`    | `string` | Original filename of the head file                                                                   |
 | `type`         | `string` | Explicit schema type: `openapi`, `graphql`, or `grpc`. Auto-detected from `base_name` extension if omitted. |
 
-The proto definition lives at [`api/drift-guard/v1/drift-guard.proto`](https://github.com/pgomes13/api-drift-engine/blob/main/api/drift-guard/v1/drift-guard.proto).
+The proto definition lives at [`api/drift-guard/v1/drift-guard.proto`](https://github.com/DriftAgent/api-drift-engine/blob/main/api/drift-guard/v1/drift-guard.proto).

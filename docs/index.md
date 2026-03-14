@@ -11,7 +11,11 @@ hero:
       link: https://github.com/marketplace/actions/api-drift-agent
     - theme: alt
       text: View on GitHub
-      link: https://github.com/pgomes13/api-drift-engine
+      link: https://github.com/DriftAgent/api-drift-engine
+    - theme: alt
+      text: npm ↗
+      link: https://www.npmjs.com/package/@drift-agent/api-drift-engine
+      target: _blank
 
 features:
   - title: Multi-schema support

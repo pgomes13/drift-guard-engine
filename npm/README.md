@@ -1,13 +1,13 @@
-# @pgomes13/drift-guard
+# @drift-agent/api-drift-engine
 
 API schema diff engine — detect breaking changes in **OpenAPI**, **GraphQL**, and **gRPC** schemas.
 
-Thin npm wrapper around the [`drift-guard`](https://github.com/pgomes13/api-drift-engine) Go binary. On install, the correct pre-built binary for your platform is downloaded automatically.
+Thin npm wrapper around the [`drift-guard`](https://github.com/DriftAgent/api-drift-engine) Go binary. On install, the correct pre-built binary for your platform is downloaded automatically.
 
 ## Installation
 
 ```sh
-npm install @pgomes13/drift-guard
+npm install @drift-agent/api-drift-engine
 ```
 
 Requires Node.js ≥ 16. The binary is downloaded for your platform (macOS arm64/amd64, Linux arm64/amd64, Windows amd64) during `npm install`.
@@ -62,7 +62,7 @@ drift-guard impact --diff diff.json --scan ./src --format markdown
 ## Node.js / TypeScript API
 
 ```ts
-import { compareOpenAPI, compareGraphQL, compareGRPC, impact } from "@pgomes13/drift-guard";
+import { compareOpenAPI, compareGraphQL, compareGRPC, impact } from "@drift-agent/api-drift-engine";
 
 // Diff two OpenAPI schemas
 const result = compareOpenAPI("old.yaml", "new.yaml");
@@ -86,7 +86,7 @@ const report = impact(result, "./src", { format: "markdown" });
 ### CommonJS
 
 ```js
-const { compareOpenAPI, impact } = require("@pgomes13/drift-guard");
+const { compareOpenAPI, impact } = require("@drift-agent/api-drift-engine");
 ```
 
 ## TypeScript types

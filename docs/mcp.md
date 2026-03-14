@@ -38,7 +38,7 @@ Compare two OpenAPI 3.x schema files (YAML or JSON).
 | ----------- | -------- | ---------------------------------------- |
 | `base_file` | Yes      | Path to the base (old) schema file       |
 | `head_file` | Yes      | Path to the head (new) schema file       |
-| `format`    | No       | Output format: `text` (default), `json`, `markdown` |
+| `format`    | No       | Output format: `text` (default), `json`, `markdown`, `github` |
 
 ### `diff_graphql`
 
@@ -48,7 +48,7 @@ Compare two GraphQL SDL schema files (`.graphql` or `.gql`).
 | ----------- | -------- | ---------------------------------------- |
 | `base_file` | Yes      | Path to the base (old) schema file       |
 | `head_file` | Yes      | Path to the head (new) schema file       |
-| `format`    | No       | Output format: `text` (default), `json`, `markdown` |
+| `format`    | No       | Output format: `text` (default), `json`, `markdown`, `github` |
 
 ### `diff_grpc`
 
@@ -58,7 +58,7 @@ Compare two Protobuf `.proto` files.
 | ----------- | -------- | ---------------------------------------- |
 | `base_file` | Yes      | Path to the base (old) `.proto` file     |
 | `head_file` | Yes      | Path to the head (new) `.proto` file     |
-| `format`    | No       | Output format: `text` (default), `json`, `markdown` |
+| `format`    | No       | Output format: `text` (default), `json`, `markdown`, `github` |
 
 ### `detect_project`
 

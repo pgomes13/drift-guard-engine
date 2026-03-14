@@ -5,7 +5,7 @@ drift-guard can be used as a Go library. The `pkg/compare` and `pkg/impact` pack
 ## Installation
 
 ```sh
-go get github.com/pgomes13/api-drift-engine@latest
+go get github.com/DriftAgent/api-drift-engine@latest
 ```
 
 ## Comparing schemas
@@ -13,7 +13,7 @@ go get github.com/pgomes13/api-drift-engine@latest
 ### OpenAPI
 
 ```go
-import "github.com/pgomes13/api-drift-engine/pkg/compare"
+import "github.com/DriftAgent/api-drift-engine/pkg/compare"
 
 result, err := compare.OpenAPI("old.yaml", "new.yaml")
 if err != nil {
@@ -46,8 +46,8 @@ Scan source code for references to each breaking change in a diff result:
 
 ```go
 import (
-    "github.com/pgomes13/api-drift-engine/pkg/compare"
-    "github.com/pgomes13/api-drift-engine/pkg/impact"
+    "github.com/DriftAgent/api-drift-engine/pkg/compare"
+    "github.com/DriftAgent/api-drift-engine/pkg/impact"
 )
 
 result, _ := compare.OpenAPI("old.yaml", "new.yaml")
@@ -67,7 +67,7 @@ Render a report:
 ```go
 import (
     "os"
-    "github.com/pgomes13/api-drift-engine/pkg/impact"
+    "github.com/DriftAgent/api-drift-engine/pkg/impact"
 )
 
 impact.Report(os.Stdout, hits, "text")     // text table

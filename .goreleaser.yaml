@@ -37,10 +37,10 @@ release:
 brews:
   - name: drift-guard
     repository:
-      owner: pgomes13
+      owner: DriftAgent
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
-    homepage: "https://github.com/pgomes13/api-drift-engine"
+    homepage: "https://github.com/DriftAgent/api-drift-engine"
     description: "Schema diff engine that detects breaking vs. non-breaking API contract changes across OpenAPI, GraphQL, and gRPC schemas."
     license: "MIT"
     install: |

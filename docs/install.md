@@ -3,7 +3,7 @@
 ## npm (Node.js)
 
 ```sh
-npm install @pgomes13/drift-guard
+npm install @drift-agent/api-drift-engine
 ```
 
 Downloads the correct pre-built binary for your platform automatically. See [npm SDK](/npm) for the full programmatic API.
@@ -11,14 +11,14 @@ Downloads the correct pre-built binary for your platform automatically. See [npm
 ## Homebrew (macOS / Linux)
 
 ```sh
-brew tap pgomes13/tap
+brew tap DriftAgent/tap
 brew install drift-guard
 ```
 
 ## Go install
 
 ```sh
-go install github.com/pgomes13/api-drift-engine/cmd/drift-guard@latest
+go install github.com/DriftAgent/api-drift-engine/cmd/drift-guard@latest
 ```
 
 ## Build from source

@@ -80,7 +80,7 @@ export default function PlaygroundPage() {
           </div>
 
           <a
-            href="https://pgomes13.github.io/api-drift-engine/generating-specs"
+            href="https://driftagent.github.io/api-drift-engine/generating-specs"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm font-medium text-indigo-600 hover:text-indigo-800 border border-indigo-200 hover:border-indigo-400 px-3 py-1.5 rounded-lg transition-colors"

@@ -3,7 +3,7 @@ package helpers
 import (
 	"fmt"
 
-	"github.com/pgomes13/api-drift-engine/pkg/schema"
+	"github.com/DriftAgent/api-drift-engine/pkg/schema"
 )
 
 func indexFields(fields []schema.GRPCField) map[string]schema.GRPCField {

@@ -1,11 +1,11 @@
 # npm SDK
 
-<a href="https://www.npmjs.com/package/@pgomes13/drift-guard" target="_blank">@pgomes13/drift-guard</a> is a thin npm wrapper around the drift-guard binary. On install, the correct pre-built binary for your platform is downloaded automatically — no Go toolchain required.
+<a href="https://www.npmjs.com/package/@drift-agent/api-drift-engine" target="_blank">@drift-agent/api-drift-engine</a> is a thin npm wrapper around the drift-guard binary. On install, the correct pre-built binary for your platform is downloaded automatically — no Go toolchain required.
 
 ## Installation
 
 ```sh
-npm install @pgomes13/drift-guard
+npm install @drift-agent/api-drift-engine
 ```
 
 Requires Node.js ≥ 16. Supported platforms: macOS arm64/amd64, Linux arm64/amd64, Windows amd64.
@@ -15,7 +15,7 @@ Requires Node.js ≥ 16. Supported platforms: macOS arm64/amd64, Linux arm64/amd
 ### OpenAPI
 
 ```ts
-import { compareOpenAPI } from "@pgomes13/drift-guard";
+import { compareOpenAPI } from "@drift-agent/api-drift-engine";
 
 const result = compareOpenAPI("old.yaml", "new.yaml");
 
@@ -30,7 +30,7 @@ for (const change of result.changes) {
 ### GraphQL
 
 ```ts
-import { compareGraphQL } from "@pgomes13/drift-guard";
+import { compareGraphQL } from "@drift-agent/api-drift-engine";
 
 const result = compareGraphQL("old.graphql", "new.graphql");
 ```
@@ -38,7 +38,7 @@ const result = compareGraphQL("old.graphql", "new.graphql");
 ### gRPC / Protobuf
 
 ```ts
-import { compareGRPC } from "@pgomes13/drift-guard";
+import { compareGRPC } from "@drift-agent/api-drift-engine";
 
 const result = compareGRPC("old.proto", "new.proto");
 ```
@@ -48,7 +48,7 @@ const result = compareGRPC("old.proto", "new.proto");
 Scan source code for references to each breaking change:
 
 ```ts
-import { compareOpenAPI, impact } from "@pgomes13/drift-guard";
+import { compareOpenAPI, impact } from "@drift-agent/api-drift-engine";
 
 const result = compareOpenAPI("old.yaml", "new.yaml");
 
@@ -60,11 +60,15 @@ for (const hit of hits) {
 }
 ```
 
-Text or markdown report:
+Text, markdown, or GitHub Actions report:
 
 ```ts
 const report = impact(result, "./src", { format: "markdown" });
 console.log(report);
+
+// GitHub Actions workflow commands for inline PR annotations
+const ghReport = impact(result, "./src", { format: "github" });
+console.log(ghReport);
 ```
 
 ## CLI via npx
@@ -80,7 +84,7 @@ npx drift-guard impact --diff diff.json --scan ./src
 ## CommonJS
 
 ```js
-const { compareOpenAPI, impact } = require("@pgomes13/drift-guard");
+const { compareOpenAPI, impact } = require("@drift-agent/api-drift-engine");
 ```
 
 ## TypeScript types

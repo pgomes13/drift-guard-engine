@@ -9,6 +9,7 @@ Formats apply to both schema diff commands (`openapi`, `graphql`, `grpc`) and th
 | `text` | ✓ | ✓ |
 | `json` | ✓ | ✓ |
 | `markdown` | ✓ | ✓ |
+| `github` | ✓ | ✓ |
 
 ---
 
@@ -73,6 +74,19 @@ Breaking change: DELETE /users/{id} (endpoint_removed)
   }
 ]
 ```
+
+---
+
+## `github`
+
+Emits [GitHub Actions workflow commands](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions) (`::error`, `::warning`, `::notice`) for inline PR annotations.
+
+```
+::error::endpoint_removed — DELETE /users/{id}: Endpoint '/users/{id}' method DELETE was removed
+::warning::param_type_changed — /users/{id}: Param 'id' type changed from 'string' to 'integer'
+```
+
+Use this format in CI to surface breaking changes directly in GitHub pull request file annotations.
 
 ---
 

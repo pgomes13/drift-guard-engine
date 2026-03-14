@@ -34,7 +34,7 @@ export interface Hit {
 }
 
 export interface ImpactOptions {
-  format?: "text" | "json" | "markdown";
+  format?: "text" | "json" | "markdown" | "github";
 }
 
 /** Diff two OpenAPI 3.x schemas (YAML or JSON). */
@@ -51,5 +51,5 @@ export function compareGRPC(base: string, head: string): DiffResult;
  * Returns Hit[] when format is "json" (default), otherwise a formatted string.
  */
 export function impact(diffResult: DiffResult, scanDir?: string, options?: ImpactOptions & { format: "json" }): Hit[];
-export function impact(diffResult: DiffResult, scanDir?: string, options?: ImpactOptions & { format: "text" | "markdown" }): string;
+export function impact(diffResult: DiffResult, scanDir?: string, options?: ImpactOptions & { format: "text" | "markdown" | "github" }): string;
 export function impact(diffResult: DiffResult, scanDir?: string, options?: ImpactOptions): Hit[] | string;

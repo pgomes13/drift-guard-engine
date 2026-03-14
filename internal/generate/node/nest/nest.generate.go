@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/pgomes13/api-drift-engine/internal/generate/node/express"
+	"github.com/DriftAgent/api-drift-engine/internal/generate/node/express"
 )
 
 // Nest generates a swagger.json in outputDir for the NestJS project rooted at

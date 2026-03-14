@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/pgomes13/api-drift-engine/internal/reporter"
-	"github.com/pgomes13/api-drift-engine/pkg/schema"
+	"github.com/DriftAgent/api-drift-engine/internal/reporter"
+	"github.com/DriftAgent/api-drift-engine/pkg/schema"
 )
 
 // sampleResult builds a DiffResult with one breaking, one non-breaking, and one info change.
