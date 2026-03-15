@@ -19,7 +19,7 @@ hero:
       target: _blank
     - theme: brand
       text: Public API Specs ↗
-      link: https://driftabot.github.io/specs
+      link: https://driftabot.github.io/registry
       target: _blank
 
 features:
