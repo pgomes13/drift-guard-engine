@@ -17,7 +17,7 @@ hero:
       text: npm ↗
       link: https://www.npmjs.com/package/@driftabot/engine
       target: _blank
-    - theme: alt
+    - theme: brand
       text: Public API Specs ↗
       link: https://driftabot.github.io/specs
       target: _blank
